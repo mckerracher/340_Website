@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2">Find a Distribution Platform</a>
+            </div>
+            <div class="form-outline">
+                <input type="search" id="form1" class="form-control" placeholder="Search"
+                       aria-label="Search"/>
+            </div>
+        </div>
+    </article>
+
+    {% for distPlat in distributionPlatform %}
+        <article class="media content-section">
+          <div class="media-body">
+{#            <div class="article-metadata">#}
+{#              <a class="mr-2" href="#">{{ post.author }}</a>#}
+{#              <small class="text-muted">{{ post.date_posted }}</small>#}
+{#            </div>#}
+            <h2><a class="article-title" href="#">Distribution Platform: {{ distPlat.nameDistrib }}</a></h2>
+              <p class="article-content">Distribution Platform ID: {{ distPlat.idDistribPlat }}</p>
+            <p class="article-content">Platform Relation: {{ distPlat.platformRel }}</p>
+          </div>
+        </article>
+    {% endfor %}
+        <div class="col-xs-1" align="center">
+    <button type="button" class="btn btn-success">Add Distribution Platform to
+        Database</button>
+    <button type="button" class="btn btn-danger">Remove Distribution Platform
+        from Database</button>
+    </div>
+{% endblock content %}

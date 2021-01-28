@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+
+        <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2">Find a Platform</a>
+            </div>
+            <div class="form-outline">
+                <input type="search" id="form1" class="form-control" placeholder="Search"
+                       aria-label="Search"/>
+            </div>
+        </div>
+    </article>
+
+    {% for platform in platform %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#"> Platform ID: {{ platform.idPlatform }}</a>
+            </div>
+            <h2><a class="article-title" href="#">{{ platform.namePlatform }}</a></h2>
+            <p class="article-content">Can it be played online? {{ platform.playedOnline }}
+                Is it multiplatform? {{ platform.multiPlat }}</p>
+          </div>
+        </article>
+    {% endfor %}
+        <div class="col-xs-1" align="center">
+    <button type="button" class="btn btn-success">Add Platform to
+        Database</button>
+    <button type="button" class="btn btn-danger">Remove Platform from
+        Database</button>
+    </div>
+{% endblock content %}

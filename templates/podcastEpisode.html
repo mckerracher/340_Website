@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2">Find an Episode</a>
+            </div>
+            <div class="form-outline">
+                <input type="search" id="form1" class="form-control" placeholder="Search"
+                       aria-label="Search"/>
+            </div>
+        </div>
+    </article>
+
+    {% for episode in podcastEpisode %}
+        <article class="media content-section">
+          <div class="media-body">
+{#            <div class="article-metadata">#}
+{#              <a class="mr-2" href="#">{{ post.author }}</a>#}
+{#              <small class="text-muted">{{ post.date_posted }}</small>#}
+{#            </div>#}
+            <h2><a class="article-title" href="#">Podcast Episode on {{ episode.title }}</a></h2>
+              <p class="article-content">Episode Number {{ episode.episodeNumber }}</p>
+            <p class="article-content">To be posted on {{ episode.episodeDate }}</p>
+          </div>
+        </article>
+    {% endfor %}
+    <div class="col-xs-1" align="center">
+    <button type="button" class="btn btn-success">Add Episode to
+        Database</button>
+    <button type="button" class="btn btn-danger">Remove Episode from
+        Database</button>
+    </div>
+{% endblock content %}

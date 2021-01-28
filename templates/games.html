@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2">Find a Game</a>
+            </div>
+            <div class="form-outline">
+                <input type="search" id="form1" class="form-control" placeholder="Search"
+                       aria-label="Search"/>
+            </div>
+        </div>
+    </article>
+
+    {% for t in game %}
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2">Game Creator: (FK) {{ t.gameCreator }}</a>
+                    <small class="text-muted">Originally Released: {{ t
+              .releaseDate }}</small>
+                </div>
+                <h2><a class="article-title" href="#">{{ t.nameGame }}</a></h2>
+                <p class="article-content">To be covered on podcast episode {{ t.podcastEpisode }}.
+                    Cost: ${{ t.cost }}
+                    Genre: (FK) {{ t.gameGenre }} </p>
+            </div>
+        </article>
+    {% endfor %}
+    <div class="col-xs-1" align="center">
+        <button type="button" class="btn btn-success">Add Game to Database</button>
+        <button type="button" class="btn btn-danger">Remove Game from
+            Database
+        </button>
+    </div>
+{% endblock content %}

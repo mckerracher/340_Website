@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for post in posts %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2">Posted by {{ post.author }}</a>
+              <small class="text-muted">{{ post.date_posted }}</small>
+            </div>
+            <h2><a class="article-title">{{ post.title }}</a></h2>
+              <img src="{{ post.image }}" width="700" height="400">
+              <small href="https://unsplash.com/" class="text-muted">Image source: https://unsplash.com/</small>
+            <p class="article-content">{{ post.content }}</p>
+          </div>
+        </article>
+    {% endfor %}
+        <div class="col-xs-1" align="center">
+    <button type="button" class="btn btn-success">Add Post</button>
+    <button type="button" class="btn btn-danger">Delete Post</button>
+    </div>
+{% endblock content %}

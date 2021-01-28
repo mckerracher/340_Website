@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2">Search Platform Combos</a>
+            </div>
+            <div class="form-outline">
+                <input type="search" id="form1" class="form-control" placeholder="Search"
+                       aria-label="Search"/>
+            </div>
+        </div>
+    </article>
+
+
+    {% for post in platform_combo_FK_zz %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2">Posted by Admin</a>
+            </div>
+              <h2><a class="article-title" href="#">Platform table ID: {{ post.idPlatform }}</a></h2>
+              <h2><a class="article-title" href="#">Distribution Platform table ID: {{ post.idDistribPlat }}</a></h2>
+          </div>
+        </article>
+    {% endfor %}
+        <div class="col-xs-1" align="center">
+    <button type="button" class="btn btn-success">Add Post</button>
+    <button type="button" class="btn btn-danger">Delete Post</button>
+    </div>
+{% endblock content %}

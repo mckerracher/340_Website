@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2">Find a Creator</a>
+            </div>
+            <div class="form-outline">
+                <input type="search" id="form1" class="form-control" placeholder="Search"
+                       aria-label="Search"/>
+            </div>
+        </div>
+    </article>
+
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2">Posted by Andy</a>
+              <small class="text-muted">on 1.24.2021</small>
+            </div>
+            <h2><a class="article-title" href="#">Game Creators</a></h2>
+              {% for creator in gameCreator %}
+            <p class="article-content">Creator ID: {{ creator.idCreator }}
+                Creator Name: {{ creator.nameCreator }}</p>
+              {% endfor %}
+          </div>
+        </article>
+        <div class="col-xs-1" align="center">
+    <button type="button" class="btn btn-success">Add Game Creator to
+        Database</button>
+    <button type="button" class="btn btn-danger">Remove Game Creator from
+        Database</button>
+    </div>
+{% endblock content %}

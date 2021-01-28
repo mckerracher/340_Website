@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+
+        <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2">Find a Genre</a>
+            </div>
+            <div class="form-outline">
+                <input type="search" id="form1" class="form-control" placeholder="Search"
+                       aria-label="Search"/>
+            </div>
+        </div>
+    </article>
+
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2">Posted by Andy</a>
+              <small class="text-muted">on 1.24.2021</small>
+            </div>
+            <h2><a class="article-title" href="#">Game Genres</a></h2>
+              {% for genre in gameGenre %}
+            <p class="article-content">Genre ID: {{ genre.idGenre }}
+                Genre Name: {{ genre.nameGenre }}</p>
+              {% endfor %}
+          </div>
+        </article>
+        <div class="col-xs-1" align="center">
+    <button type="button" class="btn btn-success">Add Game Genre to
+        Database</button>
+    <button type="button" class="btn btn-danger">Remove Game Genre from
+        Database</button>
+    </div>
+{% endblock content %}
