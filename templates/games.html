@@ -13,6 +13,14 @@
         </div>
     </article>
 
+
+    <article class="media content-section">
+        <div class="media-body" align="center">
+            <a class="btn btn-primary" href="/addgame" role="button">Add Game</a>
+            <a class="btn btn-primary" href="#" role="button">Remove Game</a>
+        </div>
+    </article>
+
     {% for t in game %}
         <article class="media content-section">
             <div class="media-body">
@@ -29,9 +37,7 @@
         </article>
     {% endfor %}
     <div class="col-xs-1" align="center">
-        <button type="button" class="btn btn-success">Add Game to Database</button>
-        <button type="button" class="btn btn-danger">Remove Game from
-            Database
-        </button>
+        <a class="btn btn-primary" href="/addgame" role="button">Add Game</a>
+        <a class="btn btn-primary" href="#" role="button">Remove Game</a>
     </div>
 {% endblock content %}
