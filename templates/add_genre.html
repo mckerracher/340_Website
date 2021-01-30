@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block content %}
+
+        <div class="content-section">
+        <form method="POST" action="/gamegenres">
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add a Genre</legend>
+
+                <div class="form-group">
+                    {{ form.idGenre.label(class="form-control-label") }}
+                    {% if form.idGenre.errors %}
+                        {{ form.idGenre(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.idGenre.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.idGenre(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.nameGenre.label(class="form-control-label") }}
+                    {% if form.nameGenre.errors %}
+                        {{ form.nameGenre(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.nameGenre.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.nameGenre(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+
+
+{% endblock content %}

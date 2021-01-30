@@ -13,23 +13,27 @@
         </div>
     </article>
 
+
+    <article class="media content-section">
+        <div class="media-body" align="center">
+            <a class="btn btn-primary" href="/addepisode" role="button">Add Episode</a>
+            <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Episode</a>
+        </div>
+    </article>
+
+
     {% for episode in podcastEpisode %}
         <article class="media content-section">
           <div class="media-body">
-{#            <div class="article-metadata">#}
-{#              <a class="mr-2" href="#">{{ post.author }}</a>#}
-{#              <small class="text-muted">{{ post.date_posted }}</small>#}
-{#            </div>#}
             <h2><a class="article-title" href="#">Podcast Episode on {{ episode.title }}</a></h2>
               <p class="article-content">Episode Number {{ episode.episodeNumber }}</p>
             <p class="article-content">To be posted on {{ episode.episodeDate }}</p>
           </div>
         </article>
     {% endfor %}
+
     <div class="col-xs-1" align="center">
-    <button type="button" class="btn btn-success">Add Episode to
-        Database</button>
-    <button type="button" class="btn btn-danger">Remove Episode from
-        Database</button>
+            <a class="btn btn-primary" href="/addepisode" role="button">Add Episode</a>
+            <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Episode</a>
     </div>
 {% endblock content %}

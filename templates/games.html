@@ -17,7 +17,7 @@
     <article class="media content-section">
         <div class="media-body" align="center">
             <a class="btn btn-primary" href="/addgame" role="button">Add Game</a>
-            <a class="btn btn-primary" href="#" role="button">Remove Game</a>
+            <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Game</a>
         </div>
     </article>
 
@@ -38,6 +38,6 @@
     {% endfor %}
     <div class="col-xs-1" align="center">
         <a class="btn btn-primary" href="/addgame" role="button">Add Game</a>
-        <a class="btn btn-primary" href="#" role="button">Remove Game</a>
+        <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Game</a>
     </div>
 {% endblock content %}

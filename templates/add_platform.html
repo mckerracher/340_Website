@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block content %}
+
+        <div class="content-section">
+        <form method="POST" action="/platforms">
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Add a Platform</legend>
+
+                <div class="form-group">
+                    {{ form.idPlatform.label(class="form-control-label") }}
+                    {% if form.idPlatform.errors %}
+                        {{ form.idPlatform(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.idPlatform.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.idPlatform(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.namePlatform.label(class="form-control-label") }}
+                    {% if form.namePlatform.errors %}
+                        {{ form.namePlatform(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.namePlatform.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.namePlatform(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+            <div class="form-group">
+                    {{ form.playedOnline.label(class="form-control-label") }}
+                    {% if form.playedOnline.errors %}
+                        {{ form.playedOnline(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.playedOnline.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.playedOnline(class="form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+
+
+            <div class="form-group">
+                    {{ form.multiPlat.label(class="form-control-label") }}
+                    {% if form.multiPlat.errors %}
+                        {{ form.multiPlat(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.multiPlat.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.multiPlat(class="form-control form-control-lg") }}
+                    {% endif %}
+            </div>
+
+
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+
+
+{% endblock content %}

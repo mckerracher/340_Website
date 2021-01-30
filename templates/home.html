@@ -14,8 +14,10 @@
           </div>
         </article>
     {% endfor %}
-        <div class="col-xs-1" align="center">
-    <button type="button" class="btn btn-success">Add Post</button>
-    <button type="button" class="btn btn-danger">Delete Post</button>
+
+    <div class="col-xs-1" align="center">
+        <a class="btn btn-primary" href="/addpost" role="button">Add Post</a>
+        <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Post</a>
     </div>
+
 {% endblock content %}

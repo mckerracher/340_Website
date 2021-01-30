@@ -13,23 +13,27 @@
         </div>
     </article>
 
+
+        <article class="media content-section">
+        <div class="media-body" align="center">
+            <a class="btn btn-primary" href="/adddistribplat" role="button">Add a Distribution Platform</a>
+            <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove a Distribution Platform</a>
+        </div>
+    </article>
+
     {% for distPlat in distributionPlatform %}
         <article class="media content-section">
           <div class="media-body">
-{#            <div class="article-metadata">#}
-{#              <a class="mr-2" href="#">{{ post.author }}</a>#}
-{#              <small class="text-muted">{{ post.date_posted }}</small>#}
-{#            </div>#}
             <h2><a class="article-title" href="#">Distribution Platform: {{ distPlat.nameDistrib }}</a></h2>
               <p class="article-content">Distribution Platform ID: {{ distPlat.idDistribPlat }}</p>
             <p class="article-content">Platform Relation: {{ distPlat.platformRel }}</p>
           </div>
         </article>
     {% endfor %}
-        <div class="col-xs-1" align="center">
-    <button type="button" class="btn btn-success">Add Distribution Platform to
-        Database</button>
-    <button type="button" class="btn btn-danger">Remove Distribution Platform
-        from Database</button>
+
+    <div class="col-xs-1" align="center">
+        <a class="btn btn-primary" href="/adddistribplat" role="button">Add a Distribution Platform</a>
+        <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove a Distribution Platform</a>
     </div>
+
 {% endblock content %}

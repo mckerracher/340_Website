@@ -1,8 +1,7 @@
 from flask import Flask, render_template, url_for
 from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
-from add_forms import AddGameForm
-from flask_wtf import FlaskForm
-from wtforms import SelectField
+from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, AddEpisodeForm, \
+    AddDistributionPlatformForm, AddPost, RemoveTheThing
 
 app = Flask(__name__)
 
@@ -57,10 +56,16 @@ posts = [
 ]
 
 
-@app.route("/")
-@app.route("/home")
+@app.route("/", methods=['POST', 'GET'])
+@app.route("/home", methods=['POST', 'GET'])
 def home():
     return render_template('home.html', posts=posts)
+
+
+@app.route("/addpost", methods=['POST', 'GET'])
+def addHomePost():
+    form = AddPost()
+    return render_template('add_post.html', title='Add a Post', form=form)
 
 
 @app.route("/games", methods=['POST', 'GET'])
@@ -74,47 +79,80 @@ def addGame():
     return render_template('add_game.html', title='Add a Game', form=form)
 
 
-@app.route("/gamegenres")
+@app.route("/gamegenres", methods=['POST', 'GET'])
 def gameGenres():
     return render_template('gameGenres.html', gameGenre=gameGenre)
 
 
-@app.route("/podcastepisodes")
+@app.route("/addgenre", methods=['POST', 'GET'])
+def addGenre():
+    form = AddGenreForm()
+    return render_template('add_genre.html', title='Add a Genre', form=form)
+
+
+@app.route("/podcastepisodes", methods=['POST', 'GET'])
 def podcastEpisodes():
     return render_template('podcastEpisode.html', podcastEpisode=podcastEpisode)
 
 
-@app.route("/distributionplatforms")
+@app.route("/addepisode", methods=['POST', 'GET'])
+def addEpisode():
+    form = AddEpisodeForm()
+    return render_template('add_episode.html', title='Add an Episode', form=form)
+
+
+@app.route("/distributionplatforms", methods=['POST', 'GET'])
 def distributionPlatforms():
-    return render_template('distributionPlatform.html',
-                           distributionPlatform=distributionPlatform)
+    return render_template('distributionPlatform.html', distributionPlatform=distributionPlatform)
 
 
-@app.route("/platforms")
+@app.route("/adddistribplat", methods=['POST', 'GET'])
+def addDistributionPlatform():
+    form = AddDistributionPlatformForm()
+    return render_template('add_distrib_plat.html', form=form)
+
+
+@app.route("/platforms", methods=['POST', 'GET'])
 def platforms():
-    return render_template('platforms.html',
-                           platform=platform)
+    return render_template('platforms.html', platform=platform)
 
 
-@app.route("/gamecreators")
+@app.route("/addplatform", methods=['POST', 'GET'])
+def addPlatforms():
+    form = AddPlatformForm()
+    return render_template('add_platform.html', title='Add a Platform', form=form)
+
+
+@app.route("/gamecreators", methods=['POST', 'GET'])
 def gameCreators():
     return render_template('gameCreators.html', gameCreator=gameCreator)
 
 
-@app.route("/gamesandplatforms")
+@app.route("/addcreator", methods=['POST', 'GET'])
+def addCreator():
+    form = AddCreatorForm()
+    return render_template('add_creator.html', title='Add a Creator', form=form)
+
+
+@app.route("/gamesandplatforms", methods=['POST', 'GET'])
 def m2m_GameAndPlatform():
     return render_template('PlatformFKzz.html', platform_FK_zz=platform_FK_zz)
 
 
-@app.route("/gamesanddistributionplatforms")
+@app.route("/gamesanddistributionplatforms", methods=['POST', 'GET'])
 def m2m_GameAndDistribPlatform():
-    return render_template('DistributionPlatFKzz.html',
-                           distribution_plat_FK_zz=distribution_plat_FK_zz)
+    return render_template('DistributionPlatFKzz.html', distribution_plat_FK_zz=distribution_plat_FK_zz)
 
 
-@app.route("/platformcombo")
+@app.route("/platformcombo", methods=['POST', 'GET'])
 def m2m_PlatformCombo():
     return render_template('PlatformComboFKzz.html', platform_combo_FK_zz=platform_combo_FK_zz)
+
+
+@app.route("/remove", methods=['POST', 'GET'])
+def remove():
+    form = RemoveTheThing()
+    return render_template('remove.html', title='Remove', form=form)
 
 
 if __name__ == '__main__':
