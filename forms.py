@@ -9,7 +9,7 @@ class AddGameForm(FlaskForm):
     cost = IntegerField('Game Cost', validators=[DataRequired()])
     gameGenre = StringField('Game Genre', validators=[DataRequired(), Length(min=1, max=255)])
     gameCreator = StringField('Game Creator', validators=[DataRequired(), Length(min=1, max=255)])
-    podcastEpisode = IntegerField('Podcast Episode', validators=[DataRequired()])
+    podcastEpisode = IntegerField('Podcast Episode')
     submit = SubmitField('Submit')
 
 
