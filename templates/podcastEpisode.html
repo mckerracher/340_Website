@@ -13,11 +13,16 @@
         </div>
     </article>
 
+    <article class="media content-section">
+        <div class="media-body" align="center">
+            <h3>Browse Existing Planned Episodes</h3>
+        </div>
+    </article>
 
     <article class="media content-section">
         <div class="media-body" align="center">
-            <a class="btn btn-primary" href="/addepisode" role="button">Add Episode</a>
-            <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Episode</a>
+            <a class="btn btn-secondary" href="/addepisode" role="button">Add Episode</a>
+            <a class="btn btn-secondary" href="{{ url_for('remove') }}" role="button">Remove Episode</a>
         </div>
     </article>
 
@@ -33,7 +38,7 @@
     {% endfor %}
 
     <div class="col-xs-1" align="center">
-            <a class="btn btn-primary" href="/addepisode" role="button">Add Episode</a>
-            <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Episode</a>
+            <a class="btn btn-secondary" href="/addepisode" role="button">Add Episode</a>
+            <a class="btn btn-secondary" href="{{ url_for('remove') }}" role="button">Remove Episode</a>
     </div>
 {% endblock content %}

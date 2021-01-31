@@ -7,7 +7,6 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 
     {% if title %}
@@ -30,21 +29,21 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-                <a class="nav-item nav-link" href="/home">Home</a>
-                <a class="nav-item nav-link" href="/games">Games</a>
-                <a class="nav-item nav-link" href="/gamegenres">Genres</a>
-                <a class="nav-item nav-link" href="/gamecreators">Creators</a>
-                <a class="nav-item nav-link" href="/platforms">Platforms</a>
-                <a class="nav-item nav-link" href="/podcastepisodes">Episodes</a>
-                <a class="nav-item nav-link"
-                   href="/distributionplatforms">Distribution Platforms</a>
+                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <a class="nav-item nav-link" href="{{ url_for('search') }}">Search</a>
+                <a class="nav-item nav-link" href="{{ url_for('games') }}">Games</a>
+                <a class="nav-item nav-link" href="{{ url_for('gameGenres') }}">Genres</a>
+                <a class="nav-item nav-link" href="{{ url_for('gameCreators') }}">Creators</a>
+                <a class="nav-item nav-link" href="{{ url_for('platforms') }}">Platforms</a>
+                <a class="nav-item nav-link" href="{{ url_for('podcastEpisodes') }}">Episodes</a>
+                <a class="nav-item nav-link" href="{{ url_for('distributionPlatforms') }}">Distribution Platforms</a>
             </div>
           </div>
         </div>
       </nav>
     </header>
 
-{#    main content#}
+{# main content #}
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
@@ -55,14 +54,10 @@
         <div class="col-md-4">
           <div class="content-section">
               <div class="form-outline">
-                  <h3>Many to Many Tables</h3>
+                  <h3>Junction Tables</h3>
                   <div class="list-group">
                       <a href="/gamesandplatforms" class="list-group-item list-group-item-action list-group-item-dark">Game & Platform (PlatformFKzz)</a>
                       <a href="/gamesanddistributionplatforms" class="list-group-item list-group-item-action list-group-item-light">Game & Distribution Platform (DistributionPlatFKzz)</a>
-                      <a href="/platformcombo" class="list-group-item list-group-item-action list-group-item-dark">Platform & Distribution Platform (PlatformComboFKzz)</a>
-                      <a href="#"
-                         class="list-group-item list-group-item-action
-                         list-group-item-light"> -        - </a>
                   </div>
               </div>
           </div>
@@ -74,5 +69,6 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="bootstrap-autocomplete.min.js"></script>
 </body>
 </html>

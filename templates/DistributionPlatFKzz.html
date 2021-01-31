@@ -14,6 +14,18 @@
         </div>
     </article>
 
+    <article class="media content-section">
+        <div class="media-body" align="center">
+            <h3>Browse Existing Distribution Platform & Game Combos</h3>
+        </div>
+    </article>
+
+    <article class="media content-section">
+        <div class="media-body" align="center">
+            <a class="btn btn-secondary" href="{{ url_for('add_m2m_GameAndDistribPlatform') }}" role="button">Add Combo</a>
+            <a class="btn btn-secondary" href="{{ url_for('remove') }}" role="button">Remove Combo</a>
+        </div>
+    </article>
 
     {% for post in distribution_plat_FK_zz %}
         <article class="media content-section">
@@ -26,8 +38,12 @@
           </div>
         </article>
     {% endfor %}
-        <div class="col-xs-1" align="center">
-    <button type="button" class="btn btn-success">Add Post</button>
-    <button type="button" class="btn btn-danger">Delete Post</button>
-    </div>
+
+    <article class="media content-section">
+        <div class="media-body" align="center">
+            <a class="btn btn-primary" href="{{ url_for('add_m2m_GameAndDistribPlatform') }}" role="button">Add Combo</a>
+            <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Combo</a>
+        </div>
+    </article>
+
 {% endblock content %}

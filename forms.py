@@ -55,6 +55,18 @@ class AddPost(FlaskForm):
     submit = SubmitField('Post')
 
 
+class AddToM2MPlatformGame(FlaskForm):
+    nameGame = StringField('Game Name', validators=[DataRequired()])
+    idPlatform = IntegerField('Platform ID', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class AddToM2MDistribPlatformGame(FlaskForm):
+    nameGame = StringField('Game Name', validators=[DataRequired()])
+    idPlatform = IntegerField('Distribution Platform ID', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
 class RemoveTheThing(FlaskForm):
     item = StringField('Item ID', validators=[DataRequired()])
     submit = SubmitField('Submit')

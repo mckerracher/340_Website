@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{% block content %}
+    {#    https://bootstrap-autocomplete.readthedocs.io/en/latest/#}
+    {#    <input class="form-control basicAutoComplete" type="text" autocomplete="off">#}
+
+    <h1>find stuff in the database:</h1>
+    <table class="table">
+        <tbody>
+
+        {# ROW ONE #}
+        <tr>
+            {#GAME NAME#}
+            <td scope="row">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Game Name
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% for t in game %}
+                            <a class="dropdown-item">{{ t.nameGame }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </td>
+
+
+
+            {#GAME GENRE#}
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Game Genre
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% for t in gameGenre %}
+                            <a class="dropdown-item">{{ t.nameGenre }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+
+
+            {#GAME CREATOR#}
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Game Creator
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% for t in gameCreator %}
+                            <a class="dropdown-item">{{ t.nameCreator }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+
+
+        {# ROW TWO #}
+        <tr>
+            {#PLATFORM#}
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Platform
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% for t in platform %}
+                            <a class="dropdown-item">{{ t.namePlatform }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+
+
+            {#DISTRIBUTION PLATFORM#}
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Distribution Platform
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% for t in distributionPlatform %}
+                            <a class="dropdown-item">{{ t.nameDistrib }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+
+
+            {# PODCAST EPISODE #}
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Podcast Episode
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {% for t in podcastEpisode %}
+                            <a class="dropdown-item">{{ t.title }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>results:</h3>
+    <table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Episode</th>
+      <th scope="col">Game</th>
+      <th scope="col">Release Date</th>
+      <th scope="col">Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for g in game %}
+    <tr>
+      <th scope="row">{{ g.podcastEpisode }}</th>
+      <td>{{ g.nameGame }}</td>
+      <td>{{ g.releaseDate }}</td>
+      <td>{{ g.cost }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+  </tbody>
+
+</table>
+
+
+{% endblock content %}

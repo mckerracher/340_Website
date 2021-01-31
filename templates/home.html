@@ -8,16 +8,15 @@
               <small class="text-muted">{{ post.date_posted }}</small>
             </div>
             <h2><a class="article-title">{{ post.title }}</a></h2>
-              <img src="{{ post.image }}" width="700" height="400">
-              <small href="https://unsplash.com/" class="text-muted">Image source: https://unsplash.com/</small>
+              <img src="{{ post.image }}" width="700" height="350">
             <p class="article-content">{{ post.content }}</p>
           </div>
         </article>
     {% endfor %}
 
     <div class="col-xs-1" align="center">
-        <a class="btn btn-primary" href="/addpost" role="button">Add Post</a>
-        <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Post</a>
+        <a class="btn btn-secondary" href="/addpost" role="button">Add Post</a>
+        <a class="btn btn-secondary" href="{{ url_for('remove') }}" role="button">Remove Post</a>
     </div>
 
 {% endblock content %}

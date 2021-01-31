@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for
 from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, AddEpisodeForm, \
-    AddDistributionPlatformForm, AddPost, RemoveTheThing
+    AddDistributionPlatformForm, AddPost, RemoveTheThing, AddToM2MPlatformGame, AddToM2MDistribPlatformGame
 
 app = Flask(__name__)
 
@@ -40,6 +40,13 @@ distribution_plat_FK_zz = excel_to_dictionary.convert_sheet_to_dict(
 
 posts = [
     {
+      'author': 'Admin',
+      'title': 'Welcome to The Backlog!',
+        'content': 'Links to all pages are in the nav bar above, or on the sidebar to the right.',
+        'date_posted': 'January 30, 2021',
+        'image': 'static/chars.png'
+    },
+    {
         'author': 'Andy',
         'title': 'Planned Episode on Fortnite',
         'content': lorem_ipsum,
@@ -60,6 +67,12 @@ posts = [
 @app.route("/home", methods=['POST', 'GET'])
 def home():
     return render_template('home.html', posts=posts)
+
+
+@app.route("/search", methods=['POST', 'GET'])
+def search():
+    return render_template('search.html', game=game, gameGenre=gameGenre, gameCreator=gameCreator,
+                           platform=platform, distributionPlatform=distributionPlatform, podcastEpisode=podcastEpisode)
 
 
 @app.route("/addpost", methods=['POST', 'GET'])
@@ -144,9 +157,16 @@ def m2m_GameAndDistribPlatform():
     return render_template('DistributionPlatFKzz.html', distribution_plat_FK_zz=distribution_plat_FK_zz)
 
 
-@app.route("/platformcombo", methods=['POST', 'GET'])
-def m2m_PlatformCombo():
-    return render_template('PlatformComboFKzz.html', platform_combo_FK_zz=platform_combo_FK_zz)
+@app.route("/addm2mgameandplatform", methods=['POST', 'GET'])
+def add_m2m_GameAndPlatform():
+    form = AddToM2MPlatformGame()
+    return render_template('add_gameandplatform.html', title='Add a Combo', form=form)
+
+
+@app.route("/addm2mgameanddistribplatform", methods=['POST', 'GET'])
+def add_m2m_GameAndDistribPlatform():
+    form = AddToM2MDistribPlatformGame()
+    return render_template('add_gameanddistribplatform.html', title='Add a Combo', form=form)
 
 
 @app.route("/remove", methods=['POST', 'GET'])

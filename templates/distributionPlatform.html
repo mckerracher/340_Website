@@ -13,11 +13,17 @@
         </div>
     </article>
 
-
-        <article class="media content-section">
+    <article class="media content-section">
         <div class="media-body" align="center">
-            <a class="btn btn-primary" href="/adddistribplat" role="button">Add a Distribution Platform</a>
-            <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove a Distribution Platform</a>
+            <h3>Browse Existing Distribution Platforms</h3>
+        </div>
+    </article>
+
+
+    <article class="media content-section">
+        <div class="media-body" align="center">
+            <a class="btn btn-secondary" href="/adddistribplat" role="button">Add a Distribution Platform</a>
+            <a class="btn btn-secondary" href="{{ url_for('remove') }}" role="button">Remove a Distribution Platform</a>
         </div>
     </article>
 
@@ -32,8 +38,8 @@
     {% endfor %}
 
     <div class="col-xs-1" align="center">
-        <a class="btn btn-primary" href="/adddistribplat" role="button">Add a Distribution Platform</a>
-        <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove a Distribution Platform</a>
+        <a class="btn btn-secondary" href="/adddistribplat" role="button">Add a Distribution Platform</a>
+        <a class="btn btn-secondary" href="{{ url_for('remove') }}" role="button">Remove a Distribution Platform</a>
     </div>
 
 {% endblock content %}

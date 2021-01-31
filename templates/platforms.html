@@ -7,16 +7,21 @@
                 <a class="mr-2">Find a Platform</a>
             </div>
             <div class="form-outline">
-                <input type="search" id="form1" class="form-control" placeholder="Search"
-                       aria-label="Search"/>
+                <input type="search" id="form1" class="form-control" placeholder="Search" aria-label="Search"/>
             </div>
         </div>
     </article>
 
     <article class="media content-section">
         <div class="media-body" align="center">
-            <a class="btn btn-primary" href="/addplatform" role="button">Add Platform</a>
-            <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Platform</a>
+            <h3>Browse Existing Platforms</h3>
+        </div>
+    </article>
+
+    <article class="media content-section">
+        <div class="media-body" align="center">
+            <a class="btn btn-secondary" href="/addplatform" role="button">Add Platform</a>
+            <a class="btn btn-secondary" href="{{ url_for('remove') }}" role="button">Remove Platform</a>
         </div>
     </article>
 
@@ -35,8 +40,8 @@
     {% endfor %}
 
     <div class="col-xs-1" align="center">
-        <a class="btn btn-primary" href="/addplatform" role="button">Add Platform</a>
-        <a class="btn btn-primary" href="{{ url_for('remove') }}" role="button">Remove Platform</a>
+        <a class="btn btn-secondary" href="/addplatform" role="button">Add Platform</a>
+        <a class="btn btn-secondary" href="{{ url_for('remove') }}" role="button">Remove Platform</a>
     </div>
 
 {% endblock content %}
