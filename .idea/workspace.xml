@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8a9d1d44-916f-4c1a-a4e3-ac63f74117ea" name="Default Changelist" comment="added updates based on step three review.">
+      <change afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,7 +108,8 @@
       <workItem from="1612221093956" duration="447000" />
       <workItem from="1612646602043" duration="1163000" />
       <workItem from="1612703106056" duration="3330000" />
-      <workItem from="1612732376181" duration="256000" />
+      <workItem from="1612732376181" duration="799000" />
+      <workItem from="1612734883958" duration="1373000" />
     </task>
     <task id="LOCAL-00001" summary="added add game form stuff">
       <created>1611956663914</created>
@@ -171,7 +174,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612732506392</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="added updates based on step three review.">
+      <created>1612732744291</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1612732744291</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

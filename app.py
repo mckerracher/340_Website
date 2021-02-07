@@ -64,6 +64,12 @@ posts = [
 ]
 
 
+@app.route("/index", methods=['POST', 'GET'])
+@app.route("/index.html", methods=['POST', 'GET'])
+def index():
+    return render_template('index.html')
+
+
 @app.route("/", methods=['POST', 'GET'])
 @app.route("/home", methods=['POST', 'GET'])
 def home():
