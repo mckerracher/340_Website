@@ -9,7 +9,7 @@ class AddGameForm(FlaskForm):
     cost = IntegerField('Game Cost', validators=[DataRequired()])
     gameGenre = StringField('Game Genre (Required)', validators=[DataRequired(), Length(min=1, max=255)])
     gameCreator = StringField('Game Creator (Required)', validators=[DataRequired(), Length(min=1, max=255)])
-    podcastEpisode = IntegerField('Podcast Episode (Required)')
+    podcastEpisode = IntegerField('Podcast Episode')
     submit = SubmitField('Submit')
 
 
@@ -56,14 +56,14 @@ class AddPost(FlaskForm):
 
 
 class AddToM2MPlatformGame(FlaskForm):
-    nameGame = StringField('Game Name', validators=[DataRequired()])
-    idPlatform = IntegerField('Platform ID', validators=[DataRequired()])
+    nameGame = StringField('Game Name (Required)', validators=[DataRequired()])
+    idPlatform = IntegerField('Platform ID (Required)', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class AddToM2MDistribPlatformGame(FlaskForm):
-    nameGame = StringField('Game Name', validators=[DataRequired()])
-    idPlatform = IntegerField('Distribution Platform ID', validators=[DataRequired()])
+    nameGame = StringField('Game Name (Required)', validators=[DataRequired()])
+    idPlatform = IntegerField('Distribution Platform ID (Required)', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
@@ -78,5 +78,5 @@ class EditTheGame(FlaskForm):
     cost = IntegerField('Game Cost', validators=[DataRequired()])
     gameGenre = StringField('Game Genre (Required)', validators=[DataRequired(), Length(min=1, max=255)])
     gameCreator = StringField('Game Creator (Required)', validators=[DataRequired(), Length(min=1, max=255)])
-    podcastEpisode = IntegerField('Podcast Episode (Required)')
+    podcastEpisode = IntegerField('Podcast Episode')
     submit = SubmitField('Submit Change')
