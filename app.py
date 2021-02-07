@@ -43,7 +43,7 @@ posts = [
     {
       'author': 'Admin',
       'title': 'Welcome to The Backlog! Links to all pages are in the nav bar above or on the sidebar.',
-        'content': 'The Backlog is a podcast is done by the Friedrich brothers covering a wide variety of games, and The Backlog website is going to cover the ever-growing list of games that the Friedrich brothers have not yet covered. The database supporting this website is going to contain that list. In other words, the database will contain all of the games that the Backlog Podcast plans on covering. With over 1,000 games released commercially every year, and more games on PC and Xbox coming out on GamePass, there’s a need for a database that records the details for each game.',
+        'content': 'The Backlog is a podcast is done by the Friedrich brothers covering a wide variety of games, and The Backlog website is going to cover the ever-growing list of games that the Friedrich brothers have previously talked about in the podcast and games that they plan on covering but have not yet talked about in depth.  The database supporting this website is going to contain that list. In other words, the database will contain games that the Backlog Podcast has talked about or thinks that it may have plans on covering in a future episode. With over 1,000 games released commercially every year, and more games on PC and Xbox coming out on GamePass, there’s a need for a database that records the details for each game.',
         'date_posted': 'January 30, 2021',
         'image': 'static/chars.png'
     },
