@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block content %}
+
+        <div class="content-section">
+        <form method="POST" action="/games">
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Edit a Game</legend>
+
+                <div class="form-group">
+                    {{ form.nameGame.label(class="form-control-label") }}
+                    {% if form.nameGame.errors %}
+                        {{ form.nameGame(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.nameGame.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.nameGame(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.releaseDate.label(class="form-control-label") }}
+                    {% if form.releaseDate.errors %}
+                        {{ form.releaseDate(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.releaseDate.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.releaseDate(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.cost.label(class="form-control-label") }}
+                    {% if form.cost.errors %}
+                        {{ form.cost(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.cost.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.cost(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.gameGenre.label(class="form-control-label") }}
+                    {% if form.gameGenre.errors %}
+                        {{ form.gameGenre(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.gameGenre.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.gameGenre(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+                <div class="form-group">
+                    {{ form.gameCreator.label(class="form-control-label") }}
+                    {% if form.gameCreator.errors %}
+                        {{ form.gameCreator(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.gameCreator.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.gameCreator(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+
+
+                <div class="form-group">
+                    {{ form.podcastEpisode.label(class="form-control-label") }}
+                    {% if form.podcastEpisode.errors %}
+                        {{ form.podcastEpisode(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.podcastEpisode.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.podcastEpisode(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+
+
+{% endblock content %}

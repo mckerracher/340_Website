@@ -1,7 +1,8 @@
 from flask import Flask, render_template, url_for
 from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, AddEpisodeForm, \
-    AddDistributionPlatformForm, AddPost, RemoveTheThing, AddToM2MPlatformGame, AddToM2MDistribPlatformGame
+    AddDistributionPlatformForm, AddPost, RemoveTheThing, AddToM2MPlatformGame, \
+    AddToM2MDistribPlatformGame, EditTheGame
 
 app = Flask(__name__)
 
@@ -173,6 +174,12 @@ def add_m2m_GameAndDistribPlatform():
 def remove():
     form = RemoveTheThing()
     return render_template('remove.html', title='Remove', form=form)
+
+
+@app.route("/editgame", methods=['POST', 'GET'])
+def editgame():
+    form = EditTheGame()
+    return render_template('editgame.html', title='Edit', form=form)
 
 
 if __name__ == '__main__':
