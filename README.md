@@ -46,6 +46,6 @@
 - Source: [Link](https://pypi.org/project/xl2dict/)
 
 #### Form Validation
-- Author: Open Source - [Github] (https://github.com/wtforms/wtforms/)
+- Author: Open Source - [Github](https://github.com/wtforms/wtforms/)
 - Date: 2/2/2021
 - Source: [Link](https://wtforms.readthedocs.io/en/2.3.x/)
