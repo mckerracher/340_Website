@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8a9d1d44-916f-4c1a-a4e3-ac63f74117ea" name="Default Changelist" comment="Adding database connection functionality (still in progress)." />
+    <list default="true" id="8a9d1d44-916f-4c1a-a4e3-ac63f74117ea" name="Default Changelist" comment="Adding database connection functionality (still in progress).">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,7 +48,6 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/static" />
   </component>
@@ -122,7 +123,9 @@
       <workItem from="1613311001062" duration="769000" />
       <workItem from="1613329995054" duration="890000" />
       <workItem from="1613426885848" duration="45000" />
-      <workItem from="1613482577913" duration="23294000" />
+      <workItem from="1613482577913" duration="23353000" />
+      <workItem from="1613615462864" duration="115000" />
+      <workItem from="1613615601039" duration="368000" />
     </task>
     <task id="LOCAL-00001" summary="added add game form stuff">
       <created>1611956663914</created>
