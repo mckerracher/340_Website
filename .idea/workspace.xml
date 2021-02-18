@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8a9d1d44-916f-4c1a-a4e3-ac63f74117ea" name="Default Changelist" comment="Fixed the read me file.">
+      <change afterPath="$PROJECT_DIR$/templates/TODO.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Database/db_connector.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database/db_connector.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/add_distrib_plat.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/add_distrib_plat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/distributionPlatform.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/distributionPlatform.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +133,7 @@
       <workItem from="1613615462864" duration="115000" />
       <workItem from="1613615601039" duration="368000" />
       <workItem from="1613616134268" duration="610000" />
-      <workItem from="1613620992818" duration="1427000" />
+      <workItem from="1613620992818" duration="3524000" />
     </task>
     <task id="LOCAL-00001" summary="added add game form stuff">
       <created>1611956663914</created>
@@ -221,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613655397656</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Fixed the read me file.">
+      <created>1613655536675</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1613655536675</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

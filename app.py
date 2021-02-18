@@ -193,7 +193,8 @@ def addEpisode():
     if form.is_submitted():
         ep_title = form.title.data
         ep_date = form.episodeDate.data
-        insert_statement = 'INSERT INTO podcastEpisode(title, episodeDate) VALUES (%s, %s)' # TODO: FIX - NOT INSERTING
+        #TODO: FIX - NOT INSERTING
+        insert_statement = 'INSERT INTO podcastEpisode(title, episodeDate) VALUES (%s, %s)'
         insert_list = [ep_title, ep_date]
         cursor.execute(insert_statement, insert_list)
         flash(f'{ep_title} episode added to the database!', 'success')
@@ -205,13 +206,40 @@ def addEpisode():
 
 @app.route("/distributionplatforms", methods=['POST', 'GET'])
 def distributionPlatforms():
-    return render_template('distributionPlatform.html',
-                           distributionPlatform=distributionPlatform)
+    distributionPlatform = {}
+    form = SearchForm()
+    if form.is_submitted():
+        distributionPlatform.clear()
+        search_str = [form.search.data]  # gets user's search input
+        query = "SELECT * FROM distributionPlatform WHERE nameDistrib = %s"
+        cursor.execute(query, search_str)  # queries DB
+        distributionPlatform = cursor.fetchall()  # assigns results of query
+        return render_template('distributionPlatform.html', distributionPlatform=distributionPlatform, form=form)
+    else:
+        query = "SELECT * FROM distributionPlatform"
+        cursor.execute(query)
+        distributionPlatform = cursor.fetchall()
+        return render_template('distributionPlatform.html', distributionPlatform=distributionPlatform, form=form)
 
 
 @app.route("/adddistribplat", methods=['POST', 'GET'])
 def addDistributionPlatform():
     form = AddDistributionPlatformForm()
+    if form.is_submitted():
+        name = form.nameDistrib.data
+        rel = form.platformRel.data
+        # TODO: FIX - NOT INSERTING
+        insert_statement = 'INSERT INTO distributionPlatform(nameDistrib, platformRel) VALUES (%s, %s)'
+        insert_list = [name, rel]
+        cursor.execute(insert_statement, insert_list)
+        flash(f'{name} distribution platform added to the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template('add_distrib_plat.html', title='Add an Episode',
+                               form=form)
+
+
+
     return render_template('add_distrib_plat.html', form=form)
 
 

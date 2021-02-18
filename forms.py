@@ -56,11 +56,9 @@ class AddEpisodeForm(FlaskForm):
 
 
 class AddDistributionPlatformForm(FlaskForm):
-    idDistribPlat = IntegerField('Distribution Platform ID (Required)',
-                                 validators=[DataRequired()])
-    nameDistrib = StringField('Distribution Platform Name (Required)',
-                              validators=[DataRequired()])
-    platformRel = StringField('Platform Relation', validators=[DataRequired()])
+    idDistribPlat = IntegerField('Distribution Platform ID')
+    nameDistrib = StringField('Distribution Platform Name (Required)',validators=[DataRequired()])
+    platformRel = StringField('Platform Release Date', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 

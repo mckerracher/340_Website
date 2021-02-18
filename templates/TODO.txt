@@ -1,0 +1,5 @@
+1. Check forms.py for fields that shouldn't be included (auto incrementing IDs)
+2. Remove the unnecessary fields from the html files.
+3. FIX SQL insert statements
+4. Figure out how to conceal DB credentials.
+5. Is platformRel in distributionPlatform a release date?
