@@ -193,7 +193,7 @@ def addEpisode():
     if form.is_submitted():
         ep_title = form.title.data
         ep_date = form.episodeDate.data
-        insert_statement = 'INSERT INTO podcastEpisode(title, episodeDate) VALUES (%s, %s)'  # TODO: FIX - NOT INSERTING
+        insert_statement = 'INSERT INTO podcastEpisode(title, episodeDate) VALUES (%s, %s)' # TODO: FIX - NOT INSERTING
         insert_list = [ep_title, ep_date]
         cursor.execute(insert_statement, insert_list)
         flash(f'{ep_title} episode added to the database!', 'success')

@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8a9d1d44-916f-4c1a-a4e3-ac63f74117ea" name="Default Changelist" comment="Adding database connection functionality (still in progress).">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Database/db_connector.py" beforeDir="false" afterPath="$PROJECT_DIR$/Database/db_connector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,6 +129,8 @@
       <workItem from="1613482577913" duration="23353000" />
       <workItem from="1613615462864" duration="115000" />
       <workItem from="1613615601039" duration="368000" />
+      <workItem from="1613616134268" duration="610000" />
+      <workItem from="1613620992818" duration="1256000" />
     </task>
     <task id="LOCAL-00001" summary="added add game form stuff">
       <created>1611956663914</created>
@@ -204,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613614856553</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Adding database connection functionality (still in progress).">
+      <created>1613616288822</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1613616288823</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
