@@ -1,21 +1,36 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <article class="media content-section">
-        <div class="media-body">
-            <div class="article-metadata">
-                <a class="mr-2">Find a Game</a>
+    <div class="content-section">
+        <form method="POST" action="{{ url_for('games') }}">
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Find a Game</legend>
+                <div class="form-group">
+                    {{ form.search.label(class="form-control-label") }}
+                    {% if form.search.errors %}
+                        {{ form.search(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.search.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.search(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
             </div>
-            <div class="form-outline">
-                <input type="search" id="form1" class="form-control" placeholder="Search"
-                       aria-label="Search"/>
-            </div>
-        </div>
-    </article>
+        </form>
+    </div>
+
+
 
     <article class="media content-section">
         <div class="media-body" align="center">
-            <h3>Browse Existing Genres</h3>
+            <h3>Browse Existing Games</h3>
         </div>
     </article>
 
@@ -28,21 +43,41 @@
         </div>
     </article>
 
-    {% for t in game %}
-        <article class="media content-section">
-            <div class="media-body">
-                <div class="article-metadata">
-                    <a class="mr-2">Game Creator: (FK) {{ t.gameCreator }}</a>
-                    <small class="text-muted">Originally Released: {{ t
+    {% if game|length > 0 %}
+        {% for t in game %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <a class="mr-2">Game Creator: (FK) {{ t.gameCreator }}</a>
+                        <small class="text-muted">Originally Released: {{ t
               .releaseDate }}</small>
-                </div>
-                <h2><a class="article-title" href="#">{{ t.nameGame }}</a></h2>
-                <p class="article-content">To be covered on podcast episode {{ t.podcastEpisode }}.
+                    </div>
+                    <h2><a class="article-title" href="#">{{ t.nameGame }}</a></h2>
+                    <p class="article-content">To be covered on podcast episode {{ t.podcastEpisode }}.
                     Cost: ${{ t.cost }}
                     Genre: (FK) {{ t.gameGenre }} </p>
-            </div>
-        </article>
-    {% endfor %}
+                </div>
+            </article>
+        {% endfor %}
+    {% endif %}
+    {% if game|length < 1 %}
+        {% for t in results %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <a class="mr-2">Game Creator: (FK) {{ t.gameCreator }}</a>
+                        <small class="text-muted">Originally Released: {{ t
+              .releaseDate }}</small>
+                    </div>
+                    <h2><a class="article-title" href="#">{{ t.nameGame }}</a></h2>
+                    <p class="article-content">To be covered on podcast episode {{ t.podcastEpisode }}.
+                    Cost: ${{ t.cost }}
+                    Genre: (FK) {{ t.gameGenre }} </p>
+                </div>
+            </article>
+        {% endfor %}
+    {% endif %}
+
     <div class="col-xs-1" align="center">
         <a class="btn btn-secondary" href="/addgame" role="button">Add Game</a>
         <a class="btn btn-secondary" href="/editgame" role="button">Edit Game</a>

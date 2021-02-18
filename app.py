@@ -1,10 +1,15 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, flash, redirect, url_for
+import MySQLdb
+import Database.db_connector as db
 from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
-from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, AddEpisodeForm, \
+from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
+    AddEpisodeForm, \
     AddDistributionPlatformForm, AddPost, RemoveTheThing, AddToM2MPlatformGame, \
-    AddToM2MDistribPlatformGame, EditTheGame
+    AddToM2MDistribPlatformGame, EditTheGame, SearchForm
 
 app = Flask(__name__)
+conn = db.connect_to_database()
+cursor = conn.cursor(MySQLdb.cursors.DictCursor)
 
 app.config['SECRET_KEY'] = 'oTv!5ox8LB#A&@cBHpa@onsKU'
 
@@ -12,23 +17,15 @@ lorem_ipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vu
 
 excel_to_dictionary = XlToDict()
 
-game = excel_to_dictionary.convert_sheet_to_dict(file_path="website_sheets/game.xls",
-                                                 sheet="Sheet1")
-
-gameGenre = excel_to_dictionary.convert_sheet_to_dict(file_path="website_sheets/gameGenre.xls",
-                                                 sheet="Sheet1")
-
-gameCreator = excel_to_dictionary.convert_sheet_to_dict(file_path="website_sheets/gameCreator.xls",
-                                                 sheet="Sheet1")
+gameCreator = excel_to_dictionary.convert_sheet_to_dict(
+    file_path="website_sheets/gameCreator.xls",
+    sheet="Sheet1")
 
 platform = excel_to_dictionary.convert_sheet_to_dict(
     file_path="website_sheets/platform.xls", sheet="Sheet1")
 
 distributionPlatform = excel_to_dictionary.convert_sheet_to_dict(
     file_path="website_sheets/distribution_platform.xls", sheet="Sheet1")
-
-podcastEpisode = excel_to_dictionary.convert_sheet_to_dict(
-    file_path="website_sheets/podcast_episode.xls", sheet="Sheet1")
 
 platform_combo_FK_zz = excel_to_dictionary.convert_sheet_to_dict(
     file_path="website_sheets/platform_combo_FK_zz.xls", sheet="Sheet1")
@@ -41,8 +38,8 @@ distribution_plat_FK_zz = excel_to_dictionary.convert_sheet_to_dict(
 
 posts = [
     {
-      'author': 'Admin',
-      'title': 'Welcome to The Backlog! Links to all pages are in the nav bar above or on the sidebar.',
+        'author': 'Admin',
+        'title': 'Welcome to The Backlog! Links to all pages are in the nav bar above or on the sidebar.',
         'content': 'The Backlog is a podcast is done by the Friedrich brothers covering a wide variety of games, and The Backlog website is going to cover the ever-growing list of games that the Friedrich brothers have previously talked about in the podcast and games that they plan on covering but have not yet talked about in depth.  The database supporting this website is going to contain that list. In other words, the database will contain games that the Backlog Podcast has talked about or thinks that it may have plans on covering in a future episode. With over 1,000 games released commercially every year, and more games on PC and Xbox coming out on GamePass, there’s a need for a database that records the details for each game.',
         'date_posted': 'January 30, 2021',
         'image': 'static/chars.png'
@@ -78,8 +75,14 @@ def home():
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
-    return render_template('search.html', game=game, gameGenre=gameGenre, gameCreator=gameCreator,
-                           platform=platform, distributionPlatform=distributionPlatform, podcastEpisode=podcastEpisode)
+    query = "SELECT * FROM game"
+    cursor.execute(query)
+    game = cursor.fetchall()
+    return render_template('search.html', game=game, gameGenre=gameGenre,
+                           gameCreator=gameCreator,
+                           platform=platform,
+                           distributionPlatform=distributionPlatform,
+                           podcastEpisode=podcastEpisode)
 
 
 @app.route("/addpost", methods=['POST', 'GET'])
@@ -90,40 +93,120 @@ def addHomePost():
 
 @app.route("/games", methods=['POST', 'GET'])
 def games():
-    return render_template('games.html', game=game)
+    results = {}
+    game = {}
+    form = SearchForm()
+    results.clear()
+    if form.is_submitted():
+        game.clear()  # ensure game is empty so results is rendered
+        search_str = [form.search.data]  # gets user's search input
+        query = "SELECT * FROM game WHERE nameGame = %s"
+        cursor.execute(query, search_str)  # queries DB
+        results = cursor.fetchall()  # assigns results of query
+        return render_template('games.html', results=results, form=form)
+    else:
+        query = "SELECT * FROM game"
+        cursor.execute(query)
+        game = cursor.fetchall()
+        return render_template('games.html', game=game, form=form)
 
 
 @app.route("/addgame", methods=['POST', 'GET'])
 def addGame():
     form = AddGameForm()
-    return render_template('add_game.html', title='Add a Game', form=form)
+    if form.is_submitted():
+        # TODO: FIX THIS INSERT STATEMENT
+        insert = "INSERT INTO game(nameGame, releaseDate, cost, podcastEpisode, gameGenre, gameCreator)VALUES(%s, %s, %s, %s, %s, %s)"
+        name = form.nameGame.data
+        date = form.releaseDate.data
+        cost = form.cost.data
+        genre = form.gameGenre.data
+        creator = form.gameCreator.data
+        episode = form.podcastEpisode.data
+        insert_list = [name, date, cost, genre, creator, episode]
+        cursor.execute(insert, insert_list)
+        flash(f'{form.nameGame.data} added to the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template('add_game.html', title='Add a Game', form=form)
 
 
 @app.route("/gamegenres", methods=['POST', 'GET'])
 def gameGenres():
-    return render_template('gameGenres.html', gameGenre=gameGenre)
+    results = {}
+    gameGenre = {}
+    form = SearchForm()
+    results.clear()
+    if form.is_submitted():
+        gameGenre.clear()
+        search_str = [form.search.data]  # gets user's search input
+        print(search_str)
+        query = "SELECT * FROM gameGenre WHERE nameGenre = %s"
+        cursor.execute(query, search_str)  # queries DB
+        results = cursor.fetchall()  # assigns results of query
+        return render_template('gameGenres.html', results=results, form=form)
+    else:
+        query = "SELECT * FROM gameGenre"
+        cursor.execute(query)
+        gameGenre = cursor.fetchall()
+        return render_template('gameGenres.html', gameGenre=gameGenre, form=form)
 
 
 @app.route("/addgenre", methods=['POST', 'GET'])
 def addGenre():
     form = AddGenreForm()
-    return render_template('add_genre.html', title='Add a Genre', form=form)
+    if form.is_submitted():
+        name_of_genre = form.nameGenre.data
+        insert_statement = "INSERT INTO gameGenre(nameGenre) VALUE (%s)"  # TODO: FIX - NOT INSERTING
+        insert_list = [name_of_genre]
+        cursor.execute(insert_statement, insert_list)
+        flash(f'{form.nameGenre.data} genre added to the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template('add_genre.html', title='Add a Genre', form=form)
 
 
 @app.route("/podcastepisodes", methods=['POST', 'GET'])
 def podcastEpisodes():
-    return render_template('podcastEpisode.html', podcastEpisode=podcastEpisode)
+    podcastEpisode = {}
+    results = {}
+    form = SearchForm()
+    results.clear()
+    if form.is_submitted():
+        podcastEpisode.clear()
+        search_str = [form.search.data]  # gets user's search input
+        query = 'SELECT * FROM podcastEpisode WHERE title = "%s"'  # TODO - NOT RETURNING ANYTHING
+        cursor.execute(query, search_str)  # queries DB
+        podcastEpisode = cursor.fetchall()  # assigns results of query
+        return render_template('podcastEpisode.html', podcastEpisode=podcastEpisode, form=form)
+    else:
+        query = "SELECT * FROM podcastEpisode"
+        cursor.execute(query)
+        podcastEpisode = cursor.fetchall()
+        return render_template('podcastEpisode.html',
+                           podcastEpisode=podcastEpisode, form=form)
 
 
 @app.route("/addepisode", methods=['POST', 'GET'])
 def addEpisode():
     form = AddEpisodeForm()
-    return render_template('add_episode.html', title='Add an Episode', form=form)
+    if form.is_submitted():
+        ep_title = form.title.data
+        ep_date = form.episodeDate.data
+        insert_statement = 'INSERT INTO podcastEpisode(title, episodeDate) VALUES (%s, %s)'  # TODO: FIX - NOT INSERTING
+        insert_list = [ep_title, ep_date]
+        cursor.execute(insert_statement, insert_list)
+        flash(f'{ep_title} episode added to the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template('add_episode.html', title='Add an Episode',
+                           form=form)
 
 
 @app.route("/distributionplatforms", methods=['POST', 'GET'])
 def distributionPlatforms():
-    return render_template('distributionPlatform.html', distributionPlatform=distributionPlatform)
+    return render_template('distributionPlatform.html',
+                           distributionPlatform=distributionPlatform)
 
 
 @app.route("/adddistribplat", methods=['POST', 'GET'])
@@ -140,7 +223,8 @@ def platforms():
 @app.route("/addplatform", methods=['POST', 'GET'])
 def addPlatforms():
     form = AddPlatformForm()
-    return render_template('add_platform.html', title='Add a Platform', form=form)
+    return render_template('add_platform.html', title='Add a Platform',
+                           form=form)
 
 
 @app.route("/gamecreators", methods=['POST', 'GET'])
@@ -151,7 +235,8 @@ def gameCreators():
 @app.route("/addcreator", methods=['POST', 'GET'])
 def addCreator():
     form = AddCreatorForm()
-    return render_template('add_creator.html', title='Add a Creator', form=form)
+    return render_template('add_creator.html', title='Add a Creator',
+                           form=form)
 
 
 @app.route("/gamesandplatforms", methods=['POST', 'GET'])
@@ -161,19 +246,22 @@ def m2m_GameAndPlatform():
 
 @app.route("/gamesanddistributionplatforms", methods=['POST', 'GET'])
 def m2m_GameAndDistribPlatform():
-    return render_template('DistributionPlatFKzz.html', distribution_plat_FK_zz=distribution_plat_FK_zz)
+    return render_template('DistributionPlatFKzz.html',
+                           distribution_plat_FK_zz=distribution_plat_FK_zz)
 
 
 @app.route("/addm2mgameandplatform", methods=['POST', 'GET'])
 def add_m2m_GameAndPlatform():
     form = AddToM2MPlatformGame()
-    return render_template('add_gameandplatform.html', title='Add a Combo', form=form)
+    return render_template('add_gameandplatform.html', title='Add a Combo',
+                           form=form)
 
 
 @app.route("/addm2mgameanddistribplatform", methods=['POST', 'GET'])
 def add_m2m_GameAndDistribPlatform():
     form = AddToM2MDistribPlatformGame()
-    return render_template('add_gameanddistribplatform.html', title='Add a Combo', form=form)
+    return render_template('add_gameanddistribplatform.html',
+                           title='Add a Combo', form=form)
 
 
 @app.route("/remove", methods=['POST', 'GET'])

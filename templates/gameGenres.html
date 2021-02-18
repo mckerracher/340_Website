@@ -1,17 +1,29 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <article class="media content-section">
-        <div class="media-body">
-            <div class="article-metadata">
-                <a class="mr-2">Find a Genre</a>
+    <div class="content-section">
+        <form method="POST" action="{{ url_for('gameGenres') }}">
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Find a Genre</legend>
+                <div class="form-group">
+                    {{ form.search.label(class="form-control-label") }}
+                    {% if form.search.errors %}
+                        {{ form.search(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.search.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.search(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
             </div>
-            <div class="form-outline">
-                <input type="search" id="form1" class="form-control" placeholder="Search"
-                       aria-label="Search"/>
-            </div>
-        </div>
-    </article>
+        </form>
+    </div>
 
     <article class="media content-section">
         <div class="media-body" align="center">
@@ -25,7 +37,6 @@
             <a class="btn btn-secondary" href="{{ url_for('remove') }}" role="button">Remove Genre</a>
         </div>
     </article>
-
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
@@ -33,10 +44,18 @@
               <small class="text-muted">on 1.24.2021</small>
             </div>
             <h2><a class="article-title" href="#">Game Genres</a></h2>
-              {% for genre in gameGenre %}
-            <p class="article-content">Genre ID: {{ genre.idGenre }}
-                Genre Name: {{ genre.nameGenre }}</p>
-              {% endfor %}
+              {% if gameGenre|length > 0 %}
+                  {% for genre in gameGenre %}
+                      <p class="article-content">Genre ID: {{ genre.idGenre }}
+                      Genre Name: {{ genre.nameGenre }}</p>
+                  {% endfor %}
+              {% endif %}
+              {% if gameGenre|length < 1 %}
+                  {% for g in results %}
+                      <p class="article-content">Genre ID: {{ g.idGenre }}
+                      Genre Name: {{ g.nameGenre }}</p>
+                  {% endfor %}
+              {% endif %}
           </div>
         </article>
         <div class="col-xs-1" align="center">
