@@ -3,9 +3,8 @@ import MySQLdb
 import Database.db_connector as db
 from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
-    AddEpisodeForm, \
-    AddDistributionPlatformForm, AddPost, RemoveTheThing, AddToM2MPlatformGame, \
-    AddToM2MDistribPlatformGame, EditTheGame, SearchForm
+    AddEpisodeForm, AddDistributionPlatformForm, AddPost, AddToM2MPlatformGame, \
+    AddToM2MDistribPlatformGame, EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, RemovePlatform, RemoveEpisode, RemoveDistribPlat
 
 app = Flask(__name__)
 conn = db.connect_to_database()
@@ -16,13 +15,6 @@ app.config['SECRET_KEY'] = 'oTv!5ox8LB#A&@cBHpa@onsKU'
 lorem_ipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate diam at nisl fringilla sodales. Mauris cursus porta porttitor. In pellentesque sapien lacus, quis feugiat turpis blandit et. Aenean porta ornare lorem at pellentesque. Vestibulum viverra rhoncus massa et pharetra. Sed ornare tristique volutpat. Aliquam tortor erat, feugiat nec aliquet non, hendrerit ut felis. Nunc viverra pellentesque nibh, at tincidunt nisl tincidunt id. Nunc congue sit amet odio id efficitur. Sed dictum orci ut felis facilisis suscipit. Fusce a lectus odio. Quisque nisl sem, tristique id turpis at, varius porttitor libero. Donec varius vitae leo quis maximus. Mauris fermentum ante sapien, id laoreet dolor ultrices in. Ut ac scelerisque leo, sit amet tristique sem. Nunc gravida sit amet enim vitae tristique. Donec imperdiet nunc non pellentesque mattis. Integer accumsan mi vel leo congue tincidunt. Maecenas posuere, lorem id vulputate viverra, turpis ex dictum massa, non imperdiet neque augue id leo. Cras vehicula dapibus lacinia. Phasellus vestibulum diam velit, id aliquam nisl venenatis sed. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vivamus vitae magna magna. Morbi at gravida lacus. Proin vel lacinia justo, vitae malesuada justo. Cras quis tortor a augue sollicitudin finibus sed et sem. Nunc lorem lacus, rutrum ac dui eu, viverra maximus sem. Nunc purus metus, viverra et diam ac, efficitur pellentesque sem. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in est dolor.'
 
 excel_to_dictionary = XlToDict()
-
-gameCreator = excel_to_dictionary.convert_sheet_to_dict(
-    file_path="website_sheets/gameCreator.xls",
-    sheet="Sheet1")
-
-distributionPlatform = excel_to_dictionary.convert_sheet_to_dict(
-    file_path="website_sheets/distribution_platform.xls", sheet="Sheet1")
 
 platform_combo_FK_zz = excel_to_dictionary.convert_sheet_to_dict(
     file_path="website_sheets/platform_combo_FK_zz.xls", sheet="Sheet1")
@@ -365,10 +357,40 @@ def add_m2m_GameAndDistribPlatform():
                            title='Add a Combo', form=form)
 
 
-@app.route("/remove", methods=['POST', 'GET'])
-def remove():
-    form = RemoveTheThing()
-    return render_template('remove.html', title='Remove', form=form)
+@app.route("/removegame", methods=['POST', 'GET'])
+def remove_game():
+    form = RemoveGame()
+    return render_template('remove_game.html', title='Remove Game', form=form)
+
+
+@app.route("/removegenre", methods=['POST', 'GET'])
+def remove_genre():
+    form = RemoveGenre()
+    return render_template('remove_genre.html', title='Remove Genre', form=form)
+
+
+@app.route("/removecreator", methods=['POST', 'GET'])
+def remove_creator():
+    form = RemoveCreator()
+    return render_template('remove_creator.html', title='Remove Creator', form=form)
+
+
+@app.route("/removeplatform", methods=['POST', 'GET'])
+def remove_platform():
+    form = RemovePlatform()
+    return render_template('remove_platform.html', title='Remove Platform', form=form)
+
+
+@app.route("/removeepisode", methods=['POST', 'GET'])
+def remove_episode():
+    form = RemoveEpisode()
+    return render_template('remove_episode.html', title='Remove Episode', form=form)
+
+
+@app.route("/removedistribplat", methods=['POST', 'GET'])
+def remove_distribPlat():
+    form = RemoveDistribPlat()
+    return render_template('remove_distribPlatform.html', title='Remove Distribution Platform', form=form)
 
 
 @app.route("/editgame", methods=['POST', 'GET'])

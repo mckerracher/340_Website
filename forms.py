@@ -82,11 +82,6 @@ class AddToM2MDistribPlatformGame(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class RemoveTheThing(FlaskForm):
-    item = StringField('Item ID', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
-
 class EditTheGame(FlaskForm):
     nameGame = StringField('Game Name (Required)',
                            validators=[DataRequired(), Length(min=1, max=255)])
@@ -106,3 +101,33 @@ class EditTheGame(FlaskForm):
 class SearchForm(FlaskForm):
     search = StringField('Search', validators=[DataRequired()])
     submit = SubmitField('Search')
+
+
+class RemoveGame(FlaskForm):
+    item = StringField('Item ID', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class RemoveGenre(FlaskForm):
+    item = StringField('Item ID', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class RemoveCreator(FlaskForm):
+    item = StringField('Item ID', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class RemovePlatform(FlaskForm):
+    item = StringField('Item ID', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class RemoveEpisode(FlaskForm):
+    item = StringField('Item ID', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class RemoveDistribPlat(FlaskForm):
+    item = StringField('Item ID', validators=[DataRequired()])
+    submit = SubmitField('Submit')
