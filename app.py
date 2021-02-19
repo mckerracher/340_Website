@@ -72,13 +72,6 @@ def home():
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
-    game = []
-    gameGenre = []
-    gameCreator = []
-    platform = []
-    distributionPlatform = []
-    podcastEpisode = []
-
     query = "SELECT nameGame FROM game"
     cursor.execute(query)
     game = cursor.fetchall()
