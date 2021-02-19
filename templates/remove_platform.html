@@ -26,5 +26,19 @@
         </form>
     </div>
 
+    <h2 class="text-center">Current Platforms</h2>
+
+    {% for platform in platform %}
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="#"> Platform ID: {{ platform.idPlatform }}</a>
+                </div>
+                <h2><a class="article-title" href="#">{{ platform.namePlatform }}</a></h2>
+                <p class="article-content">Can it be played online? {{ platform.playedOnline }}
+                    Is it multiplatform? {{ platform.multiPlat }}</p>
+            </div>
+        </article>
+    {% endfor %}
 
 {% endblock content %}

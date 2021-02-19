@@ -26,5 +26,16 @@
         </form>
     </div>
 
+<h2 class="text-center">Current Platform - Game Combinations</h2>
+
+    {% for post in platform_FK_zz %}
+        <article class="media content-section">
+            <div class="media-body">
+                <h2><a class="article-title" href="#">Game ID: {{ post.nameGame }}</a></h2>
+                <h2><a class="article-title" href="#">Platform table ID: {{ post.idPlatform }}</a></h2>
+                </p>
+            </div>
+        </article>
+    {% endfor %}
 
 {% endblock content %}

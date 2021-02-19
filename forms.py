@@ -100,17 +100,17 @@ class RemoveGenre(FlaskForm):
 
 
 class RemoveCreator(FlaskForm):
-    name = StringField('Creator', validators=[DataRequired()])
+    name = StringField('Creator ID (You must use the Creator ID number)', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemovePlatform(FlaskForm):
-    name = StringField('Platform', validators=[DataRequired()])
+    name = StringField('Platform (You must use the Platform ID number)', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveEpisode(FlaskForm):
-    name = StringField('Episode', validators=[DataRequired()])
+    name = StringField('Episode (You must use the Episode number)', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 

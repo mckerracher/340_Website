@@ -27,4 +27,15 @@
     </div>
 
 
+    <article class="media content-section">
+          <div class="media-body">
+            <h2><a class="article-title" href="#">Current Game Creators</a></h2>
+              {% for creator in gameCreator %}
+            <p class="article-content">Creator ID: {{ creator.idCreator }}
+                Creator Name: {{ creator.nameCreator }}</p>
+              {% endfor %}
+          </div>
+    </article>
+
+
 {% endblock content %}

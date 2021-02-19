@@ -288,14 +288,36 @@ def addCreator():
 
 @app.route("/gamesandplatforms", methods=['POST', 'GET'])
 def m2m_GameAndPlatform():
-    return render_template('PlatformFKzz.html', platform_FK_zz=platform_FK_zz)
+    platform_FK_zz = {}
+    form = SearchForm()
+    if form.is_submitted():
+        search_str = [form.search.data]  # gets user's search input
+        query = "SELECT * FROM platformFKzz WHERE nameGame = %s"
+        cursor.execute(query, search_str)  # queries DB
+        platform_FK_zz = cursor.fetchall()  # assigns results of query
+        return render_template('PlatformFKzz.html', platform_FK_zz=platform_FK_zz, form=form)
+    else:
+        query = "SELECT * FROM platformFKzz"
+        cursor.execute(query)
+        platform_FK_zz = cursor.fetchall()
+        return render_template('PlatformFKzz.html', platform_FK_zz=platform_FK_zz, form=form)
 
 
 @app.route("/addm2mgameandplatform", methods=['POST', 'GET'])
 def add_m2m_GameAndPlatform():
     form = AddToM2MPlatformGame()
-    return render_template('add_gameandplatform.html', title='Add a Combo',
-                           form=form)
+    if form.is_submitted():
+        name = form.nameGame.data
+        idPlat = form.idPlatform.data
+        # TODO: FIX - NOT INSERTING
+        insert_statement = 'INSERT INTO platformFKzz (nameGame, idPlatform) VALUES (%s, %s)'
+        insert_list = [name, idPlat]
+        cursor.execute(insert_statement, insert_list)
+        flash(f'{name} creator added to the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template('add_gameandplatform.html', title='Add a Creator',
+                               form=form)
 
 
 @app.route("/removegame", methods=['POST', 'GET'])
@@ -334,26 +356,69 @@ def remove_genre():
 @app.route("/removecreator", methods=['POST', 'GET'])
 def remove_creator():
     form = RemoveCreator()
-    return render_template('remove_creator.html', title='Remove Creator', form=form)
+    if form.is_submitted():
+        remove = 'DELETE FROM gameCreator WHERE idCreator = %s'
+        remove_list = [form.name.data]
+        cursor.execute(remove, remove_list)
+        flash(f'{form.name.data} removed from the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        query = "SELECT * FROM gameCreator"
+        cursor.execute(query)
+        gameCreator = cursor.fetchall()
+        return render_template('remove_creator.html', title='Remove Creator',
+                               form=form, gameCreator=gameCreator)
 
 
 @app.route("/removeplatform", methods=['POST', 'GET'])
 def remove_platform():
     form = RemovePlatform()
-    return render_template('remove_platform.html', title='Remove Platform', form=form)
+    if form.is_submitted():
+        remove = 'DELETE FROM platform WHERE idPlatform =  %s'
+        remove_list = [form.name.data]
+        cursor.execute(remove, remove_list)
+        flash(f'{form.name.data} removed from the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        query = "SELECT * FROM platform"
+        cursor.execute(query)
+        platform = cursor.fetchall()
+        return render_template('remove_platform.html', title='Remove Platform', form=form, platform=platform)
 
 
 @app.route("/removeepisode", methods=['POST', 'GET'])
 def remove_episode():
     form = RemoveEpisode()
-    return render_template('remove_episode.html', title='Remove Episode', form=form)
+    if form.is_submitted():
+        remove = 'DELETE FROM podcastEpisode WHERE episodeNumber = %s'
+        remove_list = [form.name.data]
+        cursor.execute(remove, remove_list)
+        flash(f'{form.name.data} removed from the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        query = "SELECT * FROM podcastEpisode"
+        cursor.execute(query)
+        podcastEpisode = cursor.fetchall()
+        return render_template('remove_episode.html', title='Remove Episode', form=form, podcastEpisode=podcastEpisode)
 
 
 @app.route("/removem2mgameandplatform", methods=['POST', 'GET'])
 def remove_m2m_GameAndPlatform():
     form = RemoveGameAndPlatform()
-    return render_template('remove_gameandplatform.html', title='Remove a Combo',
-                           form=form)
+    if form.is_submitted():
+        # TODO: FIX THIS
+        remove = 'DELETE FROM platformFKzz WHERE nameGame = %s'
+        remove_list = [form.name.data]
+        cursor.execute(remove, remove_list)
+        flash(f'{form.name.data} removed from the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        query = "SELECT * FROM platformFKzz"
+        cursor.execute(query)
+        post = cursor.fetchall()
+        return render_template('remove_gameandplatform.html',
+                               title='Remove a Combo',
+                               form=form, post=post)
 
 
 @app.route("/editgame", methods=['POST', 'GET'])

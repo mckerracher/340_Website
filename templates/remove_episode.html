@@ -26,5 +26,16 @@
         </form>
     </div>
 
+    <h2 class="text-center">Current Episodes</h2>
+
+    {% for episode in podcastEpisode %}
+        <article class="media content-section">
+          <div class="media-body">
+            <h2><a class="article-title" href="#">Podcast Episode on {{ episode.title }}</a></h2>
+              <p class="article-content">Episode Number {{ episode.episodeNumber }}</p>
+            <p class="article-content">To be posted on {{ episode.episodeDate }}</p>
+          </div>
+        </article>
+    {% endfor %}
 
 {% endblock content %}
