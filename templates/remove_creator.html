@@ -2,26 +2,24 @@
 {% block content %}
 
     <div class="content-section">
-        <form method="POST" action="/home">
+        <form method="POST" action="">
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Remove Item</legend>
-
+                <legend class="border-bottom mb-4">Remove a Creator</legend>
                 <div class="form-group">
-                    {{ form.item.label(class="form-control-label") }}
-                    {% if form.item.errors %}
-                        {{ form.item(class="form-control form-control-lg is-invalid") }}
+                    {{ form.name.label(class="form-control-label") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.item.errors %}
+                            {% for error in form.name.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.item(class="form-control form-control-lg") }}
+                        {{ form.name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-
-
             </fieldset>
+
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>

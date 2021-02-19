@@ -95,25 +95,25 @@ class RemoveGame(FlaskForm):
 
 
 class RemoveGenre(FlaskForm):
-    item = StringField('Item ID', validators=[DataRequired()])
+    name = StringField('Item ID', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveCreator(FlaskForm):
-    item = StringField('Item ID', validators=[DataRequired()])
+    name = StringField('Item ID', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemovePlatform(FlaskForm):
-    item = StringField('Item ID', validators=[DataRequired()])
+    name = StringField('Item ID', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveEpisode(FlaskForm):
-    item = StringField('Item ID', validators=[DataRequired()])
+    name = StringField('Item ID', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveGameAndPlatform(FlaskForm):
-    combo = StringField('Combo Name', validators=[DataRequired()])
+    name = StringField('Combo Name', validators=[DataRequired()])
     submit = SubmitField('Submit')
