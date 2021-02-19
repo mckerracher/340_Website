@@ -35,8 +35,7 @@ class AddCreatorForm(FlaskForm):
 
 
 class AddPlatformForm(FlaskForm):
-    idPlatform = IntegerField('Platform ID (Required)',
-                              validators=[DataRequired()])
+    idPlatform = IntegerField('Platform ID')
     namePlatform = StringField('Platform Name (Required)',
                                validators=[DataRequired()])
     playedOnline = StringField('Playable Online? T/F (Required)',

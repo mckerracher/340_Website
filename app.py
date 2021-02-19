@@ -259,8 +259,19 @@ def platforms():
 @app.route("/addplatform", methods=['POST', 'GET'])
 def addPlatforms():
     form = AddPlatformForm()
-    return render_template('add_platform.html', title='Add a Platform',
-                           form=form)
+    if form.is_submitted():
+        name = form.namePlatform.data
+        online = form.playedOnline.data
+        many_plat = form.multiPlat.data
+        # TODO: FIX - NOT INSERTING
+        insert_statement = 'INSERT INTO platform(namePlatform, playedOnline, multiPlat) VALUES (%s, %s, %s)'
+        insert_list = [name, online, many_plat]
+        cursor.execute(insert_statement, insert_list)
+        flash(f'{name} platform added to the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template('add_platform.html', title='Add a Platform',
+                               form=form)
 
 
 @app.route("/gamecreators", methods=['POST', 'GET'])
