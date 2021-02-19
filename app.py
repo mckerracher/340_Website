@@ -21,9 +21,6 @@ gameCreator = excel_to_dictionary.convert_sheet_to_dict(
     file_path="website_sheets/gameCreator.xls",
     sheet="Sheet1")
 
-platform = excel_to_dictionary.convert_sheet_to_dict(
-    file_path="website_sheets/platform.xls", sheet="Sheet1")
-
 distributionPlatform = excel_to_dictionary.convert_sheet_to_dict(
     file_path="website_sheets/distribution_platform.xls", sheet="Sheet1")
 
@@ -239,12 +236,23 @@ def addDistributionPlatform():
                                form=form)
 
 
-
-    return render_template('add_distrib_plat.html', form=form)
-
-
 @app.route("/platforms", methods=['POST', 'GET'])
 def platforms():
+    platform = {}
+    form = SearchForm()
+    if form.is_submitted():
+        platform.clear()
+        search_str = [form.search.data]  # gets user's search input
+        query = "SELECT * FROM platform WHERE namePlatform = %s"
+        cursor.execute(query, search_str)  # queries DB
+        platform = cursor.fetchall()  # assigns results of query
+        return render_template('platforms.html', platform=platform, form=form)
+    else:
+        query = "SELECT * FROM platform"
+        cursor.execute(query)
+        platform = cursor.fetchall()
+        return render_template('platforms.html', platform=platform, form=form)
+
     return render_template('platforms.html', platform=platform)
 
 
