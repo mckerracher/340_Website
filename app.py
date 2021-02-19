@@ -72,9 +72,37 @@ def home():
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
-    query = "SELECT * FROM game"
+    game = []
+    gameGenre = []
+    gameCreator = []
+    platform = []
+    distributionPlatform = []
+    podcastEpisode = []
+
+    query = "SELECT nameGame FROM game"
     cursor.execute(query)
     game = cursor.fetchall()
+
+    query = "SELECT nameGenre FROM gameGenre"
+    cursor.execute(query)
+    gameGenre = cursor.fetchall()
+
+    query = "SELECT nameCreator FROM gameCreator"
+    cursor.execute(query)
+    gameCreator = cursor.fetchall()
+
+    query = "SELECT namePlatform FROM platform"
+    cursor.execute(query)
+    platform = cursor.fetchall()
+
+    query = "SELECT nameDistrib FROM distributionPlatform"
+    cursor.execute(query)
+    distributionPlatform = cursor.fetchall()
+
+    query = "SELECT title FROM podcastEpisode"
+    cursor.execute(query)
+    podcastEpisode = cursor.fetchall()
+
     return render_template('search.html', game=game, gameGenre=gameGenre,
                            gameCreator=gameCreator,
                            platform=platform,
@@ -147,7 +175,8 @@ def gameGenres():
         query = "SELECT * FROM gameGenre"
         cursor.execute(query)
         gameGenre = cursor.fetchall()
-        return render_template('gameGenres.html', gameGenre=gameGenre, form=form)
+        return render_template('gameGenres.html', gameGenre=gameGenre,
+                               form=form)
 
 
 @app.route("/addgenre", methods=['POST', 'GET'])
@@ -161,7 +190,8 @@ def addGenre():
         flash(f'{form.nameGenre.data} genre added to the database!', 'success')
         return redirect(url_for('home'))
     else:
-        return render_template('add_genre.html', title='Add a Genre', form=form)
+        return render_template('add_genre.html', title='Add a Genre',
+                               form=form)
 
 
 @app.route("/podcastepisodes", methods=['POST', 'GET'])
@@ -176,13 +206,14 @@ def podcastEpisodes():
         query = 'SELECT * FROM podcastEpisode WHERE title = "%s"'  # TODO - NOT RETURNING ANYTHING
         cursor.execute(query, search_str)  # queries DB
         podcastEpisode = cursor.fetchall()  # assigns results of query
-        return render_template('podcastEpisode.html', podcastEpisode=podcastEpisode, form=form)
+        return render_template('podcastEpisode.html',
+                               podcastEpisode=podcastEpisode, form=form)
     else:
         query = "SELECT * FROM podcastEpisode"
         cursor.execute(query)
         podcastEpisode = cursor.fetchall()
         return render_template('podcastEpisode.html',
-                           podcastEpisode=podcastEpisode, form=form)
+                               podcastEpisode=podcastEpisode, form=form)
 
 
 @app.route("/addepisode", methods=['POST', 'GET'])
@@ -191,7 +222,7 @@ def addEpisode():
     if form.is_submitted():
         ep_title = form.title.data
         ep_date = form.episodeDate.data
-        #TODO: FIX - NOT INSERTING
+        # TODO: FIX - NOT INSERTING
         insert_statement = 'INSERT INTO podcastEpisode(title, episodeDate) VALUES (%s, %s)'
         insert_list = [ep_title, ep_date]
         cursor.execute(insert_statement, insert_list)
@@ -199,7 +230,7 @@ def addEpisode():
         return redirect(url_for('home'))
     else:
         return render_template('add_episode.html', title='Add an Episode',
-                           form=form)
+                               form=form)
 
 
 @app.route("/distributionplatforms", methods=['POST', 'GET'])
@@ -212,12 +243,16 @@ def distributionPlatforms():
         query = "SELECT * FROM distributionPlatform WHERE nameDistrib = %s"
         cursor.execute(query, search_str)  # queries DB
         distributionPlatform = cursor.fetchall()  # assigns results of query
-        return render_template('distributionPlatform.html', distributionPlatform=distributionPlatform, form=form)
+        return render_template('distributionPlatform.html',
+                               distributionPlatform=distributionPlatform,
+                               form=form)
     else:
         query = "SELECT * FROM distributionPlatform"
         cursor.execute(query)
         distributionPlatform = cursor.fetchall()
-        return render_template('distributionPlatform.html', distributionPlatform=distributionPlatform, form=form)
+        return render_template('distributionPlatform.html',
+                               distributionPlatform=distributionPlatform,
+                               form=form)
 
 
 @app.route("/adddistribplat", methods=['POST', 'GET'])
@@ -230,7 +265,8 @@ def addDistributionPlatform():
         insert_statement = 'INSERT INTO distributionPlatform(nameDistrib, platformRel) VALUES (%s, %s)'
         insert_list = [name, rel]
         cursor.execute(insert_statement, insert_list)
-        flash(f'{name} distribution platform added to the database!', 'success')
+        flash(f'{name} distribution platform added to the database!',
+              'success')
         return redirect(url_for('home'))
     else:
         return render_template('add_distrib_plat.html', title='Add an Episode',
@@ -285,12 +321,14 @@ def gameCreators():
         query = "SELECT * FROM gameCreator WHERE nameCreator = %s"
         cursor.execute(query, search_str)  # queries DB
         gameCreator = cursor.fetchall()  # assigns results of query
-        return render_template('gameCreators.html', gameCreator=gameCreator, form=form)
+        return render_template('gameCreators.html', gameCreator=gameCreator,
+                               form=form)
     else:
         query = "SELECT * FROM gameCreator"
         cursor.execute(query)
         gameCreator = cursor.fetchall()
-        return render_template('gameCreators.html', gameCreator=gameCreator, form=form)
+        return render_template('gameCreators.html', gameCreator=gameCreator,
+                               form=form)
 
 
 @app.route("/addcreator", methods=['POST', 'GET'])
