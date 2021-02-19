@@ -26,5 +26,19 @@
         </form>
     </div>
 
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2">Posted by Andy</a>
+              <small class="text-muted">on 1.24.2021</small>
+            </div>
+            <h2><a class="article-title" href="#">Current Game Genres</a></h2>
+                  {% for genre in gameGenre %}
+                      <p class="article-content">Genre ID: {{ genre.idGenre }}
+                      Genre Name: {{ genre.nameGenre }}</p>
+                  {% endfor %}
+          </div>
+        </article>
+
 
 {% endblock content %}

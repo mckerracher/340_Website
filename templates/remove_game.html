@@ -2,7 +2,7 @@
 {% block content %}
 
     <div class="content-section">
-        <form method="POST" action="">
+        <form method="POST" action="/removegame">
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Remove a Game</legend>
                 <div class="form-group">
@@ -25,6 +25,23 @@
             </div>
         </form>
     </div>
+
+
+        {% for t in game %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <a class="mr-2">Game Creator: (FK) {{ t.gameCreator }}</a>
+                        <small class="text-muted">Originally Released: {{ t
+              .releaseDate }}</small>
+                    </div>
+                    <h2><a class="article-title" href="#">{{ t.nameGame }}</a></h2>
+                    <p class="article-content">To be covered on podcast episode {{ t.podcastEpisode }}.
+                    Cost: ${{ t.cost }}
+                    Genre: (FK) {{ t.gameGenre }} </p>
+                </div>
+            </article>
+        {% endfor %}
 
 
 {% endblock content %}

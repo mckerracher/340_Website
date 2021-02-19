@@ -90,27 +90,27 @@ class SearchForm(FlaskForm):
 
 
 class RemoveGame(FlaskForm):
-    name = StringField('Game Name', validators=[DataRequired()])
+    name = StringField('Game', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveGenre(FlaskForm):
-    name = StringField('Item ID', validators=[DataRequired()])
+    name = StringField('Genre ID (You must use the Genre ID number)', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveCreator(FlaskForm):
-    name = StringField('Item ID', validators=[DataRequired()])
+    name = StringField('Creator', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemovePlatform(FlaskForm):
-    name = StringField('Item ID', validators=[DataRequired()])
+    name = StringField('Platform', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveEpisode(FlaskForm):
-    name = StringField('Item ID', validators=[DataRequired()])
+    name = StringField('Episode', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 

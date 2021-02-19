@@ -163,7 +163,7 @@ def addGenre():
     form = AddGenreForm()
     if form.is_submitted():
         name_of_genre = form.nameGenre.data
-        insert_statement = "INSERT INTO gameGenre(nameGenre) VALUE (%s)"  # TODO: FIX - NOT INSERTING
+        insert_statement = "INSERT INTO gameGenre(nameGenre) VALUE (%s)"
         insert_list = [name_of_genre]
         cursor.execute(insert_statement, insert_list)
         flash(f'{form.nameGenre.data} genre added to the database!', 'success')
@@ -301,13 +301,34 @@ def add_m2m_GameAndPlatform():
 @app.route("/removegame", methods=['POST', 'GET'])
 def remove_game():
     form = RemoveGame()
-    return render_template('remove_game.html', title='Remove Game', form=form)
+    if form.is_submitted():
+        remove = 'DELETE FROM game WHERE nameGame = %s'
+        remove_list = [form.name.data]
+        cursor.execute(remove, remove_list)
+        flash(f'{form.name.data} removed from the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        query = "SELECT * FROM game"
+        cursor.execute(query)
+        game = cursor.fetchall()
+        return render_template('remove_game.html', title='Remove Game', form=form, game=game)
 
 
 @app.route("/removegenre", methods=['POST', 'GET'])
 def remove_genre():
     form = RemoveGenre()
-    return render_template('remove_genre.html', title='Remove Genre', form=form)
+    if form.is_submitted():
+        remove = 'DELETE FROM gameGenre WHERE idGenre = %s'
+        remove_list = [form.name.data]
+        cursor.execute(remove, remove_list)
+        flash(f'{form.name.data} removed from the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        query = "SELECT * FROM gameGenre"
+        cursor.execute(query)
+        gameGenre = cursor.fetchall()
+        return render_template('remove_genre.html', title='Remove Genre',
+                               form=form, gameGenre=gameGenre)
 
 
 @app.route("/removecreator", methods=['POST', 'GET'])
