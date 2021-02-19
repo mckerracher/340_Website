@@ -1,17 +1,30 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <article class="media content-section">
-        <div class="media-body">
-            <div class="article-metadata">
-                <a class="mr-2">Find a Creator</a>
+    <div class="content-section">
+        <form method="POST" action="{{ url_for('gameCreators') }}">
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Find a Creator</legend>
+                <div class="form-group">
+                    {{ form.search.label(class="form-control-label") }}
+                    {% if form.search.errors %}
+                        {{ form.search(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.search.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.search(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
             </div>
-            <div class="form-outline">
-                <input type="search" id="form1" class="form-control" placeholder="Search"
-                       aria-label="Search"/>
-            </div>
-        </div>
-    </article>
+        </form>
+    </div>
 
     <article class="media content-section">
         <div class="media-body" align="center">

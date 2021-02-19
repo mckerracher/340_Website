@@ -27,8 +27,7 @@ class AddGenreForm(FlaskForm):
 
 
 class AddCreatorForm(FlaskForm):
-    idCreator = IntegerField('Genre ID (Required)',
-                             validators=[DataRequired()])
+    idCreator = IntegerField('Genre ID')
     nameCreator = StringField('Creator Name (Required)',
                               validators=[DataRequired()])
     submit = SubmitField('Submit')

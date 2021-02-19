@@ -119,7 +119,8 @@ def addGame():
         cost = form.cost.data
         genre = form.gameGenre.data
         creator = form.gameCreator.data
-        episode = form.podcastEpisode.data
+        if form.podcastEpisode.data == '':
+            episode = form.podcastEpisode.data
         insert_list = [name, date, cost, genre, creator, episode]
         cursor.execute(insert, insert_list)
         flash(f'{form.nameGame.data} added to the database!', 'success')
@@ -276,14 +277,36 @@ def addPlatforms():
 
 @app.route("/gamecreators", methods=['POST', 'GET'])
 def gameCreators():
-    return render_template('gameCreators.html', gameCreator=gameCreator)
+    gameCreator = {}
+    form = SearchForm()
+    if form.is_submitted():
+        gameCreator.clear()
+        search_str = [form.search.data]  # gets user's search input
+        query = "SELECT * FROM gameCreator WHERE nameCreator = %s"
+        cursor.execute(query, search_str)  # queries DB
+        gameCreator = cursor.fetchall()  # assigns results of query
+        return render_template('gameCreators.html', gameCreator=gameCreator, form=form)
+    else:
+        query = "SELECT * FROM gameCreator"
+        cursor.execute(query)
+        gameCreator = cursor.fetchall()
+        return render_template('gameCreators.html', gameCreator=gameCreator, form=form)
 
 
 @app.route("/addcreator", methods=['POST', 'GET'])
 def addCreator():
     form = AddCreatorForm()
-    return render_template('add_creator.html', title='Add a Creator',
-                           form=form)
+    if form.is_submitted():
+        name = form.nameCreator.data
+        # TODO: FIX - NOT INSERTING
+        insert_statement = 'INSERT INTO gameCreator(nameCreator) VALUES (%s)'
+        insert_list = [name]
+        cursor.execute(insert_statement, insert_list)
+        flash(f'{name} creator added to the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template('add_creator.html', title='Add a Creator',
+                               form=form)
 
 
 @app.route("/gamesandplatforms", methods=['POST', 'GET'])
