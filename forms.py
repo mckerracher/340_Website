@@ -53,13 +53,6 @@ class AddEpisodeForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class AddDistributionPlatformForm(FlaskForm):
-    idDistribPlat = IntegerField('Distribution Platform ID')
-    nameDistrib = StringField('Distribution Platform Name (Required)',validators=[DataRequired()])
-    platformRel = StringField('Platform Release Date', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
-
 class AddPost(FlaskForm):
     author = StringField('Author')
     date_posted = DateField('Date')
@@ -71,13 +64,6 @@ class AddPost(FlaskForm):
 class AddToM2MPlatformGame(FlaskForm):
     nameGame = StringField('Game Name (Required)', validators=[DataRequired()])
     idPlatform = IntegerField('Platform ID (Required)',
-                              validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
-
-class AddToM2MDistribPlatformGame(FlaskForm):
-    nameGame = StringField('Game Name (Required)', validators=[DataRequired()])
-    idPlatform = IntegerField('Distribution Platform ID (Required)',
                               validators=[DataRequired()])
     submit = SubmitField('Submit')
 
@@ -104,7 +90,7 @@ class SearchForm(FlaskForm):
 
 
 class RemoveGame(FlaskForm):
-    item = StringField('Item ID', validators=[DataRequired()])
+    name = StringField('Game Name', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
@@ -128,6 +114,6 @@ class RemoveEpisode(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class RemoveDistribPlat(FlaskForm):
-    item = StringField('Item ID', validators=[DataRequired()])
+class RemoveGameAndPlatform(FlaskForm):
+    combo = StringField('Combo Name', validators=[DataRequired()])
     submit = SubmitField('Submit')

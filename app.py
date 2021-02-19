@@ -3,8 +3,8 @@ import MySQLdb
 import Database.db_connector as db
 from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
-    AddEpisodeForm, AddDistributionPlatformForm, AddPost, AddToM2MPlatformGame, \
-    AddToM2MDistribPlatformGame, EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, RemovePlatform, RemoveEpisode, RemoveDistribPlat
+    AddEpisodeForm, AddPost, AddToM2MPlatformGame, \
+    EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, RemovePlatform, RemoveEpisode, RemoveGameAndPlatform
 
 app = Flask(__name__)
 conn = db.connect_to_database()
@@ -21,9 +21,6 @@ platform_combo_FK_zz = excel_to_dictionary.convert_sheet_to_dict(
 
 platform_FK_zz = excel_to_dictionary.convert_sheet_to_dict(
     file_path="website_sheets/platform_FK_zz.xls", sheet="Sheet1")
-
-distribution_plat_FK_zz = excel_to_dictionary.convert_sheet_to_dict(
-    file_path="website_sheets/distribution_plat_FK_zz.xls", sheet="Sheet1")
 
 posts = [
     {
@@ -80,10 +77,6 @@ def search():
     cursor.execute(query)
     platform = cursor.fetchall()
 
-    query = "SELECT nameDistrib FROM distributionPlatform"
-    cursor.execute(query)
-    distributionPlatform = cursor.fetchall()
-
     query = "SELECT title FROM podcastEpisode"
     cursor.execute(query)
     podcastEpisode = cursor.fetchall()
@@ -91,7 +84,6 @@ def search():
     return render_template('search.html', game=game, gameGenre=gameGenre,
                            gameCreator=gameCreator,
                            platform=platform,
-                           distributionPlatform=distributionPlatform,
                            podcastEpisode=podcastEpisode)
 
 
@@ -132,7 +124,9 @@ def addGame():
         cost = form.cost.data
         genre = form.gameGenre.data
         creator = form.gameCreator.data
-        if form.podcastEpisode.data == '':
+        episode = []
+        episode = form.podcastEpisode.data
+        if not form.podcastEpisode.data:
             episode = form.podcastEpisode.data
         insert_list = [name, date, cost, genre, creator, episode]
         cursor.execute(insert, insert_list)
@@ -218,46 +212,6 @@ def addEpisode():
                                form=form)
 
 
-@app.route("/distributionplatforms", methods=['POST', 'GET'])
-def distributionPlatforms():
-    distributionPlatform = {}
-    form = SearchForm()
-    if form.is_submitted():
-        distributionPlatform.clear()
-        search_str = [form.search.data]  # gets user's search input
-        query = "SELECT * FROM distributionPlatform WHERE nameDistrib = %s"
-        cursor.execute(query, search_str)  # queries DB
-        distributionPlatform = cursor.fetchall()  # assigns results of query
-        return render_template('distributionPlatform.html',
-                               distributionPlatform=distributionPlatform,
-                               form=form)
-    else:
-        query = "SELECT * FROM distributionPlatform"
-        cursor.execute(query)
-        distributionPlatform = cursor.fetchall()
-        return render_template('distributionPlatform.html',
-                               distributionPlatform=distributionPlatform,
-                               form=form)
-
-
-@app.route("/adddistribplat", methods=['POST', 'GET'])
-def addDistributionPlatform():
-    form = AddDistributionPlatformForm()
-    if form.is_submitted():
-        name = form.nameDistrib.data
-        rel = form.platformRel.data
-        # TODO: FIX - NOT INSERTING
-        insert_statement = 'INSERT INTO distributionPlatform(nameDistrib, platformRel) VALUES (%s, %s)'
-        insert_list = [name, rel]
-        cursor.execute(insert_statement, insert_list)
-        flash(f'{name} distribution platform added to the database!',
-              'success')
-        return redirect(url_for('home'))
-    else:
-        return render_template('add_distrib_plat.html', title='Add an Episode',
-                               form=form)
-
-
 @app.route("/platforms", methods=['POST', 'GET'])
 def platforms():
     platform = {}
@@ -337,24 +291,11 @@ def m2m_GameAndPlatform():
     return render_template('PlatformFKzz.html', platform_FK_zz=platform_FK_zz)
 
 
-@app.route("/gamesanddistributionplatforms", methods=['POST', 'GET'])
-def m2m_GameAndDistribPlatform():
-    return render_template('DistributionPlatFKzz.html',
-                           distribution_plat_FK_zz=distribution_plat_FK_zz)
-
-
 @app.route("/addm2mgameandplatform", methods=['POST', 'GET'])
 def add_m2m_GameAndPlatform():
     form = AddToM2MPlatformGame()
     return render_template('add_gameandplatform.html', title='Add a Combo',
                            form=form)
-
-
-@app.route("/addm2mgameanddistribplatform", methods=['POST', 'GET'])
-def add_m2m_GameAndDistribPlatform():
-    form = AddToM2MDistribPlatformGame()
-    return render_template('add_gameanddistribplatform.html',
-                           title='Add a Combo', form=form)
 
 
 @app.route("/removegame", methods=['POST', 'GET'])
@@ -387,10 +328,11 @@ def remove_episode():
     return render_template('remove_episode.html', title='Remove Episode', form=form)
 
 
-@app.route("/removedistribplat", methods=['POST', 'GET'])
-def remove_distribPlat():
-    form = RemoveDistribPlat()
-    return render_template('remove_distribPlatform.html', title='Remove Distribution Platform', form=form)
+@app.route("/removem2mgameandplatform", methods=['POST', 'GET'])
+def remove_m2m_GameAndPlatform():
+    form = RemoveGameAndPlatform()
+    return render_template('remove_gameandplatform.html', title='Remove a Combo',
+                           form=form)
 
 
 @app.route("/editgame", methods=['POST', 'GET'])
