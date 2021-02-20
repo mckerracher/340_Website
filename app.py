@@ -4,7 +4,7 @@ import Database.db_connector as db
 # from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
     AddEpisodeForm, AddPost, AddToM2MPlatformGame, \
-    EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, RemovePlatform, RemoveEpisode, RemoveGameAndPlatform
+    EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, RemovePlatform, RemoveEpisode, RemoveGameAndPlatform, SearchPageNameForm, SearchPageGenreForm, SearchPageEpisodeForm, SearchPageCreatorForm, SearchPageDateForm, SearchPageCostForm
 
 app = Flask(__name__)
 conn = db.connect_to_database()
@@ -53,32 +53,13 @@ def home():
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
-    query = "SELECT nameGame FROM game"
-    cursor.execute(query)
-    game = cursor.fetchall()
-
-    query = "SELECT nameGenre FROM gameGenre"
-    cursor.execute(query)
-    gameGenre = cursor.fetchall()
-
-    query = "SELECT nameCreator FROM gameCreator"
-    cursor.execute(query)
-    gameCreator = cursor.fetchall()
-
-    query = "SELECT namePlatform FROM platform"
-    cursor.execute(query)
-    platform = cursor.fetchall()
-
-    query = "SELECT title FROM podcastEpisode"
-    cursor.execute(query)
-    podcastEpisode = cursor.fetchall()
-
-    # to do
-
-    return render_template('search.html', game=game, gameGenre=gameGenre,
-                           gameCreator=gameCreator,
-                           platform=platform,
-                           podcastEpisode=podcastEpisode)
+    name_form = SearchPageNameForm()
+    genre_form = SearchPageGenreForm()
+    ep_form = SearchPageEpisodeForm()
+    creator_form = SearchPageCreatorForm()
+    date_form = SearchPageDateForm()
+    cost_form = SearchPageCostForm()
+    return render_template('search.html', name_form=name_form, genre_form=genre_form, ep_form=ep_form, creator_form=creator_form, date_form=date_form, cost_form=cost_form)
 
 
 @app.route("/games", methods=['POST', 'GET'])
