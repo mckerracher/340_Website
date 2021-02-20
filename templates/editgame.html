@@ -2,9 +2,23 @@
 {% block content %}
 
         <div class="content-section">
-        <form method="POST" action="/games">
+        <form method="POST" action="">
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Edit a Game</legend>
+
+                <div class="form-group">
+                    {{ form.originalName.label(class="form-control-label") }}
+                    {% if form.originalName.errors %}
+                        {{ form.originalName(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.originalName.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.originalName(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
 
                 <div class="form-group">
                     {{ form.nameGame.label(class="form-control-label") }}
@@ -100,5 +114,22 @@
         </form>
     </div>
 
+    <h2 class="text-center">Current Games</h2>
+
+    {% for t in game %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <a class="mr-2">Game Creator: (FK) {{ t.gameCreator }}</a>
+                        <small class="text-muted">Originally Released: {{ t
+              .releaseDate }}</small>
+                    </div>
+                    <h2><a class="article-title" href="#">{{ t.nameGame }}</a></h2>
+                    <p class="article-content">To be covered on podcast episode {{ t.podcastEpisode }}.
+                    Cost: ${{ t.cost }}
+                    Genre: (FK) {{ t.gameGenre }} </p>
+                </div>
+            </article>
+        {% endfor %}
 
 {% endblock content %}

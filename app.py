@@ -73,6 +73,8 @@ def search():
     cursor.execute(query)
     podcastEpisode = cursor.fetchall()
 
+    # to do
+
     return render_template('search.html', game=game, gameGenre=gameGenre,
                            gameCreator=gameCreator,
                            platform=platform,
@@ -109,7 +111,6 @@ def games():
 def addGame():
     form = AddGameForm()
     if form.is_submitted():
-        # TODO: FIX THIS INSERT STATEMENT
         insert = "INSERT INTO game(nameGame, releaseDate, cost, podcastEpisode, gameGenre, gameCreator)VALUES(%s, %s, %s, %s, %s, %s)"
         name = form.nameGame.data
         date = form.releaseDate.data
@@ -416,7 +417,28 @@ def remove_m2m_GameAndPlatform():
 @app.route("/editgame", methods=['POST', 'GET'])
 def editgame():
     form = EditTheGame()
-    return render_template('editgame.html', title='Edit', form=form)
+    if form.is_submitted():
+        insert = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  gameGenre = (SELECT idGenre FROM gameGenre WHERE idGenre = %s), gameCreator = (SELECT idCreator FROM gameCreator WHERE idCreator = %s), podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
+        orig_name = form.originalName.data
+        name = form.nameGame.data
+        date = form.releaseDate.data
+        cost = form.cost.data
+        genre = form.gameGenre.data
+        creator = form.gameCreator.data
+        episode = []
+        episode = form.podcastEpisode.data
+        if not form.podcastEpisode.data:
+            episode = form.podcastEpisode.data
+        insert_list = [name, date, cost, genre, creator, episode, orig_name]
+        print(insert_list)
+        cursor.execute(insert, insert_list)
+        flash(f'{orig_name} changed the database!', 'success')
+        return redirect(url_for('home'))
+    else:
+        query = "SELECT * FROM game"
+        cursor.execute(query)
+        game = cursor.fetchall()
+        return render_template('editgame.html', title='Edit a Game', form=form, game=game)
 
 
 if __name__ == '__main__':
