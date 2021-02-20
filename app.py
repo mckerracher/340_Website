@@ -333,7 +333,7 @@ def remove_game():
 def remove_genre():
     form = RemoveGenre()
     if form.is_submitted():
-        remove = 'DELETE FROM gameGenre WHERE idGenre = %s'
+        remove = 'DELETE FROM gameGenre WHERE nameGenre = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
         flash(f'{form.name.data} removed from the database!', 'success')
@@ -350,7 +350,7 @@ def remove_genre():
 def remove_creator():
     form = RemoveCreator()
     if form.is_submitted():
-        remove = 'DELETE FROM gameCreator WHERE idCreator = %s'
+        remove = 'DELETE FROM gameCreator WHERE nameCreator = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
         flash(f'{form.name.data} removed from the database!', 'success')
@@ -367,7 +367,7 @@ def remove_creator():
 def remove_platform():
     form = RemovePlatform()
     if form.is_submitted():
-        remove = 'DELETE FROM platform WHERE idPlatform =  %s'
+        remove = 'DELETE FROM platform WHERE namePlatform =  %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
         flash(f'{form.name.data} removed from the database!', 'success')
@@ -383,7 +383,7 @@ def remove_platform():
 def remove_episode():
     form = RemoveEpisode()
     if form.is_submitted():
-        remove = 'DELETE FROM podcastEpisode WHERE episodeNumber = %s'
+        remove = 'DELETE FROM podcastEpisode WHERE title = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
         flash(f'{form.name.data} removed from the database!', 'success')
@@ -430,7 +430,6 @@ def editgame():
         if not form.podcastEpisode.data:
             episode = form.podcastEpisode.data
         insert_list = [name, date, cost, genre, creator, episode, orig_name]
-        print(insert_list)
         cursor.execute(insert, insert_list)
         flash(f'{orig_name} changed the database!', 'success')
         return redirect(url_for('home'))

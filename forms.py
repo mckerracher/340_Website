@@ -12,14 +12,23 @@ class AddGameForm(FlaskForm):
                            validators=[DataRequired(), Length(min=1, max=255)])
     releaseDate = DateField('Release Date (Required)',
                             validators=[DataRequired()])
-    cost = IntegerField('Game Cost', validators=[DataRequired()])
-    gameGenre = StringField('Game Genre (Required)',
-                            validators=[DataRequired(),
-                                        Length(min=1, max=255)])
-    gameCreator = StringField('Game Creator (Required)',
-                              validators=[DataRequired(),
-                                          Length(min=1, max=255)])
-    podcastEpisode = IntegerField('Podcast Episode')
+    cost = IntegerField('Game Cost (Required)', validators=[DataRequired()])
+
+    query = "SELECT idGenre FROM gameGenre"
+    cursor.execute(query)
+    genre_list = [item['idGenre'] for item in cursor.fetchall()]
+    gameGenre = SelectField('Game Genre (Required)', choices=genre_list, validators=[DataRequired()])
+
+    query = "SELECT idCreator FROM gameCreator"
+    cursor.execute(query)
+    creator_list = [item['idCreator'] for item in cursor.fetchall()]
+    gameCreator = SelectField('Game Creator (Required)', choices=creator_list, validators=[DataRequired()])
+
+    query = "SELECT episodeNumber FROM podcastEpisode"
+    cursor.execute(query)
+    episode_list = [item['episodeNumber'] for item in cursor.fetchall()]
+    podcastEpisode = SelectField('Podcast Episode (Optional)', choices=episode_list)
+
     submit = SubmitField('Submit')
 
 
@@ -111,30 +120,58 @@ class SearchForm(FlaskForm):
 
 
 class RemoveGame(FlaskForm):
-    name = StringField('Game', validators=[DataRequired()])
+    query = "SELECT nameGame FROM game"
+    cursor.execute(query)
+    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
+    games_list = sorted(games_list_unsorted)
+    name = SelectField('Game Name', choices=games_list, validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveGenre(FlaskForm):
-    name = StringField('Genre ID (You must use the Genre ID number)', validators=[DataRequired()])
+    query = "SELECT nameGenre FROM gameGenre"
+    cursor.execute(query)
+    genre_list = [item['nameGenre'] for item in cursor.fetchall()]
+    name = SelectField('Game Genre', choices=genre_list, validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveCreator(FlaskForm):
-    name = StringField('Creator ID (You must use the Creator ID number)', validators=[DataRequired()])
+    query = "SELECT nameCreator FROM gameCreator"
+    cursor.execute(query)
+    creator_list = [item['nameCreator'] for item in cursor.fetchall()]
+    name = SelectField('Game Creator',
+                              choices=creator_list,
+                              validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemovePlatform(FlaskForm):
-    name = StringField('Platform (You must use the Platform ID number)', validators=[DataRequired()])
+    query = "SELECT namePlatform FROM platform"
+    cursor.execute(query)
+    plat_list = [item['namePlatform'] for item in cursor.fetchall()]
+    name = SelectField('Platform',
+                       choices=plat_list,
+                       validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveEpisode(FlaskForm):
-    name = StringField('Episode (You must use the Episode number)', validators=[DataRequired()])
+    query = "SELECT title FROM podcastEpisode"
+    cursor.execute(query)
+    ep_list = [item['title'] for item in cursor.fetchall()]
+    name = SelectField('Episode',
+                       choices=ep_list,
+                       validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveGameAndPlatform(FlaskForm):
-    name = StringField('Combo Name', validators=[DataRequired()])
+    query = "SELECT nameGame FROM platformFKzz"
+    cursor.execute(query)
+    ep_list = [item['nameGame'] for item in cursor.fetchall()]
+    name = SelectField('Game',
+                       choices=ep_list,
+                       validators=[DataRequired()])
+
     submit = SubmitField('Submit')
