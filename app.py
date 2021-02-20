@@ -81,12 +81,6 @@ def search():
                            podcastEpisode=podcastEpisode)
 
 
-@app.route("/addpost", methods=['POST', 'GET'])
-def addHomePost():
-    form = AddPost()
-    return render_template('add_post.html', title='Add a Post', form=form)
-
-
 @app.route("/games", methods=['POST', 'GET'])
 def games():
     results = {}
