@@ -7,20 +7,6 @@
                 <legend class="border-bottom mb-4">Add a Platform</legend>
 
                 <div class="form-group">
-                    {{ form.idPlatform.label(class="form-control-label") }}
-                    {% if form.idPlatform.errors %}
-                        {{ form.idPlatform(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.idPlatform.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.idPlatform(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
                     {{ form.namePlatform.label(class="form-control-label") }}
                     {% if form.namePlatform.errors %}
                         {{ form.namePlatform(class="form-control form-control-lg is-invalid") }}

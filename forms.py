@@ -20,21 +20,18 @@ class AddGameForm(FlaskForm):
 
 
 class AddGenreForm(FlaskForm):
-    idGenre = IntegerField('Genre ID')  # TODO - REMOVE???
     nameGenre = StringField('Genre Name (Required)',
                             validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class AddCreatorForm(FlaskForm):
-    idCreator = IntegerField('Genre ID')
     nameCreator = StringField('Creator Name (Required)',
                               validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class AddPlatformForm(FlaskForm):
-    idPlatform = IntegerField('Platform ID')
     namePlatform = StringField('Platform Name (Required)',
                                validators=[DataRequired()])
     playedOnline = StringField('Playable Online? T/F (Required)',
@@ -61,6 +58,11 @@ class AddPost(FlaskForm):
     submit = SubmitField('Post')
 
 
+class AddToM2MPlatformGame(FlaskForm):
+    nameGame = StringField('Game Name (Required)', validators=[DataRequired()])
+    idPlatform = IntegerField('Platform ID (Required)',
+                              validators=[DataRequired()])
+    submit = SubmitField('Submit')
 class AddToM2MPlatformGame(FlaskForm):
     nameGame = StringField('Game Name (Required)', validators=[DataRequired()])
     idPlatform = IntegerField('Platform ID (Required)',
