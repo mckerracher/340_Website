@@ -4,7 +4,7 @@ import MySQLdb
 
 
 
-def connect_to_database(host=host, user=user, passwd=passwd, db=db):
+def connect_to_database(host=host, user=user, passwd=passwd, db=db, ssl_disabled= ssl_disabled):
     '''
     connects to a database and returns a database objects
     '''
