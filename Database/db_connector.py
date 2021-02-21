@@ -1,7 +1,11 @@
 import MySQLdb
 
 # Database Info
-
+host = "us-cdbr-east-03.cleardb.com"
+user = "be5765a97239e1"
+passwd = "6d4a5cc8"
+db = "heroku_27223dfa0403044"
+ssl_disabled = "True"
 
 
 def connect_to_database(host=host, user=user, passwd=passwd, db=db, ssl_disabled= ssl_disabled):
