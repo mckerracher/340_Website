@@ -55,83 +55,121 @@ def home():
 @app.route("/search", methods=['POST', 'GET'])
 def search():
     form = SearchPageForm()
+    counter = 0
+
+    # Booleans used to track which dropdowns have been used.
     name_bool = False
     genre_bool = False
     ep_bool = False
     creator_bool = False
     date_bool = False
     cost_bool = False
-    bool_list = [name_bool, genre_bool, ep_bool, creator_bool, date_bool, cost_bool]
+    bool_list = [name_bool, genre_bool, ep_bool, creator_bool, date_bool,
+                 cost_bool]
 
-    if form.name.data != 'NULL':
+    # Checks which dropdowns have been used.
+    if form.name.data is not None and form.name.data != 'NULL':
         name_bool = True
         bool_list[0] = True
-    if form.genre.data != 'NULL':
+    if form.genre.data is not None and form.genre.data != 'NULL':
         genre_bool = True
         bool_list[1] = True
-    if form.episode.data != 'NULL':
+    if form.episode.data is not None and form.episode.data != 'NULL':
         ep_bool = True
         bool_list[2] = True
-    if form.creator.data != 'NULL':
+    if form.creator.data is not None and form.creator.data != 'NULL':
         creator_bool = True
         bool_list[3] = True
-    if form.date.data != 'NULL':
+    if form.date.data is not None and form.date.data != 'NULL':
         date_bool = True
         bool_list[4] = True
-    if form.cost.data != 'NULL':
+    if form.cost.data is not None and form.cost.data != 'NULL':
         cost_bool = True
         bool_list[5] = True
 
+    # If any dropdowns have been used to search, render page with results.
     if name_bool or genre_bool or ep_bool or creator_bool or date_bool or cost_bool:
         counter = 0
         render = []
+        query_prefix = "SELECT * FROM game WHERE "
+        search = []
 
+        # counts how many dropdowns have been used.
         for b in bool_list:
             if b == True:
                 counter += 1
 
+        # Build SQL query based on one dropdown used.
         if counter == 1:
             if name_bool:
-                search = [form.name.data]
+                search.append(form.name.data)
                 query = "SELECT * FROM game WHERE nameGame = %s"
                 cursor.execute(query, search)
                 render = cursor.fetchall()
             if genre_bool:
-                search = [form.genre.data]
+                search.append(form.genre.data)
                 query = "SELECT * FROM game WHERE gameGenre = %s"
                 cursor.execute(query, search)
                 render = cursor.fetchall()
             if ep_bool:
-                search = [form.episode.data]
+                search.append(form.episode.data)
                 query = "SELECT * FROM game WHERE podcastEpisode = %s"
                 cursor.execute(query, search)
                 render = cursor.fetchall()
             if creator_bool:
-                search = [form.creator.data]
+                search.append(form.creator.data)
                 query = "SELECT * FROM game WHERE gameCreator = %s"
                 cursor.execute(query, search)
                 render = cursor.fetchall()
             if date_bool:
-                search = [form.date.data]
+                search.append(form.date.data)
                 query = "SELECT * FROM game WHERE releaseDate = %s"
                 cursor.execute(query, search)
                 render = cursor.fetchall()
             if cost_bool:
-                search = [form.cost.data]
+                search.append(form.cost.data)
                 query = "SELECT * FROM game WHERE cost = %s"
                 cursor.execute(query, search)
                 render = cursor.fetchall()
-        elif counter == 2:
-            print('2')
-        elif counter == 3:
-            print('3')
-        elif counter == 4:
-            print('4')
-        elif counter == 5:
-            print('5')
-        elif counter == 6:
-            print('6')
-        return render_template('search.html', form=form, render=render)
+        # Build SQL query for more than one dropdown.
+        if counter > 1:
+            if name_bool:
+                search.append(form.name.data)
+                query_prefix += "nameGame = %s AND "
+            if genre_bool:
+                search.append(form.genre.data)
+                query_prefix += "gameGenre = %s AND "
+            if ep_bool:
+                search.append(form.episode.data)
+                query_prefix += "podcastEpisode = %s AND "
+            if creator_bool:
+                search.append(form.creator.data)
+                query_prefix += "gameCreator = %s AND "
+            if date_bool:
+                search.append(form.date.data)
+                query_prefix += "releaseDate = %s AND "
+            if cost_bool:
+                search.append(form.cost.data)
+                query_prefix += "cost = %s AND "
+            # builds the SQL query and executes it
+            query_length = len(query_prefix)
+            query = query_prefix[:query_length - 5]  # Remove trailing ' AND '
+            cursor.execute(query, search)
+            render = cursor.fetchall()
+
+        # if we have results from SQL query, render them.
+        if len(render) > 0:
+            # reset booleans
+            for b in bool_list:
+                b = False
+            return render_template('search.html', form=form, render=render)
+        # otherwise, redirect to homepage with notification of no results.
+        else:
+            # reset booleans
+            for b in bool_list:
+                b = False
+            flash(f'No search results found!', 'success')
+            return redirect(url_for('home'))
     else:
         return render_template('search.html', form=form)
 
@@ -337,12 +375,14 @@ def m2m_GameAndPlatform():
         query = "SELECT * FROM platformFKzz WHERE nameGame = %s"
         cursor.execute(query, search_str)  # queries DB
         platform_FK_zz = cursor.fetchall()  # assigns results of query
-        return render_template('PlatformFKzz.html', platform_FK_zz=platform_FK_zz, form=form)
+        return render_template('PlatformFKzz.html',
+                               platform_FK_zz=platform_FK_zz, form=form)
     else:
         query = "SELECT * FROM platformFKzz"
         cursor.execute(query)
         platform_FK_zz = cursor.fetchall()
-        return render_template('PlatformFKzz.html', platform_FK_zz=platform_FK_zz, form=form)
+        return render_template('PlatformFKzz.html',
+                               platform_FK_zz=platform_FK_zz, form=form)
 
 
 @app.route("/addm2mgameandplatform", methods=['POST', 'GET'])
@@ -358,7 +398,8 @@ def add_m2m_GameAndPlatform():
         flash(f'{name} creator added to the database!', 'success')
         return redirect(url_for('home'))
     else:
-        return render_template('add_gameandplatform.html', title='Add a Creator',
+        return render_template('add_gameandplatform.html',
+                               title='Add a Creator',
                                form=form)
 
 
@@ -375,7 +416,8 @@ def remove_game():
         query = "SELECT * FROM game"
         cursor.execute(query)
         game = cursor.fetchall()
-        return render_template('remove_game.html', title='Remove Game', form=form, game=game)
+        return render_template('remove_game.html', title='Remove Game',
+                               form=form, game=game)
 
 
 @app.route("/removegenre", methods=['POST', 'GET'])
@@ -425,7 +467,8 @@ def remove_platform():
         query = "SELECT * FROM platform"
         cursor.execute(query)
         platform = cursor.fetchall()
-        return render_template('remove_platform.html', title='Remove Platform', form=form, platform=platform)
+        return render_template('remove_platform.html', title='Remove Platform',
+                               form=form, platform=platform)
 
 
 @app.route("/removeepisode", methods=['POST', 'GET'])
@@ -441,7 +484,8 @@ def remove_episode():
         query = "SELECT * FROM podcastEpisode"
         cursor.execute(query)
         podcastEpisode = cursor.fetchall()
-        return render_template('remove_episode.html', title='Remove Episode', form=form, podcastEpisode=podcastEpisode)
+        return render_template('remove_episode.html', title='Remove Episode',
+                               form=form, podcastEpisode=podcastEpisode)
 
 
 @app.route("/removem2mgameandplatform", methods=['POST', 'GET'])
@@ -486,7 +530,8 @@ def editgame():
         query = "SELECT * FROM game"
         cursor.execute(query)
         game = cursor.fetchall()
-        return render_template('editgame.html', title='Edit a Game', form=form, game=game)
+        return render_template('editgame.html', title='Edit a Game', form=form,
+                               game=game)
 
 
 if __name__ == '__main__':
