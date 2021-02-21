@@ -5,215 +5,140 @@
 
     <h1 class="text-center">find games in the database</h1>
 
-<div class="row">
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Search by Game Name</h5>
-        <p class="card-text">Get a list of games matching the game name.</p>
-
-         <div class="content-section">
+<div class="content-section">
         <form method="POST" action="">
+
             <fieldset class="form-group">
                 <div class="form-group">
-                    {{ name_form.name.label(class="form-control-label") }}
-                    {% if name_form.name.errors %}
-                        {{ name_form.name(class="form-control form-control-lg is-invalid") }}
+                    {{ form.name.label(class="form-control-label") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in name_form.name.errors %}
+                            {% for error in form.name.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ name_form.name(class="form-control form-control-lg") }}
+                        {{ form.name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
             </fieldset>
-            <div class="form-group">
-                {{ name_form.submit(class="btn btn-outline-info") }}
-            </div>
-        </form>
-    </div>
 
-      </div>
-    </div>
-  </div>
 
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Search by Game Genre</h5>
-        <p class="card-text">Get a list of games matching the selected genre.</p>
 
-          <div class="content-section">
-        <form method="POST" action="">
+
             <fieldset class="form-group">
                 <div class="form-group">
-                    {{ genre_form.genre.label(class="form-control-label") }}
-                    {% if genre_form.genre.errors %}
-                        {{ genre_form.genre(class="form-control form-control-lg is-invalid") }}
+                    {{ form.genre.label(class="form-control-label") }}
+                    {% if form.genre.errors %}
+                        {{ form.genre(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in genre_form.genre.errors %}
+                            {% for error in form.genre.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ genre_form.genre(class="form-control form-control-lg") }}
+                        {{ form.genre(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
             </fieldset>
-            <div class="form-group">
-                {{ genre_form.submit(class="btn btn-outline-info") }}
-            </div>
-        </form>
-    </div>
 
-      </div>
-    </div>
-  </div>
-</div>
 
-<!----------------  ROW TWO BELOW ------------------->
 
-<div class="row">
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Search by Game Creator</h5>
-        <p class="card-text">Get a list of games matching the game creator.</p>
 
-         <div class="content-section">
-        <form method="POST" action="">
             <fieldset class="form-group">
                 <div class="form-group">
-                    {{ creator_form.creator.label(class="form-control-label") }}
-                    {% if creator_form.creator.errors %}
-                        {{ creator_form.creator(class="form-control form-control-lg is-invalid") }}
+                    {{ form.creator.label(class="form-control-label") }}
+                    {% if form.creator.errors %}
+                        {{ form.creator(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in creator_form.creator.errors %}
+                            {% for error in form.creator.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ creator_form.creator(class="form-control form-control-lg") }}
+                        {{ form.creator(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
             </fieldset>
-            <div class="form-group">
-                {{ creator_form.submit(class="btn btn-outline-info") }}
-            </div>
-        </form>
-    </div>
 
-      </div>
-    </div>
-  </div>
 
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Search by Podcast Episode</h5>
-        <p class="card-text">Get a list of games featured in an episode.</p>
 
-          <div class="content-section">
-        <form method="POST" action="">
             <fieldset class="form-group">
                 <div class="form-group">
-                    {{ ep_form.episode.label(class="form-control-label") }}
-                    {% if ep_form.episode.errors %}
-                        {{ ep_form.episode(class="form-control form-control-lg is-invalid") }}
+                    {{ form.episode.label(class="form-control-label") }}
+                    {% if form.episode.errors %}
+                        {{ form.episode(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in ep_form.episode.errors %}
+                            {% for error in form.episode.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ ep_form.episode(class="form-control form-control-lg") }}
+                        {{ form.episode(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
             </fieldset>
-            <div class="form-group">
-                {{ ep_form.submit(class="btn btn-outline-info") }}
-            </div>
-        </form>
-    </div>
-
-      </div>
-    </div>
-  </div>
-</div>
 
 
 
-<!----------------  ROW THREE BELOW ------------------->
-
-<div class="row">
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Search by Release Date</h5>
-        <p class="card-text">Get a list of games released on a specific date.</p>
-
-         <div class="content-section">
-        <form method="POST" action="">
             <fieldset class="form-group">
                 <div class="form-group">
-                    {{ date_form.date.label(class="form-control-label") }}
-                    {% if date_form.date.errors %}
-                        {{ date_form.date(class="form-control form-control-lg is-invalid") }}
+                    {{ form.date.label(class="form-control-label") }}
+                    {% if form.date.errors %}
+                        {{ form.date(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in date_form.date.errors %}
+                            {% for error in form.date.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ date_form.date(class="form-control form-control-lg") }}
+                        {{ form.date(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
             </fieldset>
-            <div class="form-group">
-                {{ date_form.submit(class="btn btn-outline-info") }}
-            </div>
-        </form>
-    </div>
 
-      </div>
-    </div>
-  </div>
 
-  <div class="col-sm-6">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Search by Game Cost</h5>
-        <p class="card-text">Get a list of games by matching cost.</p>
 
-          <div class="content-section">
-        <form method="POST" action="">
             <fieldset class="form-group">
                 <div class="form-group">
-                    {{ cost_form.cost.label(class="form-control-label") }}
-                    {% if cost_form.cost.errors %}
-                        {{ cost_form.cost(class="form-control form-control-lg is-invalid") }}
+                    {{ form.cost.label(class="form-control-label") }}
+                    {% if form.cost.errors %}
+                        {{ form.cost(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in cost_form.cost.errors %}
+                            {% for error in form.cost.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ cost_form.cost(class="form-control form-control-lg") }}
+                        {{ form.cost(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
             </fieldset>
+
+
+
             <div class="form-group">
-                {{ cost_form.submit(class="btn btn-outline-info") }}
+                {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
     </div>
 
-      </div>
-    </div>
-  </div>
-</div>
 
+    {% for t in render %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <a class="mr-2">Game Creator: (FK) {{ t.gameCreator }}</a>
+                        <small class="text-muted">Originally Released: {{ t
+              .releaseDate }}</small>
+                    </div>
+                    <h2><a class="article-title" href="#">{{ t.nameGame }}</a></h2>
+                    <p class="article-content">To be covered on podcast episode {{ t.podcastEpisode }}.
+                    Cost: ${{ t.cost }}
+                    Genre: (FK) {{ t.gameGenre }} </p>
+                </div>
+            </article>
+    {% endfor %}
 
 {% endblock content %}

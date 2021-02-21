@@ -176,50 +176,57 @@ class RemoveGameAndPlatform(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class SearchPageNameForm(FlaskForm):
+class SearchPageForm(FlaskForm):
     query = "SELECT nameGame FROM game"
     cursor.execute(query)
     games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
-    games_list = sorted(games_list_unsorted)
+    games_list = ['NULL']
+    for item in games_list_unsorted:
+        games_list.append(item)
     name = SelectField('Game Name', choices=games_list)
-    submit = SubmitField('Search')
 
-
-class SearchPageGenreForm(FlaskForm):
     query = "SELECT gameGenre FROM game"
     cursor.execute(query)
-    genre_list = [item['gameGenre'] for item in cursor.fetchall()]
+    genre_list = ['NULL']
+    second_list = [item['gameGenre'] for item in cursor.fetchall()]
+    second_list = list(set(second_list))  # order elements and remove duplicates
+    for item in second_list:
+        genre_list.append(item)
     genre = SelectField('Game Genre', choices=genre_list)
-    submit = SubmitField('Search')
 
-
-class SearchPageCreatorForm(FlaskForm):
     query = "SELECT gameCreator FROM game"
     cursor.execute(query)
-    creator_list = [item['gameCreator'] for item in cursor.fetchall()]
+    creator_list = ['NULL']
+    tmp = [item['gameCreator'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        creator_list.append(item)
     creator = SelectField('Game Creator', choices=creator_list)
-    submit = SubmitField('Search')
 
-
-class SearchPageEpisodeForm(FlaskForm):
     query = "SELECT podcastEpisode FROM game"
     cursor.execute(query)
-    ep_list = [item['podcastEpisode'] for item in cursor.fetchall()]
+    ep_list = ['NULL']
+    tmp = [item['podcastEpisode'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        ep_list.append(item)
     episode = SelectField('Podcast Episode', choices=ep_list)
-    submit = SubmitField('Search')
 
-
-class SearchPageDateForm(FlaskForm):
     query = "SELECT releaseDate FROM game"
     cursor.execute(query)
-    date_list = [item['releaseDate'] for item in cursor.fetchall()]
+    date_list = ['NULL']
+    tmp = [item['releaseDate'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        date_list.append(item)
     date = SelectField('Release Date', choices=date_list)
-    submit = SubmitField('Search')
 
-
-class SearchPageCostForm(FlaskForm):
     query = "SELECT cost FROM game"
     cursor.execute(query)
-    cost_list = [item['cost'] for item in cursor.fetchall()]
+    cost_list = ['NULL']
+    tmp = [item['cost'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        cost_list.append(item)
     cost = SelectField('Game Cost', choices=cost_list)
     submit = SubmitField('Search')

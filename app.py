@@ -4,7 +4,8 @@ import Database.db_connector as db
 # from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
     AddEpisodeForm, AddPost, AddToM2MPlatformGame, \
-    EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, RemovePlatform, RemoveEpisode, RemoveGameAndPlatform, SearchPageNameForm, SearchPageGenreForm, SearchPageEpisodeForm, SearchPageCreatorForm, SearchPageDateForm, SearchPageCostForm
+    EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, \
+    RemovePlatform, RemoveEpisode, RemoveGameAndPlatform, SearchPageForm
 
 app = Flask(__name__)
 conn = db.connect_to_database()
@@ -53,13 +54,86 @@ def home():
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
-    name_form = SearchPageNameForm()
-    genre_form = SearchPageGenreForm()
-    ep_form = SearchPageEpisodeForm()
-    creator_form = SearchPageCreatorForm()
-    date_form = SearchPageDateForm()
-    cost_form = SearchPageCostForm()
-    return render_template('search.html', name_form=name_form, genre_form=genre_form, ep_form=ep_form, creator_form=creator_form, date_form=date_form, cost_form=cost_form)
+    form = SearchPageForm()
+    name_bool = False
+    genre_bool = False
+    ep_bool = False
+    creator_bool = False
+    date_bool = False
+    cost_bool = False
+    bool_list = [name_bool, genre_bool, ep_bool, creator_bool, date_bool, cost_bool]
+
+    if form.name.data != 'NULL':
+        name_bool = True
+        bool_list[0] = True
+    if form.genre.data != 'NULL':
+        genre_bool = True
+        bool_list[1] = True
+    if form.episode.data != 'NULL':
+        ep_bool = True
+        bool_list[2] = True
+    if form.creator.data != 'NULL':
+        creator_bool = True
+        bool_list[3] = True
+    if form.date.data != 'NULL':
+        date_bool = True
+        bool_list[4] = True
+    if form.cost.data != 'NULL':
+        cost_bool = True
+        bool_list[5] = True
+
+    if name_bool or genre_bool or ep_bool or creator_bool or date_bool or cost_bool:
+        counter = 0
+        render = []
+
+        for b in bool_list:
+            if b == True:
+                counter += 1
+
+        if counter == 1:
+            if name_bool:
+                search = [form.name.data]
+                query = "SELECT * FROM game WHERE nameGame = %s"
+                cursor.execute(query, search)
+                render = cursor.fetchall()
+            if genre_bool:
+                search = [form.genre.data]
+                query = "SELECT * FROM game WHERE gameGenre = %s"
+                cursor.execute(query, search)
+                render = cursor.fetchall()
+            if ep_bool:
+                search = [form.episode.data]
+                query = "SELECT * FROM game WHERE podcastEpisode = %s"
+                cursor.execute(query, search)
+                render = cursor.fetchall()
+            if creator_bool:
+                search = [form.creator.data]
+                query = "SELECT * FROM game WHERE gameCreator = %s"
+                cursor.execute(query, search)
+                render = cursor.fetchall()
+            if date_bool:
+                search = [form.date.data]
+                query = "SELECT * FROM game WHERE releaseDate = %s"
+                cursor.execute(query, search)
+                render = cursor.fetchall()
+            if cost_bool:
+                search = [form.cost.data]
+                query = "SELECT * FROM game WHERE cost = %s"
+                cursor.execute(query, search)
+                render = cursor.fetchall()
+        elif counter == 2:
+            print('2')
+        elif counter == 3:
+            print('3')
+        elif counter == 4:
+            print('4')
+        elif counter == 5:
+            print('5')
+        elif counter == 6:
+            print('6')
+        return render_template('search.html', form=form, render=render)
+    else:
+        return render_template('search.html', form=form)
 
 
 @app.route("/games", methods=['POST', 'GET'])
