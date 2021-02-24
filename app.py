@@ -281,7 +281,6 @@ def addEpisode():
     if form.is_submitted():
         ep_title = form.title.data
         ep_date = form.episodeDate.data
-        # TODO: FIX - NOT INSERTING
         insert_statement = 'INSERT INTO podcastEpisode(title, episodeDate) VALUES (%s, %s)'
         insert_list = [ep_title, ep_date]
         cursor.execute(insert_statement, insert_list)
