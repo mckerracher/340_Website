@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, IntegerField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length
-import MySQLdb
 import Database.db_connector as db
+import pymysql.cursors
 
 conn = db.connect_to_database()
-cursor = conn.cursor(MySQLdb.cursors.DictCursor)
+cursor = conn.cursor(pymysql.cursors.DictCursor)
 
 
 class AddGameForm(FlaskForm):

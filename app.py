@@ -1,15 +1,16 @@
 from flask import Flask, render_template, flash, redirect, url_for
-import MySQLdb
 import Database.db_connector as db
+import pymysql.cursors
 # from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
     AddEpisodeForm, AddPost, AddToM2MPlatformGame, \
     EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, \
     RemovePlatform, RemoveEpisode, RemoveGameAndPlatform, SearchPageForm
 
+# Connect to the database
 app = Flask(__name__)
 conn = db.connect_to_database()
-cursor = conn.cursor(MySQLdb.cursors.DictCursor)
+cursor = conn.cursor(pymysql.cursors.DictCursor)
 
 app.config['SECRET_KEY'] = 'oTv!5ox8LB#A&@cBHpa@onsKU'
 
@@ -210,6 +211,7 @@ def addGame():
             episode = form.podcastEpisode.data
         insert_list = [name, date, cost, genre, creator, episode]
         cursor.execute(insert, insert_list)
+        conn.commit()
         flash(f'{form.nameGame.data} added to the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -246,6 +248,7 @@ def addGenre():
         insert_statement = "INSERT INTO gameGenre(nameGenre) VALUE (%s)"
         insert_list = [name_of_genre]
         cursor.execute(insert_statement, insert_list)
+        conn.commit()
         flash(f'{form.nameGenre.data} genre added to the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -284,6 +287,7 @@ def addEpisode():
         insert_statement = 'INSERT INTO podcastEpisode(title, episodeDate) VALUES (%s, %s)'
         insert_list = [ep_title, ep_date]
         cursor.execute(insert_statement, insert_list)
+        conn.commit()
         flash(f'{ep_title} episode added to the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -318,10 +322,10 @@ def addPlatforms():
         name = form.namePlatform.data
         online = form.playedOnline.data
         many_plat = form.multiPlat.data
-        # TODO: FIX - NOT INSERTING
         insert_statement = 'INSERT INTO platform(namePlatform, playedOnline, multiPlat) VALUES (%s, %s, %s)'
         insert_list = [name, online, many_plat]
         cursor.execute(insert_statement, insert_list)
+        conn.commit()
         flash(f'{name} platform added to the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -354,10 +358,10 @@ def addCreator():
     form = AddCreatorForm()
     if form.is_submitted():
         name = form.nameCreator.data
-        # TODO: FIX - NOT INSERTING
         insert_statement = 'INSERT INTO gameCreator(nameCreator) VALUES (%s)'
         insert_list = [name]
         cursor.execute(insert_statement, insert_list)
+        conn.commit()
         flash(f'{name} creator added to the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -390,10 +394,10 @@ def add_m2m_GameAndPlatform():
     if form.is_submitted():
         name = form.nameGame.data
         idPlat = form.idPlatform.data
-        # TODO: FIX - NOT INSERTING
         insert_statement = 'INSERT INTO platformFKzz (nameGame, idPlatform) VALUES (%s, %s)'
         insert_list = [name, idPlat]
         cursor.execute(insert_statement, insert_list)
+        conn.commit()
         flash(f'{name} creator added to the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -523,6 +527,7 @@ def editgame():
             episode = form.podcastEpisode.data
         insert_list = [name, date, cost, genre, creator, episode, orig_name]
         cursor.execute(insert, insert_list)
+        conn.commit()
         flash(f'{orig_name} changed the database!', 'success')
         return redirect(url_for('home'))
     else:
