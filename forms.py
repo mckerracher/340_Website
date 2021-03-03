@@ -78,16 +78,40 @@ class AddPost(FlaskForm):
 
 
 class AddToM2MPlatformGame(FlaskForm):
-    nameGame = StringField('Game Name (Required)', validators=[DataRequired()])
-    idPlatform = IntegerField('Platform ID (Required)',
-                              validators=[DataRequired()])
+    query = "SELECT nameGame FROM game"
+    cursor.execute(query)
+    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
+    games_list = sorted(games_list_unsorted)
+    nameGame = SelectField('Game Name (Required)', choices=games_list,
+                           validators=[DataRequired()])
+
+    query = "SELECT idPlatform FROM platform"
+    cursor.execute(query)
+    platform_list = [item['idPlatform'] for
+                     item in cursor.fetchall()]
+
+    idPlatform = SelectField('Platform ID (Required)', choices=platform_list,
+                             validators=[DataRequired()])
+
     submit = SubmitField('Submit')
 
 
 class AddToM2MPlatformGame(FlaskForm):
-    nameGame = StringField('Game Name (Required)', validators=[DataRequired()])
-    idPlatform = IntegerField('Platform ID (Required)',
-                              validators=[DataRequired()])
+    query = "SELECT nameGame FROM game"
+    cursor.execute(query)
+    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
+    games_list = sorted(games_list_unsorted)
+    nameGame = SelectField('Game Name (Required)', choices=games_list,
+                           validators=[DataRequired()])
+
+    query = "SELECT idPlatform FROM platform"
+    cursor.execute(query)
+    platform_list = [item['idPlatform'] for
+                     item in cursor.fetchall()]
+
+    idPlatform = SelectField('Platform ID (Required)', choices=platform_list,
+                             validators=[DataRequired()])
+
     submit = SubmitField('Submit')
 
 
