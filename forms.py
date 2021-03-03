@@ -27,7 +27,11 @@ class AddGameForm(FlaskForm):
 
     query = "SELECT episodeNumber FROM podcastEpisode"
     cursor.execute(query)
-    episode_list = [item['episodeNumber'] for item in cursor.fetchall()]
+    episode_list = ['NULL']
+    results = cursor.fetchall()
+    for res in results:
+        episode_list.append(res)
+    # episode_list = [item['episodeNumber'] for item in cursor.fetchall()]
     podcastEpisode = SelectField('Podcast Episode (Optional)', choices=episode_list)
 
     query = "SELECT idPlatform FROM platform"
@@ -51,12 +55,10 @@ class AddCreatorForm(FlaskForm):
 
 
 class AddPlatformForm(FlaskForm):
-    namePlatform = StringField('Platform Name (Required)',
-                               validators=[DataRequired()])
-    playedOnline = StringField('Playable Online? T/F (Required)',
-                               validators=[DataRequired()])
-    multiPlat = StringField('Playable on Multiple Platforms? T/F (Required)',
-                            validators=[DataRequired()])
+    true_false = ["True", "False"]
+    namePlatform = StringField('Platform Name (Required)', validators=[DataRequired()])
+    playedOnline = SelectField('Playable Online? (Required)', choices=true_false, validators=[DataRequired()])
+    multiPlat = SelectField('Playable on Multiple Platforms? (Required)', choices=true_false, validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
