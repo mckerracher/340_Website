@@ -1,9 +1,6 @@
 import pymysql
 
-h = ""
-u = ""
-pw = ""
-dbase =""
+
 
 
 def connect_to_database(host=h, user=u, passwd=pw, datab=dbase):

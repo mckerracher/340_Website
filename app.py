@@ -413,6 +413,7 @@ def remove_game():
         remove = 'DELETE FROM game WHERE nameGame = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
+        conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -430,6 +431,7 @@ def remove_genre():
         remove = 'DELETE FROM gameGenre WHERE nameGenre = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
+        conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -447,6 +449,7 @@ def remove_creator():
         remove = 'DELETE FROM gameCreator WHERE nameCreator = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
+        conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -464,6 +467,7 @@ def remove_platform():
         remove = 'DELETE FROM platform WHERE namePlatform =  %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
+        conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -481,6 +485,7 @@ def remove_episode():
         remove = 'DELETE FROM podcastEpisode WHERE title = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
+        conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -495,10 +500,10 @@ def remove_episode():
 def remove_m2m_GameAndPlatform():
     form = RemoveGameAndPlatform()
     if form.is_submitted():
-        # TODO: FIX THIS
         remove = 'DELETE FROM platformFKzz WHERE nameGame = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
+        conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
