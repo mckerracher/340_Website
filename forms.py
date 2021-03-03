@@ -29,6 +29,12 @@ class AddGameForm(FlaskForm):
     cursor.execute(query)
     episode_list = [item['episodeNumber'] for item in cursor.fetchall()]
     podcastEpisode = SelectField('Podcast Episode (Optional)', choices=episode_list)
+
+    query = "SELECT idPlatform FROM platform"
+    cursor.execute(query)
+    platform_list = [item['idPlatform'] for item in cursor.fetchall()]
+    platformList = SelectField('Platform (Required)', choices=platform_list)
+
     submit = SubmitField('Submit')
 
 

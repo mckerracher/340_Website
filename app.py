@@ -212,6 +212,11 @@ def addGame():
         insert_list = [name, date, cost, genre, creator, episode]
         cursor.execute(insert, insert_list)
         conn.commit()
+        platform = form.platformList.data
+        platform_value = [platform, name]
+        insert = "INSERT INTO platformFKzz(idPlatform, nameGame)VALUES(%s, %s)"
+        cursor.execute(insert, platform_value)
+        conn.commit()
         flash(f'{form.nameGame.data} added to the database!', 'success')
         return redirect(url_for('home'))
     else:
