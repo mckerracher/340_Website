@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for
 import Database.db_connector as db
 import pymysql.cursors
+import time
 # from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
     AddEpisodeForm, AddPost, AddToM2MPlatformGame, \
@@ -199,7 +200,6 @@ def games():
 def addGame():
     form = AddGameForm()
     if form.is_submitted():
-        insert = "INSERT INTO game(nameGame, releaseDate, cost, podcastEpisode, gameGenre, gameCreator)VALUES(%s, %s, %s, %s, %s, %s)"
         name = form.nameGame.data
         date = form.releaseDate.data
         cost = form.cost.data
@@ -207,13 +207,21 @@ def addGame():
         creator = form.gameCreator.data
         episode = []
         episode = form.podcastEpisode.data
-        if not form.podcastEpisode.data:
-            episode = form.podcastEpisode.data
-        insert_list = [name, date, cost, genre, creator, episode]
-        cursor.execute(insert, insert_list)
-        conn.commit()
+        insert = ""
+        insert_list = []
+        if episode == 'NULL':
+            insert += "INSERT INTO game(nameGame, releaseDate, cost, gameGenre, gameCreator)VALUES(%s, %s, %s, %s, %s)"
+            insert_list = [name, date, cost, genre, creator]
+            cursor.execute(insert, insert_list)
+            conn.commit()
+        else:
+            insert += "INSERT INTO game(nameGame, releaseDate, cost, gameGenre, gameCreator, podcastEpisode)VALUES(%s, %s, %s, %s, %s, %s)"
+            insert_list = [name, date, cost, genre, creator, episode]
+            cursor.execute(insert, insert_list)
+            conn.commit()
         platform = form.platformList.data
         platform_value = [platform, name]
+        time.sleep(1)
         insert = "INSERT INTO platformFKzz(idPlatform, nameGame)VALUES(%s, %s)"
         cursor.execute(insert, platform_value)
         conn.commit()

@@ -27,11 +27,10 @@ class AddGameForm(FlaskForm):
 
     query = "SELECT episodeNumber FROM podcastEpisode"
     cursor.execute(query)
-    episode_list = ['NULL']
+    episode_list = ["NULL"]
     results = cursor.fetchall()
-    for res in results:
-        episode_list.append(res)
-    # episode_list = [item['episodeNumber'] for item in cursor.fetchall()]
+    for item in results:
+        episode_list.append(item['episodeNumber'])
     podcastEpisode = SelectField('Podcast Episode (Optional)', choices=episode_list)
 
     query = "SELECT idPlatform FROM platform"
