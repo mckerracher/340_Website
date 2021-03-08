@@ -114,10 +114,17 @@ def search():
                 cursor.execute(query, search)
                 render = cursor.fetchall()
             if ep_bool:
-                search.append(form.episode.data)
-                query = "SELECT * FROM game WHERE podcastEpisode = %s"
-                cursor.execute(query, search)
-                render = cursor.fetchall()
+                tmp = form.episode.data
+                query = ''
+                if tmp == 'None':
+                    query = "SELECT * FROM game WHERE podcastEpisode IS NULL"
+                    cursor.execute(query)
+                    render = cursor.fetchall()
+                else:
+                    search.append(tmp)
+                    query = "SELECT * FROM game WHERE podcastEpisode = %s"
+                    cursor.execute(query, search)
+                    render = cursor.fetchall()
             if creator_bool:
                 search.append(form.creator.data)
                 query = "SELECT * FROM game WHERE gameCreator = %s"
