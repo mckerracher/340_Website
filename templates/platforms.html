@@ -47,8 +47,8 @@
                     <a class="mr-2" href="#"> Platform ID: {{ platform.idPlatform }}</a>
                 </div>
                 <h2><a class="article-title" href="#">{{ platform.namePlatform }}</a></h2>
-                <p class="article-content">Can it be played online? {{ platform.playedOnline }}
-                    Is it multiplatform? {{ platform.multiPlat }}</p>
+                <p class="article-content">Can it be played online? {% if platform.playedOnline == 1 %} Yes {% endif %}{% if platform.playedOnline == 0 %} No {% endif %}
+                Is it multiplatform? {% if platform.multiPlat == 1 %} Yes {% endif %} {% if platform.multiPlat == 0 %} No {% endif %}</p>
             </div>
         </article>
     {% endfor %}
