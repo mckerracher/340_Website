@@ -149,8 +149,11 @@ def search():
                 search.append(form.genre.data)
                 query_prefix += "gameGenre = %s AND "
             if ep_bool:
-                search.append(form.episode.data)
-                query_prefix += "podcastEpisode = %s AND "
+                if form.episode.data == 'None':
+                    query_prefix += "podcastEpisode IS NULL AND "
+                else:
+                    search.append(form.episode.data)
+                    query_prefix += "podcastEpisode = %s AND "
             if creator_bool:
                 search.append(form.creator.data)
                 query_prefix += "gameCreator = %s AND "
