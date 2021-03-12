@@ -109,11 +109,31 @@ def search():
                 cursor.execute(query, search)
                 render = cursor.fetchall()
             if genre_bool:
-                search.append(form.genre.data)
+                # 1 Get nameGenre
+                genre_name = form.genre.data
+                # 2 Get idGenre
+                alt_query = "SELECT nameGenre FROM gameGenre"
+                cursor.execute(alt_query)
+                names = [item['nameGenre'] for item in cursor.fetchall()]
+                alt_query = "SELECT idGenre FROM gameGenre"
+                cursor.execute(alt_query)
+                ids = [item['idGenre'] for item in cursor.fetchall()]
+                index = -1
+                for name in names:
+                    index += 1
+                    if genre_name == name:
+                        break
+                idx_count = -1
+                if index != -1:
+                    for id in ids:
+                        idx_count += 1
+                        if idx_count == index:
+                            search.append(str(id))
                 query = "SELECT * FROM game WHERE gameGenre = %s"
                 cursor.execute(query, search)
                 render = cursor.fetchall()
             if ep_bool:
+                # 1 - Get the name from dropdown
                 tmp = form.episode.data
                 query = ''
                 if tmp == 'None':
@@ -121,12 +141,53 @@ def search():
                     cursor.execute(query)
                     render = cursor.fetchall()
                 else:
+                    # 2 - Get corresponding ID
+                    ep_query = "SELECT title FROM podcastEpisode"
+                    cursor.execute(ep_query)
+                    ep_titles = [item['title'] for item in cursor.fetchall()]
+                    ep_query = "SELECT episodeNumber FROM podcastEpisode"
+                    cursor.execute(ep_query)
+                    ep_ids = [item['episodeNumber'] for item in
+                              cursor.fetchall()]
+                    idx = -1
+                    for title in ep_titles:
+                        idx += 1
+                        if title == tmp:
+                            break
+                    idx_2 = -1
+                    for id in ep_ids:
+                        idx_2 += 1
+                        if idx_2 == idx:
+                            tmp = id
+                    # 3 - Execute DB search from ID
                     search.append(tmp)
                     query = "SELECT * FROM game WHERE podcastEpisode = %s"
                     cursor.execute(query, search)
                     render = cursor.fetchall()
             if creator_bool:
-                search.append(form.creator.data)
+                # 1 - Get the name from dropdown
+                creator_name = form.creator.data
+                # 2 - Get corresponding ID
+                creator_query = "SELECT nameCreator FROM gameCreator"
+                cursor.execute(creator_query)
+                creator_names = [item['nameCreator'] for item in
+                                 cursor.fetchall()]
+                creator_query = "SELECT idCreator FROM gameCreator"
+                cursor.execute(creator_query)
+                creator_ids = [item['idCreator'] for item in cursor.fetchall()]
+                index = -1
+                for c_name in creator_names:
+                    index += 1
+                    if c_name == creator_name:
+                        break
+                idx_2 = -1
+                search_ID = ''
+                for c_id in creator_ids:
+                    idx_2 += 1
+                    if idx_2 == index:
+                        search_ID = c_id
+                search.append(search_ID)
+                # 3 - Execute DB search from ID
                 query = "SELECT * FROM game WHERE gameCreator = %s"
                 cursor.execute(query, search)
                 render = cursor.fetchall()
@@ -146,16 +207,76 @@ def search():
                 search.append(form.name.data)
                 query_prefix += "nameGame = %s AND "
             if genre_bool:
-                search.append(form.genre.data)
+                # 1 Get nameGenre
+                genre_name = form.genre.data
+                # 2 Get idGenre
+                alt_query = "SELECT nameGenre FROM gameGenre"
+                cursor.execute(alt_query)
+                names = [item['nameGenre'] for item in cursor.fetchall()]
+                alt_query = "SELECT idGenre FROM gameGenre"
+                cursor.execute(alt_query)
+                ids = [item['idGenre'] for item in cursor.fetchall()]
+                index = -1
+                for name in names:
+                    index += 1
+                    if genre_name == name:
+                        break
+                idx_count = -1
+                if index != -1:
+                    for id in ids:
+                        idx_count += 1
+                        if idx_count == index:
+                            search.append(str(id))
                 query_prefix += "gameGenre = %s AND "
             if ep_bool:
-                if form.episode.data == 'None':
+                tmp = form.episode.data
+                if tmp == 'None':
                     query_prefix += "podcastEpisode IS NULL AND "
                 else:
-                    search.append(form.episode.data)
+                    # 2 - Get corresponding ID
+                    ep_query = "SELECT title FROM podcastEpisode"
+                    cursor.execute(ep_query)
+                    ep_titles = [item['title'] for item in cursor.fetchall()]
+                    ep_query = "SELECT episodeNumber FROM podcastEpisode"
+                    cursor.execute(ep_query)
+                    ep_ids = [item['episodeNumber'] for item in
+                              cursor.fetchall()]
+                    idx = -1
+                    for title in ep_titles:
+                        idx += 1
+                        if title == tmp:
+                            break
+                    idx_2 = -1
+                    for id in ep_ids:
+                        idx_2 += 1
+                        if idx_2 == idx:
+                            tmp = id
+                    # 3 - Execute DB search from ID
+                    search.append(tmp)
                     query_prefix += "podcastEpisode = %s AND "
             if creator_bool:
-                search.append(form.creator.data)
+                # 1 - Get the name from dropdown
+                creator_name = form.creator.data
+                # 2 - Get corresponding ID
+                creator_query = "SELECT nameCreator FROM gameCreator"
+                cursor.execute(creator_query)
+                creator_names = [item['nameCreator'] for item in
+                                 cursor.fetchall()]
+                creator_query = "SELECT idCreator FROM gameCreator"
+                cursor.execute(creator_query)
+                creator_ids = [item['idCreator'] for item in cursor.fetchall()]
+                index = -1
+                for c_name in creator_names:
+                    index += 1
+                    if c_name == creator_name:
+                        break
+                idx_2 = -1
+                search_ID = ''
+                for c_id in creator_ids:
+                    idx_2 += 1
+                    if idx_2 == index:
+                        search_ID = c_id
+                search.append(search_ID)
                 query_prefix += "gameCreator = %s AND "
             if date_bool:
                 search.append(form.date.data)
@@ -434,9 +555,44 @@ def remove_game():
     form = RemoveGame()
     if form.is_submitted():
         remove = 'DELETE FROM game WHERE nameGame = %s'
-        remove_list = [form.name.data]
-        cursor.execute(remove, remove_list)
-        conn.commit()
+
+        # check if the game has a podcast episode
+        nm = [form.name.data]
+        gm_q = 'SELECT podcastEpisode FROM game WHERE nameGame = %s'
+        cursor.execute(gm_q, nm)
+        game_ep = [item['podcastEpisode'] for item in cursor.fetchall()]
+
+        # check if the game is in platformFkzz
+        cursor.execute('SELECT nameGame FROM platformFKzz')
+        name_list = [item['nameGame'] for item in cursor.fetchall()]
+        game_found = False
+        for x in name_list:
+            # toggle the boolean if it's there
+            if x == form.name.data:
+                game_found = True
+
+        # remove from platformFkzz if it's there
+        if game_found:
+            cursor.execute('DELETE FROM platformFKzz WHERE nameGame = %s', nm)
+            conn.commit()
+
+        print(f"PODCAST EPISODE = {game_ep}")
+        if not game_ep[0]:
+            game_name = form.name.data
+            # gets a list of current episodes
+            cursor.execute("SELECT episodeNumber FROM podcastEpisode")
+            eps = [item['episodeNumber'] for item in cursor.fetchall()]
+            name_val = [eps[0], game_name]
+            # adds the first episode to current game
+            insert = 'UPDATE game SET podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
+            cursor.execute(insert, name_val)
+            conn.commit()
+            cursor.execute(remove, game_name)
+            conn.commit()
+        else:
+            remove_list = [form.name.data]
+            cursor.execute(remove, remove_list)
+            conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -542,7 +698,10 @@ def remove_m2m_GameAndPlatform():
 def editgame():
     form = EditTheGame()
     if form.is_submitted():
-        insert = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  gameGenre = (SELECT idGenre FROM gameGenre WHERE idGenre = %s), gameCreator = (SELECT idCreator FROM gameCreator WHERE idCreator = %s), podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
+        insert = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  ' \
+                 'gameGenre = (SELECT idGenre FROM gameGenre WHERE idGenre = %s), ' \
+                 'gameCreator = (SELECT idCreator FROM gameCreator WHERE idCreator = %s), ' \
+                 'podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
         orig_name = form.originalName.data
         name = form.nameGame.data
         date = form.releaseDate.data

@@ -216,28 +216,29 @@ class SearchPageForm(FlaskForm):
         games_list.append(item)
     name = SelectField('Game Name', choices=games_list)
 
-    query = "SELECT gameGenre FROM game"
+    query = "SELECT nameGenre FROM gameGenre"
     cursor.execute(query)
     genre_list = ['NULL']
-    second_list = [item['gameGenre'] for item in cursor.fetchall()]
-    second_list = list(set(second_list))  # order elements and remove duplicates
+    second_list = [item['nameGenre'] for item in cursor.fetchall()]
+    # order elements and remove duplicates
+    second_list = list(set(second_list))
     for item in second_list:
         genre_list.append(item)
     genre = SelectField('Game Genre', choices=genre_list)
 
-    query = "SELECT gameCreator FROM game"
+    query = "SELECT nameCreator FROM gameCreator"
     cursor.execute(query)
     creator_list = ['NULL']
-    tmp = [item['gameCreator'] for item in cursor.fetchall()]
+    tmp = [item['nameCreator'] for item in cursor.fetchall()]
     tmp = list(set(tmp))
     for item in tmp:
         creator_list.append(item)
     creator = SelectField('Game Creator', choices=creator_list)
 
-    query = "SELECT podcastEpisode FROM game"
+    query = "SELECT title FROM podcastEpisode"
     cursor.execute(query)
     ep_list = ['NULL']
-    tmp = [item['podcastEpisode'] for item in cursor.fetchall()]
+    tmp = [item['title'] for item in cursor.fetchall()]
     tmp = list(set(tmp))
     for item in tmp:
         ep_list.append(item)
