@@ -4,7 +4,7 @@ import pymysql.cursors
 import time
 # from xl2dict import XlToDict  # https://pypi.org/project/xl2dict/
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
-    AddEpisodeForm, AddPost, AddToM2MPlatformGame, \
+    AddEpisodeForm, AddToM2MPlatformGame, \
     EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, \
     RemovePlatform, RemoveEpisode, RemoveGameAndPlatform, SearchPageForm
 
@@ -339,6 +339,47 @@ def search():
             if cost_bool:
                 search.append(form.cost.data)
                 query_prefix += "cost = %s AND "
+            if platform_bool:
+                # 1 Get the ID matching the name
+                p_name = form.platform.data
+                print(f"{p_name}")
+                cursor.execute("SELECT namePlatform FROM platform")
+                tmp = [item['namePlatform'] for item in cursor.fetchall()]
+                counter = -1
+                for item in tmp:
+                    counter += 1
+                    if item == p_name:
+                        break
+                cursor.execute("SELECT idPlatform FROM platform")
+                tmp2 = [item['idPlatform'] for item in cursor.fetchall()]
+                id = ''
+                counter2 = -1
+                for item in tmp2:
+                    counter2 += 1
+                    if counter2 == counter:
+                        id = item
+                print(f"{id}")
+                # 2 get the game name from platformFKzz with the ID
+                cursor.execute("SELECT idPlatform FROM platformFKzz")
+                tmp3 = [item['idPlatform'] for item in cursor.fetchall()]
+                counter3 = -1
+                for item in tmp3:
+                    counter3 += 1
+                    if item == id:
+                        break
+                cursor.execute("SELECT nameGame FROM platformFKzz")
+                tmp4 = [item['nameGame'] for item in cursor.fetchall()]
+                counter4 = -1
+                game_name = ''
+                for item in tmp4:
+                    counter4 += 1
+                    if counter4 == counter3:
+                        game_name = item
+                        break
+                if not name_bool:
+                    search.append(game_name)
+                    query_prefix += "nameGame = %s AND "
+
             # builds the SQL query and executes it
             query_length = len(query_prefix)
             query = query_prefix[:query_length - 5]  # Remove trailing ' AND '
@@ -861,7 +902,7 @@ def editgame():
     form = EditTheGame()
     if form.is_submitted():
         # define the update query
-        insert = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  ' \
+        update_entry = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  ' \
                  'gameGenre = (SELECT idGenre FROM gameGenre WHERE idGenre = %s), ' \
                  'gameCreator = (SELECT idCreator FROM gameCreator WHERE idCreator = %s), ' \
                  'podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
@@ -878,8 +919,40 @@ def editgame():
         if not form.podcastEpisode.data:
             episode = form.podcastEpisode.data
         insert_list = [name, date, cost, genre, creator, episode, orig_name]
-        cursor.execute(insert, insert_list)
-        conn.commit()
+
+        # check if the game is in platformFKzz
+        cursor.execute("SELECT nameGame FROM platformFKzz")
+        tmp = [item['nameGame'] for item in cursor.fetchall()]
+        name_found_in_platformFKzz = False
+        idx = -1
+        for tmp_name in tmp:
+            idx += 1
+            if tmp_name == orig_name:
+                name_found_in_platformFKzz = True
+
+        if name_found_in_platformFKzz:
+            # get the list of platform IDs associated with this game
+            search_id = [orig_name]
+            cursor.execute("SELECT idPlatform FROM platformFKzz WHERE nameGame = %s", search_id)
+            orig_IDs = [item['idPlatform'] for item in cursor.fetchall()]
+
+            # delete entries in platformFKzz for this game
+            cursor.execute("DELETE FROM platformFKzz WHERE nameGame = %s", search_id)
+            conn.commit()
+
+            # edit this game in the game table now
+            cursor.execute(update_entry, insert_list)
+            conn.commit()
+
+            # recreate all of the platformFKzz relations with updated game name.
+            for plat_id in orig_IDs:
+                insert_statement = 'INSERT INTO platformFKzz (nameGame, idPlatform) VALUES (%s, %s)'
+                insert_l = [name, plat_id]
+                cursor.execute(insert_statement, insert_l)
+                conn.commit()
+        else:
+            cursor.execute(update_entry, insert_list)
+            conn.commit()
         # show success message on home redirect
         flash(f'{orig_name} changed the database!', 'success')
         return redirect(url_for('home'))
