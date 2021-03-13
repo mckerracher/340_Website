@@ -66,8 +66,9 @@ def search():
     creator_bool = False
     date_bool = False
     cost_bool = False
+    platform_bool = False
     bool_list = [name_bool, genre_bool, ep_bool, creator_bool, date_bool,
-                 cost_bool]
+                 cost_bool, platform_bool]
 
     # Checks which dropdowns have been used.
     if form.name.data is not None and form.name.data != 'NULL':
@@ -88,9 +89,12 @@ def search():
     if form.cost.data is not None and form.cost.data != 'NULL':
         cost_bool = True
         bool_list[5] = True
+    if form.platform.data is not None and form.platform.data != 'NULL':
+        platform_bool = True
+        bool_list[6] = True
 
     # If any dropdowns have been used to search, render page with results.
-    if name_bool or genre_bool or ep_bool or creator_bool or date_bool or cost_bool:
+    if name_bool or genre_bool or ep_bool or creator_bool or date_bool or cost_bool or platform_bool:
         counter = 0
         render = []
         query_prefix = "SELECT * FROM game WHERE "
@@ -201,6 +205,55 @@ def search():
                 query = "SELECT * FROM game WHERE cost = %s"
                 cursor.execute(query, search)
                 render = cursor.fetchall()
+            if platform_bool:
+                # 1 Get the ID matching the name
+                p_name = form.platform.data
+                print(f"{p_name}")
+                cursor.execute("SELECT namePlatform FROM platform")
+                tmp = [item['namePlatform'] for item in cursor.fetchall()]
+                counter = -1
+                for item in tmp:
+                    counter += 1
+                    if item == p_name:
+                        break
+
+
+                cursor.execute("SELECT idPlatform FROM platform")
+                tmp2 = [item['idPlatform'] for item in cursor.fetchall()]
+                id = ''
+                counter2 = -1
+                for item in tmp2:
+                    counter2 += 1
+                    if counter2 == counter:
+                        id = item
+
+                print(f"{id}")
+                # 2 get the game name from platformFKzz with the ID
+                cursor.execute("SELECT idPlatform FROM platformFKzz")
+                tmp3 = [item['idPlatform'] for item in cursor.fetchall()]
+                counter3 = -1
+                for item in tmp3:
+                    counter3 += 1
+                    if item == id:
+                        break
+
+                cursor.execute("SELECT nameGame FROM platformFKzz")
+                tmp4 = [item['nameGame'] for item in cursor.fetchall()]
+                counter4 = -1
+                game_name = ''
+                for item in tmp4:
+                    counter4 += 1
+                    if counter4 == counter3:
+                        game_name = item
+                        break
+
+                print(f"{game_name}")
+                # 3 get the game data from game with the name of game
+                game_search = "SELECT * FROM game WHERE nameGame = %s"
+                game_search_list = [game_name]
+                cursor.execute(game_search, game_search_list)
+                render = cursor.fetchall()
+
         # Build SQL query for more than one dropdown.
         if counter > 1:
             if name_bool:

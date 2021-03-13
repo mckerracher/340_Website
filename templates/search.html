@@ -118,6 +118,24 @@
 
 
 
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ form.platform.label(class="form-control-label") }}
+                    {% if form.platform.errors %}
+                        {{ form.platform(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.platform.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.platform(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+
+
+
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>

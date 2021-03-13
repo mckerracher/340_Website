@@ -261,4 +261,12 @@ class SearchPageForm(FlaskForm):
     for item in tmp:
         cost_list.append(item)
     cost = SelectField('Game Cost', choices=cost_list)
+
+    cursor.execute("SELECT namePlatform FROM platform")
+    platforms = ['NULL']
+    tmp = [item['namePlatform'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        platforms.append(item)
+    platform = SelectField('Platforms', choices=platforms)
     submit = SubmitField('Search')
