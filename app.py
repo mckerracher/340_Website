@@ -10,8 +10,6 @@ from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
 
 # Connect to the database
 app = Flask(__name__)
-conn = db.connect_to_database()
-cursor = conn.cursor(pymysql.cursors.DictCursor)
 
 app.config['SECRET_KEY'] = 'oTv!5ox8LB#A&@cBHpa@onsKU'
 
@@ -56,6 +54,8 @@ def home():
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = SearchPageForm()
     counter = 0
 
@@ -309,6 +309,8 @@ def search():
 
 @app.route("/games", methods=['POST', 'GET'])
 def games():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     results = {}
     game = {}
     form = SearchForm()
@@ -329,6 +331,8 @@ def games():
 
 @app.route("/addgame", methods=['POST', 'GET'])
 def addGame():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddGameForm()
     if form.is_submitted():
         name = form.nameGame.data
@@ -364,6 +368,8 @@ def addGame():
 
 @app.route("/gamegenres", methods=['POST', 'GET'])
 def gameGenres():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     results = {}
     gameGenre = {}
     form = SearchForm()
@@ -386,6 +392,8 @@ def gameGenres():
 
 @app.route("/addgenre", methods=['POST', 'GET'])
 def addGenre():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddGenreForm()
     if form.is_submitted():
         name_of_genre = form.nameGenre.data
@@ -402,6 +410,8 @@ def addGenre():
 
 @app.route("/podcastepisodes", methods=['POST', 'GET'])
 def podcastEpisodes():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     podcastEpisode = {}
     results = {}
     form = SearchForm()
@@ -424,6 +434,8 @@ def podcastEpisodes():
 
 @app.route("/addepisode", methods=['POST', 'GET'])
 def addEpisode():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddEpisodeForm()
     if form.is_submitted():
         ep_title = form.title.data
@@ -441,6 +453,8 @@ def addEpisode():
 
 @app.route("/platforms", methods=['POST', 'GET'])
 def platforms():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     platform = {}
     form = SearchForm()
     if form.is_submitted():
@@ -461,6 +475,8 @@ def platforms():
 
 @app.route("/addplatform", methods=['POST', 'GET'])
 def addPlatforms():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddPlatformForm()
     if form.is_submitted():
         name = form.namePlatform.data
@@ -479,6 +495,8 @@ def addPlatforms():
 
 @app.route("/gamecreators", methods=['POST', 'GET'])
 def gameCreators():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     gameCreator = {}
     form = SearchForm()
     if form.is_submitted():
@@ -499,6 +517,8 @@ def gameCreators():
 
 @app.route("/addcreator", methods=['POST', 'GET'])
 def addCreator():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddCreatorForm()
     if form.is_submitted():
         name = form.nameCreator.data
@@ -515,6 +535,8 @@ def addCreator():
 
 @app.route("/gamesandplatforms", methods=['POST', 'GET'])
 def m2m_GameAndPlatform():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     platform_FK_zz = {}
     form = SearchForm()
     if form.is_submitted():
@@ -534,6 +556,8 @@ def m2m_GameAndPlatform():
 
 @app.route("/addm2mgameandplatform", methods=['POST', 'GET'])
 def add_m2m_GameAndPlatform():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddToM2MPlatformGame()
     if form.is_submitted():
         name = form.nameGame.data
@@ -552,6 +576,8 @@ def add_m2m_GameAndPlatform():
 
 @app.route("/removegame", methods=['POST', 'GET'])
 def remove_game():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveGame()
     if form.is_submitted():
         remove = 'DELETE FROM game WHERE nameGame = %s'
@@ -605,6 +631,8 @@ def remove_game():
 
 @app.route("/removegenre", methods=['POST', 'GET'])
 def remove_genre():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveGenre()
     if form.is_submitted():
         remove = 'DELETE FROM gameGenre WHERE nameGenre = %s'
@@ -623,6 +651,8 @@ def remove_genre():
 
 @app.route("/removecreator", methods=['POST', 'GET'])
 def remove_creator():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveCreator()
     if form.is_submitted():
         remove = 'DELETE FROM gameCreator WHERE nameCreator = %s'
@@ -641,6 +671,8 @@ def remove_creator():
 
 @app.route("/removeplatform", methods=['POST', 'GET'])
 def remove_platform():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemovePlatform()
     if form.is_submitted():
         remove = 'DELETE FROM platform WHERE namePlatform =  %s'
@@ -659,6 +691,8 @@ def remove_platform():
 
 @app.route("/removeepisode", methods=['POST', 'GET'])
 def remove_episode():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveEpisode()
     if form.is_submitted():
         remove = 'DELETE FROM podcastEpisode WHERE title = %s'
@@ -677,6 +711,8 @@ def remove_episode():
 
 @app.route("/removem2mgameandplatform", methods=['POST', 'GET'])
 def remove_m2m_GameAndPlatform():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveGameAndPlatform()
     if form.is_submitted():
         remove = 'DELETE FROM platformFKzz WHERE nameGame = %s'
@@ -696,6 +732,8 @@ def remove_m2m_GameAndPlatform():
 
 @app.route("/editgame", methods=['POST', 'GET'])
 def editgame():
+    conn = db.connect_to_database()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = EditTheGame()
     if form.is_submitted():
         insert = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  ' \
