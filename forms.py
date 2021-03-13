@@ -9,6 +9,7 @@ cursor = conn.cursor(pymysql.cursors.DictCursor)
 
 
 class AddGameForm(FlaskForm):
+    """This defines the add game form"""
     nameGame = StringField('Game Name (Required)',
                            validators=[DataRequired(), Length(min=1, max=255)])
     releaseDate = DateField('Release Date (Required)',
@@ -42,26 +43,31 @@ class AddGameForm(FlaskForm):
 
 
 class AddGenreForm(FlaskForm):
+    """This defines the add genre form"""
     nameGenre = StringField('Genre Name (Required)',
                             validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class AddCreatorForm(FlaskForm):
+    """This defines the add creator form"""
     nameCreator = StringField('Creator Name (Required)',
                               validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class AddPlatformForm(FlaskForm):
+    """This defines the add platform form"""
     true_false = ["True", "False"]
     namePlatform = StringField('Platform Name (Required)', validators=[DataRequired()])
     playedOnline = SelectField('Playable Online? (Required)', choices=true_false, validators=[DataRequired()])
-    multiPlat = SelectField('Playable on Multiple Platforms? (Required)', choices=true_false, validators=[DataRequired()])
+    multiPlat = SelectField('Playable on Multiple Platforms? (Required)', choices=true_false,
+                            validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class AddEpisodeForm(FlaskForm):
+    """This defines the add episode form"""
     episodeNumber = IntegerField('Episode Number')
     title = StringField('Episode Title (Required)',
                         validators=[DataRequired()])
@@ -70,15 +76,8 @@ class AddEpisodeForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class AddPost(FlaskForm):
-    author = StringField('Author')
-    date_posted = DateField('Date')
-    title = StringField('Post Title')
-    content = StringField('Content')
-    submit = SubmitField('Post')
-
-
 class AddToM2MPlatformGame(FlaskForm):
+    """This defines the add M2M form"""
     query = "SELECT nameGame FROM game"
     cursor.execute(query)
     games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
@@ -98,6 +97,7 @@ class AddToM2MPlatformGame(FlaskForm):
 
 
 class AddToM2MPlatformGame(FlaskForm):
+    """This defines the add game/platform form"""
     query = "SELECT nameGame FROM game"
     cursor.execute(query)
     games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
@@ -117,6 +117,7 @@ class AddToM2MPlatformGame(FlaskForm):
 
 
 class EditTheGame(FlaskForm):
+    """This defines the edit game form"""
     query = "SELECT nameGame FROM game"
     cursor.execute(query)
     games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
@@ -146,11 +147,13 @@ class EditTheGame(FlaskForm):
 
 
 class SearchForm(FlaskForm):
+    """This defines the search form"""
     search = StringField('Search', validators=[DataRequired()])
     submit = SubmitField('Search')
 
 
 class RemoveGame(FlaskForm):
+    """This defines the remove game form"""
     query = "SELECT nameGame FROM game"
     cursor.execute(query)
     games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
@@ -160,6 +163,7 @@ class RemoveGame(FlaskForm):
 
 
 class RemoveGenre(FlaskForm):
+    """This defines the remove genre form"""
     query = "SELECT nameGenre FROM gameGenre"
     cursor.execute(query)
     genre_list = [item['nameGenre'] for item in cursor.fetchall()]
@@ -168,16 +172,18 @@ class RemoveGenre(FlaskForm):
 
 
 class RemoveCreator(FlaskForm):
+    """This defines the remove creator form"""
     query = "SELECT nameCreator FROM gameCreator"
     cursor.execute(query)
     creator_list = [item['nameCreator'] for item in cursor.fetchall()]
     name = SelectField('Game Creator',
-                              choices=creator_list,
-                              validators=[DataRequired()])
+                       choices=creator_list,
+                       validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemovePlatform(FlaskForm):
+    """This defines the remove platform form"""
     query = "SELECT namePlatform FROM platform"
     cursor.execute(query)
     plat_list = [item['namePlatform'] for item in cursor.fetchall()]
@@ -188,6 +194,7 @@ class RemovePlatform(FlaskForm):
 
 
 class RemoveEpisode(FlaskForm):
+    """This defines the remove episode form"""
     query = "SELECT title FROM podcastEpisode"
     cursor.execute(query)
     ep_list = [item['title'] for item in cursor.fetchall()]
@@ -198,6 +205,7 @@ class RemoveEpisode(FlaskForm):
 
 
 class RemoveGameAndPlatform(FlaskForm):
+    """This defines the remove game/platform form"""
     query = "SELECT nameGame FROM platformFKzz"
     cursor.execute(query)
     ep_list = [item['nameGame'] for item in cursor.fetchall()]
@@ -208,6 +216,7 @@ class RemoveGameAndPlatform(FlaskForm):
 
 
 class SearchPageForm(FlaskForm):
+    """This defines the search page form"""
     query = "SELECT nameGame FROM game"
     cursor.execute(query)
     games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]

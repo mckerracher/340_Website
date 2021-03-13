@@ -43,17 +43,20 @@ posts = [
 @app.route("/index", methods=['POST', 'GET'])
 @app.route("/index.html", methods=['POST', 'GET'])
 def index():
+    """This provides the index page route."""
     return render_template('index.html')
 
 
 @app.route("/", methods=['POST', 'GET'])
 @app.route("/home", methods=['POST', 'GET'])
 def home():
+    """This provides the home page route."""
     return render_template('home.html', posts=posts)
 
 
 @app.route("/search", methods=['POST', 'GET'])
 def search():
+    """This provides the search page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = SearchPageForm()
@@ -217,7 +220,6 @@ def search():
                     if item == p_name:
                         break
 
-
                 cursor.execute("SELECT idPlatform FROM platform")
                 tmp2 = [item['idPlatform'] for item in cursor.fetchall()]
                 id = ''
@@ -362,12 +364,14 @@ def search():
 
 @app.route("/games", methods=['POST', 'GET'])
 def games():
+    """This provides the games page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     results = {}
     game = {}
     form = SearchForm()
     results.clear()
+    # renders the page based on search results.
     if form.is_submitted():
         game.clear()  # ensure game is empty so results is rendered
         search_str = [form.search.data]  # gets user's search input
@@ -376,6 +380,7 @@ def games():
         results = cursor.fetchall()  # assigns results of query
         return render_template('games.html', results=results, form=form)
     else:
+        # renders the page before form is submitted.
         query = "SELECT * FROM game"
         cursor.execute(query)
         game = cursor.fetchall()
@@ -384,10 +389,13 @@ def games():
 
 @app.route("/addgame", methods=['POST', 'GET'])
 def addGame():
+    """This provides the addgame page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddGameForm()
+    # adds the new game to the game table.
     if form.is_submitted():
+        # gets values from form to be used in insert statement
         name = form.nameGame.data
         date = form.releaseDate.data
         cost = form.cost.data
@@ -397,22 +405,26 @@ def addGame():
         episode = form.podcastEpisode.data
         insert = ""
         insert_list = []
+        # inserts game when no podcast episode is entered.
         if episode == 'NULL':
             insert += "INSERT INTO game(nameGame, releaseDate, cost, gameGenre, gameCreator)VALUES(%s, %s, %s, %s, %s)"
             insert_list = [name, date, cost, genre, creator]
             cursor.execute(insert, insert_list)
             conn.commit()
         else:
+            # inserts game when a podcast episode is entered.
             insert += "INSERT INTO game(nameGame, releaseDate, cost, gameGenre, gameCreator, podcastEpisode)VALUES(%s, %s, %s, %s, %s, %s)"
             insert_list = [name, date, cost, genre, creator, episode]
             cursor.execute(insert, insert_list)
             conn.commit()
+        # gets platform value and inserts the game/platform combo in platformFKzz
         platform = form.platformList.data
         platform_value = [platform, name]
-        time.sleep(1)
+        time.sleep(1)  # debugging
         insert = "INSERT INTO platformFKzz(idPlatform, nameGame)VALUES(%s, %s)"
         cursor.execute(insert, platform_value)
         conn.commit()
+        # redirects to home with success message.
         flash(f'{form.nameGame.data} added to the database!', 'success')
         return redirect(url_for('home'))
     else:
@@ -421,12 +433,14 @@ def addGame():
 
 @app.route("/gamegenres", methods=['POST', 'GET'])
 def gameGenres():
+    """This provides the gameGenres page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     results = {}
     gameGenre = {}
     form = SearchForm()
     results.clear()
+    # renders the page based on search results
     if form.is_submitted():
         gameGenre.clear()
         search_str = [form.search.data]  # gets user's search input
@@ -436,6 +450,7 @@ def gameGenres():
         results = cursor.fetchall()  # assigns results of query
         return render_template('gameGenres.html', results=results, form=form)
     else:
+        # renders the page before form is submitted.
         query = "SELECT * FROM gameGenre"
         cursor.execute(query)
         gameGenre = cursor.fetchall()
@@ -445,9 +460,11 @@ def gameGenres():
 
 @app.route("/addgenre", methods=['POST', 'GET'])
 def addGenre():
+    """This provides the addGenre page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddGenreForm()
+    # adds the new genre to the genre table
     if form.is_submitted():
         name_of_genre = form.nameGenre.data
         insert_statement = "INSERT INTO gameGenre(nameGenre) VALUE (%s)"
@@ -457,27 +474,31 @@ def addGenre():
         flash(f'{form.nameGenre.data} genre added to the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders the page before form is submitted.
         return render_template('add_genre.html', title='Add a Genre',
                                form=form)
 
 
 @app.route("/podcastepisodes", methods=['POST', 'GET'])
 def podcastEpisodes():
+    """This provides the pordcastEpisodes page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     podcastEpisode = {}
     results = {}
     form = SearchForm()
     results.clear()
+    # renders the page based on search results.
     if form.is_submitted():
         podcastEpisode.clear()
         search_str = [form.search.data]  # gets user's search input
-        query = 'SELECT * FROM podcastEpisode WHERE title = "%s"'  # TODO - NOT RETURNING ANYTHING
+        query = 'SELECT * FROM podcastEpisode WHERE title = "%s"'
         cursor.execute(query, search_str)  # queries DB
         podcastEpisode = cursor.fetchall()  # assigns results of query
         return render_template('podcastEpisode.html',
                                podcastEpisode=podcastEpisode, form=form)
     else:
+        # renders the page before form is submitted.
         query = "SELECT * FROM podcastEpisode"
         cursor.execute(query)
         podcastEpisode = cursor.fetchall()
@@ -487,9 +508,11 @@ def podcastEpisodes():
 
 @app.route("/addepisode", methods=['POST', 'GET'])
 def addEpisode():
+    """This provides the addEpisode page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddEpisodeForm()
+    # adds the episode to the table that was entered into the form
     if form.is_submitted():
         ep_title = form.title.data
         ep_date = form.episodeDate.data
@@ -500,16 +523,19 @@ def addEpisode():
         flash(f'{ep_title} episode added to the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders the page before form is submitted.
         return render_template('add_episode.html', title='Add an Episode',
                                form=form)
 
 
 @app.route("/platforms", methods=['POST', 'GET'])
 def platforms():
+    """This provides the platforms page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     platform = {}
     form = SearchForm()
+    # renders the page based on search results if search form is used.
     if form.is_submitted():
         platform.clear()
         search_str = [form.search.data]  # gets user's search input
@@ -518,6 +544,7 @@ def platforms():
         platform = cursor.fetchall()  # assigns results of query
         return render_template('platforms.html', platform=platform, form=form)
     else:
+        # renders the page before form submission.
         query = "SELECT * FROM platform"
         cursor.execute(query)
         platform = cursor.fetchall()
@@ -528,10 +555,13 @@ def platforms():
 
 @app.route("/addplatform", methods=['POST', 'GET'])
 def addPlatforms():
+    """This provides the addPlatforms page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddPlatformForm()
+    # adds platform to platform table if form is submitted.
     if form.is_submitted():
+        # gets values for the insert statement
         name = form.namePlatform.data
         online = form.playedOnline.data
         many_plat = form.multiPlat.data
@@ -539,19 +569,23 @@ def addPlatforms():
         insert_list = [name, online, many_plat]
         cursor.execute(insert_statement, insert_list)
         conn.commit()
+        # redirect to home with success message
         flash(f'{name} platform added to the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders page before form submission.
         return render_template('add_platform.html', title='Add a Platform',
                                form=form)
 
 
 @app.route("/gamecreators", methods=['POST', 'GET'])
 def gameCreators():
+    """This provides the gameCreators page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     gameCreator = {}
     form = SearchForm()
+    # renders page based on search results if search form is submitted.
     if form.is_submitted():
         gameCreator.clear()
         search_str = [form.search.data]  # gets user's search input
@@ -561,6 +595,7 @@ def gameCreators():
         return render_template('gameCreators.html', gameCreator=gameCreator,
                                form=form)
     else:
+        # renders page before form submission.
         query = "SELECT * FROM gameCreator"
         cursor.execute(query)
         gameCreator = cursor.fetchall()
@@ -570,9 +605,11 @@ def gameCreators():
 
 @app.route("/addcreator", methods=['POST', 'GET'])
 def addCreator():
+    """This provides the addCreator page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddCreatorForm()
+    # adds the creator to the gameCreator table if form is submitted.
     if form.is_submitted():
         name = form.nameCreator.data
         insert_statement = 'INSERT INTO gameCreator(nameCreator) VALUES (%s)'
@@ -582,16 +619,20 @@ def addCreator():
         flash(f'{name} creator added to the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders page before form submission.
         return render_template('add_creator.html', title='Add a Creator',
                                form=form)
 
 
 @app.route("/gamesandplatforms", methods=['POST', 'GET'])
 def m2m_GameAndPlatform():
+    """This provides the gamesandplatforms page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     platform_FK_zz = {}
     form = SearchForm()
+
+    # renders page based on search results if the search form is submitted.
     if form.is_submitted():
         search_str = [form.search.data]  # gets user's search input
         query = "SELECT * FROM platformFKzz WHERE nameGame = %s"
@@ -600,6 +641,7 @@ def m2m_GameAndPlatform():
         return render_template('PlatformFKzz.html',
                                platform_FK_zz=platform_FK_zz, form=form)
     else:
+        # renders page normally.
         query = "SELECT * FROM platformFKzz"
         cursor.execute(query)
         platform_FK_zz = cursor.fetchall()
@@ -609,9 +651,11 @@ def m2m_GameAndPlatform():
 
 @app.route("/addm2mgameandplatform", methods=['POST', 'GET'])
 def add_m2m_GameAndPlatform():
+    """This provides the addm2mgameandplatform page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = AddToM2MPlatformGame()
+    # adds the selected combination into platformFKzz
     if form.is_submitted():
         name = form.nameGame.data
         idPlat = form.idPlatform.data
@@ -622,6 +666,7 @@ def add_m2m_GameAndPlatform():
         flash(f'{name} creator added to the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders page before submission.
         return render_template('add_gameandplatform.html',
                                title='Add a Creator',
                                form=form)
@@ -629,19 +674,20 @@ def add_m2m_GameAndPlatform():
 
 @app.route("/removegame", methods=['POST', 'GET'])
 def remove_game():
+    """This provides the removegame page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveGame()
     if form.is_submitted():
         remove = 'DELETE FROM game WHERE nameGame = %s'
 
-        # check if the game has a podcast episode
+        # gets the name of this game (selected game) and get its podcast.
         nm = [form.name.data]
         gm_q = 'SELECT podcastEpisode FROM game WHERE nameGame = %s'
         cursor.execute(gm_q, nm)
         game_ep = [item['podcastEpisode'] for item in cursor.fetchall()]
 
-        # check if the game is in platformFkzz
+        # get games in platformFKzz and check if this game is there.
         cursor.execute('SELECT nameGame FROM platformFKzz')
         name_list = [item['nameGame'] for item in cursor.fetchall()]
         game_found = False
@@ -650,31 +696,38 @@ def remove_game():
             if x == form.name.data:
                 game_found = True
 
-        # remove from platformFkzz if it's there
+        # if this game is in platformFKzz, remove it.
         if game_found:
             cursor.execute('DELETE FROM platformFKzz WHERE nameGame = %s', nm)
             conn.commit()
 
         print(f"PODCAST EPISODE = {game_ep}")
+        # if this game has no podcast, give it one before deleting the game.
         if not game_ep[0]:
             game_name = form.name.data
             # gets a list of current episodes
             cursor.execute("SELECT episodeNumber FROM podcastEpisode")
             eps = [item['episodeNumber'] for item in cursor.fetchall()]
             name_val = [eps[0], game_name]
-            # adds the first episode to current game
+
+            # gives this game a currently existing podcast episode
             insert = 'UPDATE game SET podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
             cursor.execute(insert, name_val)
             conn.commit()
+
+            # now remove the game from the game table.
             cursor.execute(remove, game_name)
             conn.commit()
         else:
+            # removes game from game table
             remove_list = [form.name.data]
             cursor.execute(remove, remove_list)
             conn.commit()
+        # redirect to home with removal success message.
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders the page before form submission.
         query = "SELECT * FROM game"
         cursor.execute(query)
         game = cursor.fetchall()
@@ -684,17 +737,20 @@ def remove_game():
 
 @app.route("/removegenre", methods=['POST', 'GET'])
 def remove_genre():
+    """This provides the removegenre page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveGenre()
     if form.is_submitted():
         remove = 'DELETE FROM gameGenre WHERE nameGenre = %s'
         remove_list = [form.name.data]
+        # removes selection from the table
         cursor.execute(remove, remove_list)
         conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders the page before form submission
         query = "SELECT * FROM gameGenre"
         cursor.execute(query)
         gameGenre = cursor.fetchall()
@@ -704,17 +760,20 @@ def remove_genre():
 
 @app.route("/removecreator", methods=['POST', 'GET'])
 def remove_creator():
+    """This provides the removecreator page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveCreator()
     if form.is_submitted():
         remove = 'DELETE FROM gameCreator WHERE nameCreator = %s'
         remove_list = [form.name.data]
+        # removes the selection from the table
         cursor.execute(remove, remove_list)
         conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders the page before form submission
         query = "SELECT * FROM gameCreator"
         cursor.execute(query)
         gameCreator = cursor.fetchall()
@@ -724,17 +783,20 @@ def remove_creator():
 
 @app.route("/removeplatform", methods=['POST', 'GET'])
 def remove_platform():
+    """This provides the removeplatform page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemovePlatform()
     if form.is_submitted():
         remove = 'DELETE FROM platform WHERE namePlatform =  %s'
         remove_list = [form.name.data]
+        # removes the selection from the table
         cursor.execute(remove, remove_list)
         conn.commit()
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders the page before form submission
         query = "SELECT * FROM platform"
         cursor.execute(query)
         platform = cursor.fetchall()
@@ -744,10 +806,12 @@ def remove_platform():
 
 @app.route("/removeepisode", methods=['POST', 'GET'])
 def remove_episode():
+    """This provides the remove_episode page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveEpisode()
     if form.is_submitted():
+        # Removes selection from the table.
         remove = 'DELETE FROM podcastEpisode WHERE title = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
@@ -755,6 +819,7 @@ def remove_episode():
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders page before form is submitted
         query = "SELECT * FROM podcastEpisode"
         cursor.execute(query)
         podcastEpisode = cursor.fetchall()
@@ -764,17 +829,22 @@ def remove_episode():
 
 @app.route("/removem2mgameandplatform", methods=['POST', 'GET'])
 def remove_m2m_GameAndPlatform():
+    """This provides the removem2mgameandplatform page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = RemoveGameAndPlatform()
+
+    # if the form has been submitted, delete the selection from table.
     if form.is_submitted():
         remove = 'DELETE FROM platformFKzz WHERE nameGame = %s'
         remove_list = [form.name.data]
         cursor.execute(remove, remove_list)
         conn.commit()
+        # redirect to home with success message
         flash(f'{form.name.data} removed from the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders page before form is submitted
         query = "SELECT * FROM platformFKzz"
         cursor.execute(query)
         post = cursor.fetchall()
@@ -785,14 +855,17 @@ def remove_m2m_GameAndPlatform():
 
 @app.route("/editgame", methods=['POST', 'GET'])
 def editgame():
+    """This provides the editgame page route."""
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     form = EditTheGame()
     if form.is_submitted():
+        # define the update query
         insert = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  ' \
                  'gameGenre = (SELECT idGenre FROM gameGenre WHERE idGenre = %s), ' \
                  'gameCreator = (SELECT idCreator FROM gameCreator WHERE idCreator = %s), ' \
                  'podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
+        # get the values used in the query
         orig_name = form.originalName.data
         name = form.nameGame.data
         date = form.releaseDate.data
@@ -801,14 +874,17 @@ def editgame():
         creator = form.gameCreator.data
         episode = []
         episode = form.podcastEpisode.data
+        # checks if podcastEpisode is left blank
         if not form.podcastEpisode.data:
             episode = form.podcastEpisode.data
         insert_list = [name, date, cost, genre, creator, episode, orig_name]
         cursor.execute(insert, insert_list)
         conn.commit()
+        # show success message on home redirect
         flash(f'{orig_name} changed the database!', 'success')
         return redirect(url_for('home'))
     else:
+        # renders the page before the form is submitted
         query = "SELECT * FROM game"
         cursor.execute(query)
         game = cursor.fetchall()
