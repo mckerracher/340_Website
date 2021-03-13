@@ -2,7 +2,7 @@ import pymysql
 
 h = "classmysql.engr.oregonstate.edu"
 u = "cs340_mckerraj"
-pw = "#sSuoeyz0yCqdko8DZuZau9%U"
+pw = ""
 dbase = "cs340_mckerraj"
 
 
