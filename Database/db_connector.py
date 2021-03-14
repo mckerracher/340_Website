@@ -1,9 +1,9 @@
 import pymysql
 
-h = "classmysql.engr.oregonstate.edu"
-u = "cs340_mckerraj"
-pw = ""
-dbase = "cs340_mckerraj"
+h = "us-cdbr-east-03.cleardb.com"
+u = "be5765a97239e1"
+pw = "VU^nX$#g!a&3NrSJU4YR"
+dbase = "heroku_27223dfa0403044"
 
 
 def connect_to_database(host=h, user=u, passwd=pw, datab=dbase):
