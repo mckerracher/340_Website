@@ -16,28 +16,13 @@ class AddGameForm(FlaskForm):
                             validators=[DataRequired()])
     cost = IntegerField('Game Cost (Required)', validators=[DataRequired()])
 
-    query = "SELECT idGenre FROM gameGenre"
-    cursor.execute(query)
-    genre_list = [item['idGenre'] for item in cursor.fetchall()]
-    gameGenre = SelectField('Game Genre (Required)', choices=genre_list, validators=[DataRequired()])
+    gameGenre = SelectField('Game Genre (Required)', validators=[DataRequired()])
 
-    query = "SELECT idCreator FROM gameCreator"
-    cursor.execute(query)
-    creator_list = [item['idCreator'] for item in cursor.fetchall()]
-    gameCreator = SelectField('Game Creator (Required)', choices=creator_list, validators=[DataRequired()])
+    gameCreator = SelectField('Game Creator (Required)', validators=[DataRequired()])
 
-    query = "SELECT episodeNumber FROM podcastEpisode"
-    cursor.execute(query)
-    episode_list = ["NULL"]
-    results = cursor.fetchall()
-    for item in results:
-        episode_list.append(item['episodeNumber'])
-    podcastEpisode = SelectField('Podcast Episode (Optional)', choices=episode_list)
+    podcastEpisode = SelectField('Podcast Episode (Optional)')
 
-    query = "SELECT idPlatform FROM platform"
-    cursor.execute(query)
-    platform_list = [item['idPlatform'] for item in cursor.fetchall()]
-    platformList = SelectField('Platform (Required)', choices=platform_list)
+    platformList = SelectField('Platform (Required)')
 
     submit = SubmitField('Submit')
 
@@ -78,70 +63,26 @@ class AddEpisodeForm(FlaskForm):
 
 class AddToM2MPlatformGame(FlaskForm):
     """This defines the add M2M form"""
-    query = "SELECT nameGame FROM game"
-    cursor.execute(query)
-    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
-    games_list = sorted(games_list_unsorted)
-    nameGame = SelectField('Game Name (Required)', choices=games_list,
-                           validators=[DataRequired()])
+    nameGame = SelectField('Game Name (Required)', validators=[DataRequired()])
 
-    query = "SELECT idPlatform FROM platform"
-    cursor.execute(query)
-    platform_list = [item['idPlatform'] for
-                     item in cursor.fetchall()]
-
-    idPlatform = SelectField('Platform ID (Required)', choices=platform_list,
-                             validators=[DataRequired()])
-
-    submit = SubmitField('Submit')
-
-
-class AddToM2MPlatformGame(FlaskForm):
-    """This defines the add game/platform form"""
-    query = "SELECT nameGame FROM game"
-    cursor.execute(query)
-    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
-    games_list = sorted(games_list_unsorted)
-    nameGame = SelectField('Game Name (Required)', choices=games_list,
-                           validators=[DataRequired()])
-
-    query = "SELECT idPlatform FROM platform"
-    cursor.execute(query)
-    platform_list = [item['idPlatform'] for
-                     item in cursor.fetchall()]
-
-    idPlatform = SelectField('Platform ID (Required)', choices=platform_list,
-                             validators=[DataRequired()])
+    idPlatform = SelectField('Platform ID (Required)', validators=[DataRequired()])
 
     submit = SubmitField('Submit')
 
 
 class EditTheGame(FlaskForm):
     """This defines the edit game form"""
-    query = "SELECT nameGame FROM game"
-    cursor.execute(query)
-    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
-    games_list = sorted(games_list_unsorted)
-    originalName = SelectField('*Original* Game Name (Required)', choices=games_list, validators=[DataRequired()])
+    originalName = SelectField('*Original* Game Name (Required)', validators=[DataRequired()])
 
     nameGame = StringField('Updated Game Name (Required)', validators=[DataRequired(), Length(min=1, max=255)])
     releaseDate = DateField('Updated Release Date (Required)', validators=[DataRequired()])
     cost = IntegerField('Updated Game Cost (Required)', validators=[DataRequired()])
 
-    query = "SELECT idGenre FROM gameGenre"
-    cursor.execute(query)
-    genre_list = [item['idGenre'] for item in cursor.fetchall()]
-    gameGenre = SelectField('Updated Game Genre (Required)', choices=genre_list, validators=[DataRequired()])
+    gameGenre = SelectField('Updated Game Genre (Required)', validators=[DataRequired()])
 
-    query = "SELECT idCreator FROM gameCreator"
-    cursor.execute(query)
-    creator_list = [item['idCreator'] for item in cursor.fetchall()]
-    gameCreator = SelectField('Updated Game Creator (Required)', choices=creator_list, validators=[DataRequired()])
+    gameCreator = SelectField('Updated Game Creator (Required)', validators=[DataRequired()])
 
-    query = "SELECT episodeNumber FROM podcastEpisode"
-    cursor.execute(query)
-    episode_list = [item['episodeNumber'] for item in cursor.fetchall()]
-    podcastEpisode = SelectField('(Optional) Updated Podcast Episode', choices=episode_list)
+    podcastEpisode = SelectField('(Optional) Updated Podcast Episode')
 
     submit = SubmitField('Submit Change')
 
@@ -154,128 +95,54 @@ class SearchForm(FlaskForm):
 
 class RemoveGame(FlaskForm):
     """This defines the remove game form"""
-    query = "SELECT nameGame FROM game"
-    cursor.execute(query)
-    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
-    games_list = sorted(games_list_unsorted)
-    name = SelectField('Game Name', choices=games_list, validators=[DataRequired()])
+    name = SelectField('Game Name', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveGenre(FlaskForm):
     """This defines the remove genre form"""
-    query = "SELECT nameGenre FROM gameGenre"
-    cursor.execute(query)
-    genre_list = [item['nameGenre'] for item in cursor.fetchall()]
-    name = SelectField('Game Genre', choices=genre_list, validators=[DataRequired()])
+    name = SelectField('Game Genre', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveCreator(FlaskForm):
     """This defines the remove creator form"""
-    query = "SELECT nameCreator FROM gameCreator"
-    cursor.execute(query)
-    creator_list = [item['nameCreator'] for item in cursor.fetchall()]
-    name = SelectField('Game Creator',
-                       choices=creator_list,
-                       validators=[DataRequired()])
+    name = SelectField('Game Creator', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemovePlatform(FlaskForm):
     """This defines the remove platform form"""
-    query = "SELECT namePlatform FROM platform"
-    cursor.execute(query)
-    plat_list = [item['namePlatform'] for item in cursor.fetchall()]
-    name = SelectField('Platform',
-                       choices=plat_list,
-                       validators=[DataRequired()])
+    name = SelectField('Platform', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveEpisode(FlaskForm):
     """This defines the remove episode form"""
-    query = "SELECT title FROM podcastEpisode"
-    cursor.execute(query)
-    ep_list = [item['title'] for item in cursor.fetchall()]
-    name = SelectField('Episode',
-                       choices=ep_list,
-                       validators=[DataRequired()])
+    name = SelectField('Episode', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class RemoveGameAndPlatform(FlaskForm):
     """This defines the remove game/platform form"""
-    query = "SELECT nameGame FROM platformFKzz"
-    cursor.execute(query)
-    ep_list = [item['nameGame'] for item in cursor.fetchall()]
-    name = SelectField('Game',
-                       choices=ep_list,
-                       validators=[DataRequired()])
+    name = SelectField('Game', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class SearchPageForm(FlaskForm):
     """This defines the search page form"""
-    query = "SELECT nameGame FROM game"
-    cursor.execute(query)
-    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
-    games_list = ['NULL']
-    for item in games_list_unsorted:
-        games_list.append(item)
-    name = SelectField('Game Name', choices=games_list)
+    name = SelectField('Game Name')
 
-    query = "SELECT nameGenre FROM gameGenre"
-    cursor.execute(query)
-    genre_list = ['NULL']
-    second_list = [item['nameGenre'] for item in cursor.fetchall()]
-    # order elements and remove duplicates
-    second_list = list(set(second_list))
-    for item in second_list:
-        genre_list.append(item)
-    genre = SelectField('Game Genre', choices=genre_list)
+    genre = SelectField('Game Genre')
 
-    query = "SELECT nameCreator FROM gameCreator"
-    cursor.execute(query)
-    creator_list = ['NULL']
-    tmp = [item['nameCreator'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        creator_list.append(item)
-    creator = SelectField('Game Creator', choices=creator_list)
+    creator = SelectField('Game Creator')
 
-    query = "SELECT title FROM podcastEpisode"
-    cursor.execute(query)
-    ep_list = ['NULL']
-    tmp = [item['title'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        ep_list.append(item)
-    episode = SelectField('Podcast Episode', choices=ep_list)
+    episode = SelectField('Podcast Episode')
 
-    query = "SELECT releaseDate FROM game"
-    cursor.execute(query)
-    date_list = ['NULL']
-    tmp = [item['releaseDate'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        date_list.append(item)
-    date = SelectField('Release Date', choices=date_list)
+    date = SelectField('Release Date')
 
-    query = "SELECT cost FROM game"
-    cursor.execute(query)
-    cost_list = ['NULL']
-    tmp = [item['cost'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        cost_list.append(item)
-    cost = SelectField('Game Cost', choices=cost_list)
+    cost = SelectField('Game Cost')
 
-    cursor.execute("SELECT namePlatform FROM platform")
-    platforms = ['NULL']
-    tmp = [item['namePlatform'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        platforms.append(item)
-    platform = SelectField('Platforms', choices=platforms)
+    platform = SelectField('Platforms')
+
     submit = SubmitField('Search')
