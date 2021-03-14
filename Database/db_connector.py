@@ -2,7 +2,7 @@ import pymysql
 
 h = "us-cdbr-east-03.cleardb.com"
 u = "be5765a97239e1"
-pw = "VU^nX$#g!a&3NrSJU4YR"
+pw = "6d4a5cc8"
 dbase = "heroku_27223dfa0403044"
 
 
