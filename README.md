@@ -35,7 +35,7 @@
 - Source: [Link](https://github.com/CoreyMSchafer/code_snippets/blob/master/Python/Flask_Blog/03-Forms-and-Validation/flaskblog.py)
 
 ## Other
-### Excel to Dictionary
+### Excel to Dictionary (not used in current version)
 - Author: Ashwin Kondapalli
 - Date: 2/1/2021
 - Source: [Link](https://pypi.org/project/xl2dict/)
