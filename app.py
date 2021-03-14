@@ -57,9 +57,75 @@ def home():
 @app.route("/search", methods=['POST', 'GET'])
 def search():
     """This provides the search page route."""
+    # connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+    # populate forms
     form = SearchPageForm()
+    # game names -------
+    query = "SELECT nameGame FROM game"
+    cursor.execute(query)
+    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
+    games_list = ['NULL']
+    for item in games_list_unsorted:
+        games_list.append(item)
+    form.name.choices = games_list
+    # game genres ------
+    query = "SELECT nameGenre FROM gameGenre"
+    cursor.execute(query)
+    genre_list = ['NULL']
+    second_list = [item['nameGenre'] for item in cursor.fetchall()]
+    # order elements and remove duplicates
+    second_list = list(set(second_list))
+    for item in second_list:
+        genre_list.append(item)
+    form.genre.choices = genre_list
+    # creators --------
+    query = "SELECT nameCreator FROM gameCreator"
+    cursor.execute(query)
+    creator_list = ['NULL']
+    tmp = [item['nameCreator'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        creator_list.append(item)
+    form.creator.choices = creator_list
+    # episodes --------
+    query = "SELECT title FROM podcastEpisode"
+    cursor.execute(query)
+    ep_list = ['NULL']
+    tmp = [item['title'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        ep_list.append(item)
+    form.episode.choices = ep_list
+    # dates -------------
+    query = "SELECT releaseDate FROM game"
+    cursor.execute(query)
+    date_list = ['NULL']
+    tmp = [item['releaseDate'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        date_list.append(item)
+    form.date.choices = date_list
+    # costs ------------
+    query = "SELECT cost FROM game"
+    cursor.execute(query)
+    cost_list = ['NULL']
+    tmp = [item['cost'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        cost_list.append(item)
+    form.cost.choices = cost_list
+    # platforms --------
+    cursor.execute("SELECT namePlatform FROM platform")
+    platforms = ['NULL']
+    tmp = [item['namePlatform'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        platforms.append(item)
+    form.platform.choices = platforms
+
     counter = 0
 
     # Booleans used to track which dropdowns have been used.
@@ -431,9 +497,35 @@ def games():
 @app.route("/addgame", methods=['POST', 'GET'])
 def addGame():
     """This provides the addgame page route."""
+    # connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # add form and populate the dropdowns
     form = AddGameForm()
+    # genre IDs ----------
+    query = "SELECT idGenre FROM gameGenre"
+    cursor.execute(query)
+    genre_list = [item['idGenre'] for item in cursor.fetchall()]
+    form.gameGenre.choices = genre_list
+    # creators ----------
+    query = "SELECT idCreator FROM gameCreator"
+    cursor.execute(query)
+    creator_list = [item['idCreator'] for item in cursor.fetchall()]
+    form.gameCreator.choices = creator_list
+    # podcast episodes -----------
+    query = "SELECT episodeNumber FROM podcastEpisode"
+    cursor.execute(query)
+    episode_list = ["NULL"]
+    results = cursor.fetchall()
+    for item in results:
+        episode_list.append(item['episodeNumber'])
+    form.podcastEpisode.choices = episode_list
+    # platforms -------------------
+    query = "SELECT idPlatform FROM platform"
+    cursor.execute(query)
+    platform_list = [item['idPlatform'] for item in cursor.fetchall()]
+    form.platformList.choices = platform_list
+
     # adds the new game to the game table.
     if form.is_submitted():
         # gets values from form to be used in insert statement
@@ -693,9 +785,23 @@ def m2m_GameAndPlatform():
 @app.route("/addm2mgameandplatform", methods=['POST', 'GET'])
 def add_m2m_GameAndPlatform():
     """This provides the addm2mgameandplatform page route."""
+    # Connect to DB.
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # Populate the form
     form = AddToM2MPlatformGame()
+    # game names -------------------
+    query = "SELECT nameGame FROM game"
+    cursor.execute(query)
+    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
+    games_list = sorted(games_list_unsorted)
+    form.nameGame.choices = games_list
+    # platforms -------------------
+    query = "SELECT idPlatform FROM platform"
+    cursor.execute(query)
+    platform_list = [item['idPlatform'] for item in cursor.fetchall()]
+    form.idPlatform.choices = platform_list
+
     # adds the selected combination into platformFKzz
     if form.is_submitted():
         name = form.nameGame.data
@@ -716,9 +822,17 @@ def add_m2m_GameAndPlatform():
 @app.route("/removegame", methods=['POST', 'GET'])
 def remove_game():
     """This provides the removegame page route."""
+    # Connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # Populate the form and its data
     form = RemoveGame()
+    # game names ------------
+    query = "SELECT nameGame FROM game"
+    cursor.execute(query)
+    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
+    games_list = sorted(games_list_unsorted)
+    form.name.choices = games_list
     if form.is_submitted():
         remove = 'DELETE FROM game WHERE nameGame = %s'
 
@@ -779,9 +893,16 @@ def remove_game():
 @app.route("/removegenre", methods=['POST', 'GET'])
 def remove_genre():
     """This provides the removegenre page route."""
+    # connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # populate the form data
     form = RemoveGenre()
+    # genre name -------------------
+    query = "SELECT nameGenre FROM gameGenre"
+    cursor.execute(query)
+    genre_list = [item['nameGenre'] for item in cursor.fetchall()]
+    form.name.choices = genre_list
     if form.is_submitted():
         remove = 'DELETE FROM gameGenre WHERE nameGenre = %s'
         remove_list = [form.name.data]
@@ -802,9 +923,17 @@ def remove_genre():
 @app.route("/removecreator", methods=['POST', 'GET'])
 def remove_creator():
     """This provides the removecreator page route."""
+    # Connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # Populate the form data
     form = RemoveCreator()
+    # Creator name -----------------
+    query = "SELECT nameCreator FROM gameCreator"
+    cursor.execute(query)
+    creator_list = [item['nameCreator'] for item in cursor.fetchall()]
+    form.name.choices = creator_list
+
     if form.is_submitted():
         remove = 'DELETE FROM gameCreator WHERE nameCreator = %s'
         remove_list = [form.name.data]
@@ -825,9 +954,17 @@ def remove_creator():
 @app.route("/removeplatform", methods=['POST', 'GET'])
 def remove_platform():
     """This provides the removeplatform page route."""
+    # Connect to the DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # Populate the form
     form = RemovePlatform()
+    # platform name ----------------
+    query = "SELECT namePlatform FROM platform"
+    cursor.execute(query)
+    plat_list = [item['namePlatform'] for item in cursor.fetchall()]
+    form.name.choices = plat_list
+
     if form.is_submitted():
         remove = 'DELETE FROM platform WHERE namePlatform =  %s'
         remove_list = [form.name.data]
@@ -848,9 +985,17 @@ def remove_platform():
 @app.route("/removeepisode", methods=['POST', 'GET'])
 def remove_episode():
     """This provides the remove_episode page route."""
+    # Connect to the DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # Populate the form
     form = RemoveEpisode()
+    # Episode names -----------
+    query = "SELECT title FROM podcastEpisode"
+    cursor.execute(query)
+    ep_list = [item['title'] for item in cursor.fetchall()]
+    form.name.choices = ep_list
+
     if form.is_submitted():
         # Removes selection from the table.
         remove = 'DELETE FROM podcastEpisode WHERE title = %s'
@@ -871,9 +1016,15 @@ def remove_episode():
 @app.route("/removem2mgameandplatform", methods=['POST', 'GET'])
 def remove_m2m_GameAndPlatform():
     """This provides the removem2mgameandplatform page route."""
+    # Connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # Populate the form data
     form = RemoveGameAndPlatform()
+    query = "SELECT nameGame FROM platformFKzz"
+    cursor.execute(query)
+    nm_list = [item['nameGame'] for item in cursor.fetchall()]
+    form.name.choices = nm_list
 
     # if the form has been submitted, delete the selection from table.
     if form.is_submitted():
@@ -897,9 +1048,33 @@ def remove_m2m_GameAndPlatform():
 @app.route("/editgame", methods=['POST', 'GET'])
 def editgame():
     """This provides the editgame page route."""
+    # connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+    # populate the form and form data
     form = EditTheGame()
+    # original game names ------------------
+    query = "SELECT nameGame FROM game"
+    cursor.execute(query)
+    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
+    games_list = sorted(games_list_unsorted)
+    form.originalName.choices = games_list
+    # game genre ---------------------------
+    query = "SELECT idGenre FROM gameGenre"
+    cursor.execute(query)
+    genre_list = [item['idGenre'] for item in cursor.fetchall()]
+    form.gameGenre.choices = genre_list
+    # game creator --------------------------
+    query = "SELECT idCreator FROM gameCreator"
+    cursor.execute(query)
+    creator_list = [item['idCreator'] for item in cursor.fetchall()]
+    form.gameCreator.choices = creator_list
+    # episodes ------------------------------
+    query = "SELECT episodeNumber FROM podcastEpisode"
+    cursor.execute(query)
+    episode_list = [item['episodeNumber'] for item in cursor.fetchall()]
+    form.podcastEpisode.choices = episode_list
+
     if form.is_submitted():
         # define the update query
         update_entry = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  ' \
