@@ -18,24 +18,10 @@ lorem_ipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vu
 posts = [
     {
         'author': 'Admin',
-        'title': 'Welcome to The Backlog! Links to all pages are in the nav bar above or on the sidebar.',
+        'title': 'Welcome to The Backlog!',
         'content': 'The Backlog is a podcast is done by the Friedrich brothers covering a wide variety of games, and The Backlog website is going to cover the ever-growing list of games that the Friedrich brothers have previously talked about in the podcast and games that they plan on covering but have not yet talked about in depth.  The database supporting this website is going to contain that list. In other words, the database will contain games that the Backlog Podcast has talked about or thinks that it may have plans on covering in a future episode. With over 1,000 games released commercially every year, and more games on PC and Xbox coming out on GamePass, there’s a need for a database that records the details for each game.',
         'date_posted': 'January 30, 2021',
         'image': 'static/chars.png'
-    },
-    {
-        'author': 'Andy',
-        'title': 'Planned Episode on Fortnite',
-        'content': lorem_ipsum,
-        'date_posted': 'August 27, 2018',
-        'image': 'static/vlad-gorshkov-G1jbCAqp5sk-unsplash.jpg'
-    },
-    {
-        'author': 'Andy',
-        'title': 'Planned Episode on Mario Kart 8',
-        'content': lorem_ipsum,
-        'date_posted': 'August 28, 2018',
-        'image': 'static/ravi-palwe-CHAqx7kpnLQ-unsplash.jpg'
     }
 ]
 
