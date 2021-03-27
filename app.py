@@ -10,16 +10,105 @@ from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'oTv!5ox8LB#A&@cBHpa@onsKU'
 
+
+# ------------- helper functions --------------------
+def get_games(cursor):
+    query = "SELECT nameGame FROM game"
+    cursor.execute(query)
+    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
+    games_list = ['NULL']
+    for item in games_list_unsorted:
+        games_list.append(item)
+    return games_list
+
+
+def get_genres(cursor):
+    query = "SELECT nameGenre FROM gameGenre"
+    cursor.execute(query)
+    genre_list = ['NULL']
+    second_list = [item['nameGenre'] for item in cursor.fetchall()]
+    # order elements and remove duplicates
+    second_list = list(set(second_list))
+    for item in second_list:
+        genre_list.append(item)
+    return genre_list
+
+
+def get_creators(cursor):
+    query = "SELECT nameCreator FROM gameCreator"
+    cursor.execute(query)
+    creator_list = ['NULL']
+    tmp = [item['nameCreator'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        creator_list.append(item)
+    return creator_list
+
+
+def get_episodes(cursor):
+    query = "SELECT title FROM podcastEpisode"
+    cursor.execute(query)
+    ep_list = ['NULL']
+    tmp = [item['title'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        ep_list.append(item)
+    return ep_list
+
+
+def get_dates(cursor):
+    query = "SELECT releaseDate FROM game"
+    cursor.execute(query)
+    date_list = ['NULL']
+    tmp = [item['releaseDate'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        date_list.append(item)
+    return date_list
+
+
+def get_costs(cursor):
+    query = "SELECT cost FROM game"
+    cursor.execute(query)
+    cost_list = ['NULL']
+    tmp = [item['cost'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        cost_list.append(item)
+    return cost_list
+
+
+def get_platforms(cursor):
+    cursor.execute("SELECT namePlatform FROM platform")
+    platforms = ['NULL']
+    tmp = [item['namePlatform'] for item in cursor.fetchall()]
+    tmp = list(set(tmp))
+    for item in tmp:
+        platforms.append(item)
+    return platforms
+
+
 posts = [
     {
         'author': 'Admin',
         'title': 'Welcome to The Backlog!',
-        'content': 'The Backlog is a podcast is done by the Friedrich brothers covering a wide variety of games, and The Backlog website is going to cover the ever-growing list of games that the Friedrich brothers have previously talked about in the podcast and games that they plan on covering but have not yet talked about in depth.  The database supporting this website is going to contain that list. In other words, the database will contain games that the Backlog Podcast has talked about or thinks that it may have plans on covering in a future episode. With over 1,000 games released commercially every year, and more games on PC and Xbox coming out on GamePass, there’s a need for a database that records the details for each game.',
+        'content': 'The Backlog is a podcast is done by the Friedrich brothers covering a wide '
+                   'variety of games, and The Backlog website is going to cover the ever-growing'
+                   ' list of games that the Friedrich brothers have previously talked about in '
+                   'the podcast and games that they plan on covering but have not yet talked '
+                   'about in depth.  The database supporting this website is going to contain '
+                   'that list. In other words, the database will contain games that the '
+                   'Backlog Podcast has talked about or thinks that it may have plans on '
+                   'covering in a future episode. With over 1,000 games released commercially '
+                   'every year, and more games on PC and Xbox coming out on GamePass, there’s a '
+                   'need for a database that records the details for each game.',
         'date_posted': 'January 30, 2021',
         'image': 'static/chars.png'
     }
 ]
 
+
+# ------------- END of helper functions --------------------
 
 @app.route("/index", methods=['POST', 'GET'])
 @app.route("/index.html", methods=['POST', 'GET'])
@@ -44,68 +133,27 @@ def search():
 
     # populate forms
     form = SearchPageForm()
+
     # game names -------
-    query = "SELECT nameGame FROM game"
-    cursor.execute(query)
-    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
-    games_list = ['NULL']
-    for item in games_list_unsorted:
-        games_list.append(item)
-    form.name.choices = games_list
+    form.name.choices = get_games(cursor)
+
     # game genres ------
-    query = "SELECT nameGenre FROM gameGenre"
-    cursor.execute(query)
-    genre_list = ['NULL']
-    second_list = [item['nameGenre'] for item in cursor.fetchall()]
-    # order elements and remove duplicates
-    second_list = list(set(second_list))
-    for item in second_list:
-        genre_list.append(item)
-    form.genre.choices = genre_list
+    form.genre.choices = get_genres(cursor)
+
     # creators --------
-    query = "SELECT nameCreator FROM gameCreator"
-    cursor.execute(query)
-    creator_list = ['NULL']
-    tmp = [item['nameCreator'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        creator_list.append(item)
-    form.creator.choices = creator_list
+    form.creator.choices = get_creators(cursor)
+
     # episodes --------
-    query = "SELECT title FROM podcastEpisode"
-    cursor.execute(query)
-    ep_list = ['NULL']
-    tmp = [item['title'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        ep_list.append(item)
-    form.episode.choices = ep_list
+    form.episode.choices = get_episodes(cursor)
+
     # dates -------------
-    query = "SELECT releaseDate FROM game"
-    cursor.execute(query)
-    date_list = ['NULL']
-    tmp = [item['releaseDate'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        date_list.append(item)
-    form.date.choices = date_list
+    form.date.choices = get_dates(cursor)
+
     # costs ------------
-    query = "SELECT cost FROM game"
-    cursor.execute(query)
-    cost_list = ['NULL']
-    tmp = [item['cost'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        cost_list.append(item)
-    form.cost.choices = cost_list
+    form.cost.choices = get_costs(cursor)
+
     # platforms --------
-    cursor.execute("SELECT namePlatform FROM platform")
-    platforms = ['NULL']
-    tmp = [item['namePlatform'] for item in cursor.fetchall()]
-    tmp = list(set(tmp))
-    for item in tmp:
-        platforms.append(item)
-    form.platform.choices = platforms
+    form.platform.choices = get_platforms(cursor)
 
     counter = 0
 
@@ -1059,9 +1107,9 @@ def editgame():
     if form.is_submitted():
         # define the update query
         update_entry = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  ' \
-                 'gameGenre = (SELECT idGenre FROM gameGenre WHERE idGenre = %s), ' \
-                 'gameCreator = (SELECT idCreator FROM gameCreator WHERE idCreator = %s), ' \
-                 'podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
+                       'gameGenre = (SELECT idGenre FROM gameGenre WHERE idGenre = %s), ' \
+                       'gameCreator = (SELECT idCreator FROM gameCreator WHERE idCreator = %s), ' \
+                       'podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
         # get the values used in the query
         orig_name = form.originalName.data
         name = form.nameGame.data
