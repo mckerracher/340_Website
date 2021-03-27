@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = 'oTv!5ox8LB#A&@cBHpa@onsKU'
 
 
 # ------------- helper functions --------------------
-def get_games(cursor):
+def get_game_names(cursor):
     query = "SELECT nameGame FROM game"
     cursor.execute(query)
     games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
@@ -22,7 +22,7 @@ def get_games(cursor):
     return games_list
 
 
-def get_genres(cursor):
+def get_genre_names(cursor):
     query = "SELECT nameGenre FROM gameGenre"
     cursor.execute(query)
     genre_list = ['NULL']
@@ -34,7 +34,7 @@ def get_genres(cursor):
     return genre_list
 
 
-def get_creators(cursor):
+def get_creator_names(cursor):
     query = "SELECT nameCreator FROM gameCreator"
     cursor.execute(query)
     creator_list = ['NULL']
@@ -45,7 +45,7 @@ def get_creators(cursor):
     return creator_list
 
 
-def get_episodes(cursor):
+def get_episode_names(cursor):
     query = "SELECT title FROM podcastEpisode"
     cursor.execute(query)
     ep_list = ['NULL']
@@ -56,7 +56,7 @@ def get_episodes(cursor):
     return ep_list
 
 
-def get_dates(cursor):
+def get_dates_only_dates(cursor):
     query = "SELECT releaseDate FROM game"
     cursor.execute(query)
     date_list = ['NULL']
@@ -67,7 +67,7 @@ def get_dates(cursor):
     return date_list
 
 
-def get_costs(cursor):
+def get_cost_only_costs(cursor):
     query = "SELECT cost FROM game"
     cursor.execute(query)
     cost_list = ['NULL']
@@ -78,7 +78,7 @@ def get_costs(cursor):
     return cost_list
 
 
-def get_platforms(cursor):
+def get_platform_names(cursor):
     cursor.execute("SELECT namePlatform FROM platform")
     platforms = ['NULL']
     tmp = [item['namePlatform'] for item in cursor.fetchall()]
@@ -86,6 +86,18 @@ def get_platforms(cursor):
     for item in tmp:
         platforms.append(item)
     return platforms
+
+
+def get_all_from_entity(entity, cursor):
+    query = f"SELECT * FROM {entity}"
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+def search_entity_with_key(key, entity, cursor):
+    query = f"SELECT * FROM {entity} WHERE nameGame = %s"
+    search_string = f"{key}"
+    return cursor.execute(query, search_string)
 
 
 posts = [
@@ -135,25 +147,25 @@ def search():
     form = SearchPageForm()
 
     # game names -------
-    form.name.choices = get_games(cursor)
+    form.name.choices = get_game_names(cursor)
 
     # game genres ------
-    form.genre.choices = get_genres(cursor)
+    form.genre.choices = get_genre_names(cursor)
 
     # creators --------
-    form.creator.choices = get_creators(cursor)
+    form.creator.choices = get_creator_names(cursor)
 
     # episodes --------
-    form.episode.choices = get_episodes(cursor)
+    form.episode.choices = get_episode_names(cursor)
 
     # dates -------------
-    form.date.choices = get_dates(cursor)
+    form.date.choices = get_dates_only_dates(cursor)
 
     # costs ------------
-    form.cost.choices = get_costs(cursor)
+    form.cost.choices = get_cost_only_costs(cursor)
 
     # platforms --------
-    form.platform.choices = get_platforms(cursor)
+    form.platform.choices = get_platform_names(cursor)
 
     counter = 0
 
@@ -511,15 +523,11 @@ def games():
     if form.is_submitted():
         game.clear()  # ensure game is empty so results is rendered
         search_str = [form.search.data]  # gets user's search input
-        query = "SELECT * FROM game WHERE nameGame = %s"
-        cursor.execute(query, search_str)  # queries DB
-        results = cursor.fetchall()  # assigns results of query
+        results = search_entity_with_key(search_str, game, cursor)  # assigns results of query
         return render_template('games.html', results=results, form=form)
     else:
         # renders the page before form is submitted.
-        query = "SELECT * FROM game"
-        cursor.execute(query)
-        game = cursor.fetchall()
+        game = get_all_from_entity("game", cursor)
         return render_template('games.html', game=game, form=form)
 
 
