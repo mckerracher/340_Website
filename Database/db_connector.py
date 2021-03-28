@@ -1,8 +1,9 @@
 import pymysql
+import os
 
 h = "us-cdbr-east-03.cleardb.com"
-u = "be5765a97239e1"
-pw = "6d4a5cc8"
+u = os.environ.get('DB_USER')
+pw = os.environ.get('DB_PW')
 dbase = "heroku_27223dfa0403044"
 
 
