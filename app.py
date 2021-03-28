@@ -16,23 +16,30 @@ def connect_to_db_get_cursor():
     conn = db.connect_to_database()
     return conn.cursor(pymysql.cursors.DictCursor)
 
-def get_game_names(cursor):
+
+def get_game_names(cursor, set_first_null):
     query = "SELECT nameGame FROM game"
+    games_list = []
     cursor.execute(query)
     games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
-    games_list = ['NULL']
+    games_list_unsorted.sort()
+    if set_first_null:
+        games_list.append('NULL')
     for item in games_list_unsorted:
         games_list.append(item)
     return games_list
 
 
-def get_genre_names(cursor):
+def get_genre_names(cursor, set_null):
     query = "SELECT nameGenre FROM gameGenre"
     cursor.execute(query)
-    genre_list = ['NULL']
+    genre_list = []
+    if set_null:
+        genre_list.append('NULL')
     second_list = [item['nameGenre'] for item in cursor.fetchall()]
     # order elements and remove duplicates
     second_list = list(set(second_list))
+    second_list.sort()
     for item in second_list:
         genre_list.append(item)
     return genre_list
@@ -44,12 +51,15 @@ def get_genre_IDs(cursor):
     return [item['idGenre'] for item in cursor.fetchall()]
 
 
-def get_creator_names(cursor):
+def get_creator_names(cursor, set_null):
     query = "SELECT nameCreator FROM gameCreator"
     cursor.execute(query)
-    creator_list = ['NULL']
+    creator_list = []
+    if set_null:
+        creator_list.append('NULL')
     tmp = [item['nameCreator'] for item in cursor.fetchall()]
     tmp = list(set(tmp))
+    tmp.sort()
     for item in tmp:
         creator_list.append(item)
     return creator_list
@@ -61,12 +71,15 @@ def get_creator_IDs(cursor):
     return [item['idCreator'] for item in cursor.fetchall()]
 
 
-def get_episode_names(cursor):
+def get_episode_names(cursor, set_null):
     query = "SELECT title FROM podcastEpisode"
     cursor.execute(query)
-    ep_list = ['NULL']
+    ep_list = []
+    if set_null:
+        ep_list.append('NULL')
     tmp = [item['title'] for item in cursor.fetchall()]
     tmp = list(set(tmp))
+    tmp.sort()
     for item in tmp:
         ep_list.append(item)
     return ep_list
@@ -82,10 +95,12 @@ def get_episode_numbers(cursor):
     return episode_list
 
 
-def get_dates_only_dates(cursor):
+def get_dates_only_dates(cursor, set_null):
     query = "SELECT releaseDate FROM game"
     cursor.execute(query)
-    date_list = ['NULL']
+    date_list = []
+    if set_null:
+        date_list.append('NULL')
     tmp = [item['releaseDate'] for item in cursor.fetchall()]
     tmp = list(set(tmp))
     for item in tmp:
@@ -93,10 +108,12 @@ def get_dates_only_dates(cursor):
     return date_list
 
 
-def get_cost_only_costs(cursor):
+def get_cost_only_costs(cursor, set_null):
     query = "SELECT cost FROM game"
     cursor.execute(query)
-    cost_list = ['NULL']
+    cost_list = []
+    if set_null:
+        cost_list.append('NULL')
     tmp = [item['cost'] for item in cursor.fetchall()]
     tmp = list(set(tmp))
     for item in tmp:
@@ -104,11 +121,14 @@ def get_cost_only_costs(cursor):
     return cost_list
 
 
-def get_platform_names(cursor):
+def get_platform_names(cursor, set_null):
     cursor.execute("SELECT namePlatform FROM platform")
-    platforms = ['NULL']
+    platforms = []
+    if set_null:
+        platforms.append('NULL')
     tmp = [item['namePlatform'] for item in cursor.fetchall()]
     tmp = list(set(tmp))
+    tmp.sort()
     for item in tmp:
         platforms.append(item)
     return platforms
@@ -172,25 +192,25 @@ def search():
     form = SearchPageForm()
 
     # game names -------
-    form.name.choices = get_game_names(cursor)
+    form.name.choices = get_game_names(cursor, True)
 
     # game genres ------
-    form.genre.choices = get_genre_names(cursor)
+    form.genre.choices = get_genre_names(cursor, True)
 
     # creators --------
-    form.creator.choices = get_creator_names(cursor)
+    form.creator.choices = get_creator_names(cursor, True)
 
     # episodes --------
-    form.episode.choices = get_episode_names(cursor)
+    form.episode.choices = get_episode_names(cursor, True)
 
     # dates -------------
-    form.date.choices = get_dates_only_dates(cursor)
+    form.date.choices = get_dates_only_dates(cursor, True)
 
     # costs ------------
-    form.cost.choices = get_cost_only_costs(cursor)
+    form.cost.choices = get_cost_only_costs(cursor, True)
 
     # platforms --------
-    form.platform.choices = get_platform_names(cursor)
+    form.platform.choices = get_platform_names(cursor, True)
 
     counter = 0
 
@@ -251,12 +271,9 @@ def search():
                 # 1 Get nameGenre
                 genre_name = form.genre.data
                 # 2 Get idGenre
-                alt_query = "SELECT nameGenre FROM gameGenre"
-                cursor.execute(alt_query)
-                names = [item['nameGenre'] for item in cursor.fetchall()]
-                alt_query = "SELECT idGenre FROM gameGenre"
-                cursor.execute(alt_query)
-                ids = [item['idGenre'] for item in cursor.fetchall()]
+                names = get_genre_names(cursor)
+                ids = get_genre_IDs(cursor)
+
                 index = -1
                 for name in names:
                     index += 1
@@ -540,10 +557,12 @@ def games():
     """This provides the games page route."""
     cursor = connect_to_db_get_cursor()
 
+    # init variables
     results = {}
     game = {}
     form = SearchForm()
     results.clear()
+
     # renders the page based on search results.
     if form.is_submitted():
         game.clear()  # ensure game is empty so results is rendered
@@ -640,9 +659,7 @@ def gameGenres():
         return render_template('gameGenres.html', results=results, form=form)
     else:
         # renders the page before form is submitted.
-        query = "SELECT * FROM gameGenre"
-        cursor.execute(query)
-        gameGenre = cursor.fetchall()
+        gameGenre = get_all_from_entity("gameGenre", cursor)
         return render_template('gameGenres.html', gameGenre=gameGenre,
                                form=form)
 
@@ -685,7 +702,7 @@ def podcastEpisodes():
     if form.is_submitted():
         podcastEpisode.clear()
         search_str = [form.search.data]  # gets user's search input
-        query = 'SELECT * FROM podcastEpisode WHERE title = "%s"'
+        query = 'SELECT * FROM podcastEpisode WHERE title = %s'
         cursor.execute(query, search_str)  # queries DB
         podcastEpisode = cursor.fetchall()  # assigns results of query
         return render_template('podcastEpisode.html',
@@ -740,12 +757,8 @@ def platforms():
         return render_template('platforms.html', platform=platform, form=form)
     else:
         # renders the page before form submission.
-        query = "SELECT * FROM platform"
-        cursor.execute(query)
-        platform = cursor.fetchall()
+        platform = get_all_from_entity("platform", cursor)
         return render_template('platforms.html', platform=platform, form=form)
-
-    return render_template('platforms.html', platform=platform)
 
 
 @app.route("/addplatform", methods=['POST', 'GET'])
@@ -795,9 +808,7 @@ def gameCreators():
                                form=form)
     else:
         # renders page before form submission.
-        query = "SELECT * FROM gameCreator"
-        cursor.execute(query)
-        gameCreator = cursor.fetchall()
+        gameCreator = get_all_from_entity("gameCreator", cursor)
         return render_template('gameCreators.html', gameCreator=gameCreator,
                                form=form)
 
@@ -844,9 +855,7 @@ def m2m_GameAndPlatform():
                                platform_FK_zz=platform_FK_zz, form=form)
     else:
         # renders page normally.
-        query = "SELECT * FROM platformFKzz"
-        cursor.execute(query)
-        platform_FK_zz = cursor.fetchall()
+        platform_FK_zz = get_all_from_entity("platformFKzz", cursor)
         return render_template('PlatformFKzz.html',
                                platform_FK_zz=platform_FK_zz, form=form)
 
@@ -861,7 +870,7 @@ def add_m2m_GameAndPlatform():
     form = AddToM2MPlatformGame()
 
     # game names -------------------
-    form.nameGame.choices = get_game_names(cursor)
+    form.nameGame.choices = get_game_names(cursor, False)
 
     # platforms -------------------
     form.idPlatform.choices = get_platform_IDs(cursor)
@@ -874,7 +883,7 @@ def add_m2m_GameAndPlatform():
         insert_list = [name, idPlat]
         cursor.execute(insert_statement, insert_list)
         conn.commit()
-        flash(f'{name} creator added to the database!', 'success')
+        flash(f'{name} combo added to the database!', 'success')
         return redirect(url_for('home'))
     else:
         # renders page before submission.
@@ -894,7 +903,7 @@ def remove_game():
     form = RemoveGame()
 
     # game names ------------
-    form.name.choices = get_game_names(cursor)
+    form.name.choices = get_game_names(cursor, False)
 
     if form.is_submitted():
         remove = 'DELETE FROM game WHERE nameGame = %s'
@@ -906,8 +915,7 @@ def remove_game():
         game_ep = [item['podcastEpisode'] for item in cursor.fetchall()]
 
         # get games in platformFKzz and check if this game is there.
-        cursor.execute('SELECT nameGame FROM platformFKzz')
-        name_list = [item['nameGame'] for item in cursor.fetchall()]
+        name_list = get_game_names(cursor, False)
         game_found = False
         for x in name_list:
             # toggle the boolean if it's there
@@ -922,13 +930,14 @@ def remove_game():
         # if this game has no podcast, give it one before deleting the game.
         if not game_ep[0]:
             game_name = form.name.data
+
             # gets a list of current episodes
-            cursor.execute("SELECT episodeNumber FROM podcastEpisode")
-            eps = [item['episodeNumber'] for item in cursor.fetchall()]
+            eps = get_episode_numbers(cursor)
             name_val = [eps[0], game_name]
 
             # gives this game a currently existing podcast episode
-            insert = 'UPDATE game SET podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
+            insert = 'UPDATE game SET podcastEpisode = (SELECT episodeNumber FROM podcastEpisode ' \
+                     'WHERE episodeNumber = %s) WHERE nameGame = %s'
             cursor.execute(insert, name_val)
             conn.commit()
 
@@ -945,9 +954,7 @@ def remove_game():
         return redirect(url_for('home'))
     else:
         # renders the page before form submission.
-        query = "SELECT * FROM game"
-        cursor.execute(query)
-        game = cursor.fetchall()
+        game = get_all_from_entity("game", cursor)
         return render_template('remove_game.html', title='Remove Game',
                                form=form, game=game)
 
@@ -958,16 +965,17 @@ def remove_genre():
     # connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     # populate the form data
     form = RemoveGenre()
+
     # genre name -------------------
-    query = "SELECT nameGenre FROM gameGenre"
-    cursor.execute(query)
-    genre_list = [item['nameGenre'] for item in cursor.fetchall()]
-    form.name.choices = genre_list
+    form.name.choices = get_genre_names(cursor, False)
+
     if form.is_submitted():
         remove = 'DELETE FROM gameGenre WHERE nameGenre = %s'
         remove_list = [form.name.data]
+
         # removes selection from the table
         cursor.execute(remove, remove_list)
         conn.commit()
@@ -975,9 +983,7 @@ def remove_genre():
         return redirect(url_for('home'))
     else:
         # renders the page before form submission
-        query = "SELECT * FROM gameGenre"
-        cursor.execute(query)
-        gameGenre = cursor.fetchall()
+        gameGenre = get_all_from_entity("gameGenre", cursor)
         return render_template('remove_genre.html', title='Remove Genre',
                                form=form, gameGenre=gameGenre)
 
@@ -988,17 +994,17 @@ def remove_creator():
     # Connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     # Populate the form data
     form = RemoveCreator()
+
     # Creator name -----------------
-    query = "SELECT nameCreator FROM gameCreator"
-    cursor.execute(query)
-    creator_list = [item['nameCreator'] for item in cursor.fetchall()]
-    form.name.choices = creator_list
+    form.name.choices = get_creator_names(cursor, False)
 
     if form.is_submitted():
         remove = 'DELETE FROM gameCreator WHERE nameCreator = %s'
         remove_list = [form.name.data]
+
         # removes the selection from the table
         cursor.execute(remove, remove_list)
         conn.commit()
@@ -1006,9 +1012,7 @@ def remove_creator():
         return redirect(url_for('home'))
     else:
         # renders the page before form submission
-        query = "SELECT * FROM gameCreator"
-        cursor.execute(query)
-        gameCreator = cursor.fetchall()
+        gameCreator = get_all_from_entity("gameCreator", cursor)
         return render_template('remove_creator.html', title='Remove Creator',
                                form=form, gameCreator=gameCreator)
 
@@ -1019,17 +1023,17 @@ def remove_platform():
     # Connect to the DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     # Populate the form
     form = RemovePlatform()
+
     # platform name ----------------
-    query = "SELECT namePlatform FROM platform"
-    cursor.execute(query)
-    plat_list = [item['namePlatform'] for item in cursor.fetchall()]
-    form.name.choices = plat_list
+    form.name.choices = get_platform_names(cursor, False)
 
     if form.is_submitted():
         remove = 'DELETE FROM platform WHERE namePlatform =  %s'
         remove_list = [form.name.data]
+
         # removes the selection from the table
         cursor.execute(remove, remove_list)
         conn.commit()
@@ -1037,9 +1041,7 @@ def remove_platform():
         return redirect(url_for('home'))
     else:
         # renders the page before form submission
-        query = "SELECT * FROM platform"
-        cursor.execute(query)
-        platform = cursor.fetchall()
+        platform = get_all_from_entity("platform", cursor)
         return render_template('remove_platform.html', title='Remove Platform',
                                form=form, platform=platform)
 
@@ -1050,13 +1052,12 @@ def remove_episode():
     # Connect to the DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     # Populate the form
     form = RemoveEpisode()
+
     # Episode names -----------
-    query = "SELECT title FROM podcastEpisode"
-    cursor.execute(query)
-    ep_list = [item['title'] for item in cursor.fetchall()]
-    form.name.choices = ep_list
+    form.name.choices = get_episode_names(cursor, False)
 
     if form.is_submitted():
         # Removes selection from the table.
@@ -1068,9 +1069,7 @@ def remove_episode():
         return redirect(url_for('home'))
     else:
         # renders page before form is submitted
-        query = "SELECT * FROM podcastEpisode"
-        cursor.execute(query)
-        podcastEpisode = cursor.fetchall()
+        podcastEpisode = get_all_from_entity("podcastEpisode", cursor)
         return render_template('remove_episode.html', title='Remove Episode',
                                form=form, podcastEpisode=podcastEpisode)
 
@@ -1081,12 +1080,10 @@ def remove_m2m_GameAndPlatform():
     # Connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     # Populate the form data
     form = RemoveGameAndPlatform()
-    query = "SELECT nameGame FROM platformFKzz"
-    cursor.execute(query)
-    nm_list = [item['nameGame'] for item in cursor.fetchall()]
-    form.name.choices = nm_list
+    form.name.choices = get_game_names(cursor, False)
 
     # if the form has been submitted, delete the selection from table.
     if form.is_submitted():
@@ -1099,9 +1096,7 @@ def remove_m2m_GameAndPlatform():
         return redirect(url_for('home'))
     else:
         # renders page before form is submitted
-        query = "SELECT * FROM platformFKzz"
-        cursor.execute(query)
-        post = cursor.fetchall()
+        post = get_all_from_entity("platformFKzz", cursor)
         return render_template('remove_gameandplatform.html',
                                title='Remove a Combo',
                                form=form, post=post)
@@ -1113,36 +1108,30 @@ def editgame():
     # connect to DB
     conn = db.connect_to_database()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+
     # populate the form and form data
     form = EditTheGame()
+
     # original game names ------------------
-    query = "SELECT nameGame FROM game"
-    cursor.execute(query)
-    games_list_unsorted = [item['nameGame'] for item in cursor.fetchall()]
-    games_list = sorted(games_list_unsorted)
-    form.originalName.choices = games_list
+    form.originalName.choices = get_game_names(cursor, False)
+
     # game genre ---------------------------
-    query = "SELECT idGenre FROM gameGenre"
-    cursor.execute(query)
-    genre_list = [item['idGenre'] for item in cursor.fetchall()]
-    form.gameGenre.choices = genre_list
+    form.gameGenre.choices = get_genre_IDs(cursor)
+
     # game creator --------------------------
-    query = "SELECT idCreator FROM gameCreator"
-    cursor.execute(query)
-    creator_list = [item['idCreator'] for item in cursor.fetchall()]
-    form.gameCreator.choices = creator_list
+    form.gameCreator.choices = get_creator_IDs(cursor)
+
     # episodes ------------------------------
-    query = "SELECT episodeNumber FROM podcastEpisode"
-    cursor.execute(query)
-    episode_list = [item['episodeNumber'] for item in cursor.fetchall()]
-    form.podcastEpisode.choices = episode_list
+    form.podcastEpisode.choices = get_episode_numbers(cursor)
 
     if form.is_submitted():
         # define the update query
         update_entry = 'UPDATE game SET nameGame = %s, releaseDate = %s, cost = %s,  ' \
                        'gameGenre = (SELECT idGenre FROM gameGenre WHERE idGenre = %s), ' \
                        'gameCreator = (SELECT idCreator FROM gameCreator WHERE idCreator = %s), ' \
-                       'podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE episodeNumber = %s) WHERE nameGame = %s'
+                       'podcastEpisode = (SELECT episodeNumber FROM podcastEpisode WHERE ' \
+                       'episodeNumber = %s) WHERE nameGame = %s'
+
         # get the values used in the query
         orig_name = form.originalName.data
         name = form.nameGame.data
@@ -1152,6 +1141,7 @@ def editgame():
         creator = form.gameCreator.data
         episode = []
         episode = form.podcastEpisode.data
+
         # checks if podcastEpisode is left blank
         if not form.podcastEpisode.data:
             episode = form.podcastEpisode.data
@@ -1195,9 +1185,7 @@ def editgame():
         return redirect(url_for('home'))
     else:
         # renders the page before the form is submitted
-        query = "SELECT * FROM game"
-        cursor.execute(query)
-        game = cursor.fetchall()
+        game = get_all_from_entity("game", cursor)
         return render_template('editgame.html', title='Edit a Game', form=form,
                                game=game)
 
