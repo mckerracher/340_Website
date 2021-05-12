@@ -1,4 +1,4 @@
-# CS 340 Project
+# The Backlog Website - CS340 Project
 - Team 13: Buggy_Debuggers
 - Students: Andy Friedrich and Josh McKerracher
 - Winter 2021
