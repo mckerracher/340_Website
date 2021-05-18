@@ -1,0 +1,74 @@
+<!----------
+Andy Friedrich
+OSU 361
+Word Cloud HTML now using Flask
+
+Credit:
+https://help.pythonanywhere.com/pages/StaticFiles/
+----->
+
+{% extends "layout2.html" %}
+    {% block body %}
+
+<!-------------------
+<!DOCTYPE html>
+<html lang="en-US"></html>
+<html lang="en">
+------->
+<body>
+    <div style = "text-align: center">
+        <h1>
+            <strong>
+                Word Cloud Creator!
+            </strong>
+        </h1>
+    </div>
+
+    <div style= "text-align: center; boarder: 4px solid">
+    <title>Word Cloud Creator</title>
+    </div>
+    <div style= "border: 2px solid">
+    <h2>The Word Cloud Creator takes data from two microservice applications and combines it into a word cloud.</h2>
+    <h2>Click submit to generate a new word cloud based on the current data in these two microservices</h2>
+    </div>
+    <br>
+
+
+
+
+
+    <br>
+    <!-----------------------
+    <h3>Please use Ctrl+F5 to force reload of page - I am learning how to make flask do this for future iterations</h3>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
+    <script type="text/javascript"> $(function() { $("#mybutton").click(function (event) { $.getJSON('/SomeFunction', { },
+    function(data) { }); return false; }); }); </script>
+    <div style= "text-align: center">
+
+    <input type="button" id="mybutton" value="Submit"><p>Do you want to <a href="{{ url_for('wordcloud2') }}">log in?</a>
+   ------------>
+  <form method=post>
+    <dl>
+        <br>
+
+    </dl>
+        <div style= "text-align: center">
+        <p><a href="{{ url_for('wordcloud2') }}"><input type="button" id="mybutton2" value="Submit" onclick="{{ url_for('wordcloud2') }}"></a></p>
+        <br>
+        </div>
+
+  </form>
+
+
+    </div>
+    <br>
+    <br>
+    <div style= "text-align: center">
+    <img src="\static\wordCloud.png">
+    </div>
+
+</body>
+</html>
+
+
+{% endblock %}
