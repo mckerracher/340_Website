@@ -1,7 +1,26 @@
-from flask import Flask, render_template, flash, redirect, url_for
+from flask import Flask, render_template, flash, redirect, url_for, jsonify, abort
 import Database.db_connector as db
 import pymysql.cursors
 import time
+#Andy Word Cloud inclusions
+import matplotlib
+matplotlib.use('Agg')
+import requests
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud, STOPWORDS
+from flask import flash
+import threading
+import base64
+import webbrowser
+import io
+import logging
+import numpy as np
+from PIL import Image
+from io import BytesIO
+import urllib3
+import PIL.Image
+data = 'foo'
+
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
     AddEpisodeForm, AddToM2MPlatformGame, \
     EditTheGame, SearchForm, RemoveGame, RemoveGenre, RemoveCreator, \
@@ -10,6 +29,13 @@ from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'oTv!5ox8LB#A&@cBHpa@onsKU'
 
+#--------word cloud coloring -----------------------
+def random_color_func(word=None, font_size=None, position=None, orientation=None, font_path=None, random_state=None):
+    h = int(360.0 * 45.0 / 255.0)
+    s = int(100.0 * 255.0 / 255.0)
+    l = int(100.0 * float(random_state.randint(60, 120)) / 255.0)
+
+    return "hsl({}, {}%, {}%)".format(h, s, l)
 
 # ------------- helper functions --------------------
 def connect_to_db_get_cursor():
@@ -1189,6 +1215,95 @@ def editgame():
         return render_template('editgame.html', title='Edit a Game', form=form,
                                game=game)
 
+#---------------word cloud app route and specific----------------------
+
+r = ""
+
+@app.route("/wordcloud", methods=['POST', 'GET'])
+def wordcloud():
+    flash('Welcome!')
+    return render_template('wordcloud.html')
+
+
+@app.route("/wordcloud2", methods=['POST', 'GET'])
+def wordcloud2():
+    #need to update the code below to something along the lines of the web address access
+    #perhaps something of "did beavis work"
+    try:
+        #f = open('game.json')
+        #webbrowser.get('http://127.0.0.4/wordcloud')
+        requests.get('http://127.0.0.4/wordcloud')
+        #f.close()
+    #when error happens then flashing this error will be helpful
+    except IOError:
+        print('File is not accessible')
+        flash('Files not found or readable. One or more required scraper files (game.json as example) not available - please fix')
+        return render_template('wordcloud.html')
+    print('File is accessible')
+    flash('You created a word cloud')
+    #Need to update this to the proper web address for the word cloud
+    beavis = requests.get('http://127.0.0.4/wordcloud')
+    print("out of beavis")
+    #Discovered this after way too long - this forces the text out of beavis and into
+    #a format that the cloud generator can run
+    file_content = beavis.text
+    # literally exists out of total paranoia - shows the text
+    print(file_content)
+    print('out of file_content')
+    print("FileContent")
+    #this section generates the word cloud
+    wordcloud = WordCloud(
+        stopwords=STOPWORDS,
+        background_color='white',
+        width=1200,
+        height=1000,
+        color_func=random_color_func
+    ).generate(file_content)
+    plt.imshow(wordcloud)
+    plt.axis('off')
+    # plt.show()
+    # saves picture file to picture format
+    plt.savefig('static/wordCloud.png')
+    print("wordCloud.png created")
+    flash('Success! Word Cloud has been processed and is loading')
+    return render_template('wordcloud2.html')
+
+# this is the only word cloud get method that works
+@app.route('/wordcloud66', methods=['POST', 'GET'])
+def wordcloudGet66():
+    try:
+        f = open('static/wordCloud.png')
+        f.close()
+    except IOError:
+        print('File is not accessible')
+        flash('picture file not found')
+        return ('File is not accessible')
+    print('pre file content opening of word cloud')
+    file_content = open("static/wordCloud.png", 'rb')
+    with open('static/wordCloud.png', 'rb') as image_file:
+        print('file_content')
+        encoded_string = base64.b64encode(image_file.read())
+
+        print('file content created')
+
+        print('checking if file can be written')
+        #image decoding from recent encoding - this is to prove that
+        #encoded string will actually return back to the original picture
+        newImage = Image.open(BytesIO(base64.b64decode(encoded_string)))
+        print('decode workie?')
+
+        print("test")
+        #image is successfully printed to static folder proving that data can be decoded
+        newImage.save('static/noob.png', 'PNG')
+        print('possible print')
+
+        return (encoded_string)
+
+@app.route("/")
+def main():
+    return data
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    threading.Thread(target=app.run).start()
