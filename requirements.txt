@@ -33,3 +33,4 @@ wordcloud==1.8.0
 WTForms==2.3.3
 xl2dict==0.1.5
 xlrd==2.0.1
+gunicorn==20.0.4
