@@ -1234,7 +1234,10 @@ def wordcloud2():
     try:
         #f = open('game.json')
         #webbrowser.get('http://127.0.0.4/wordcloud')
-        requests.get('http://127.0.0.4/wordcloud')
+
+        #put your website here
+        requests.get('https://pastebin.com/raw/W2ez0StJ')
+
         #f.close()
     #when error happens then flashing this error will be helpful
     except IOError:
@@ -1244,7 +1247,7 @@ def wordcloud2():
     print('File is accessible')
     flash('You created a word cloud')
     #Need to update this to the proper web address for the word cloud
-    beavis = requests.get('http://127.0.0.4/wordcloud')
+    beavis = requests.get('https://pastebin.com/raw/W2ez0StJ')
     print("out of beavis")
     #Discovered this after way too long - this forces the text out of beavis and into
     #a format that the cloud generator can run
