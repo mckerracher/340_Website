@@ -19,6 +19,7 @@ from PIL import Image
 from io import BytesIO
 import urllib3
 import PIL.Image
+from whitenoise import WhiteNoise
 data = 'foo'
 
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
@@ -27,6 +28,7 @@ from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
     RemovePlatform, RemoveEpisode, RemoveGameAndPlatform, SearchPageForm
 
 app = Flask(__name__)
+app.wsgi_app = WhiteNoise(app.wsgi_app, root='static/')
 app.config['SECRET_KEY'] = 'oTv!5ox8LB#A&@cBHpa@onsKU'
 
 #--------word cloud coloring -----------------------

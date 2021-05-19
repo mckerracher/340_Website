@@ -9,7 +9,7 @@ pw = os.environ.get('DB_PW')
 dbase = "heroku_27223dfa0403044"
 
 """
-for running locally
+#for running locally
 #u = "be5765a97239e1"
 #pw = "6d4a5cc8"
 # local running
