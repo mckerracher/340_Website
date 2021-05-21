@@ -1236,8 +1236,9 @@ def wordcloud2():
         #webbrowser.get('http://127.0.0.4/wordcloud')
 
         #put your website here
-        requests.get('https://pastebin.com/raw/W2ez0StJ')
-
+        requests.get('http://valchin.com/sendjson2021')
+        #confirmed worked old - delete the above if you use below
+        #requests.get('https://pastebin.com/raw/W2ez0StJ')
         #f.close()
     #when error happens then flashing this error will be helpful
     except IOError:
@@ -1247,7 +1248,9 @@ def wordcloud2():
     print('File is accessible')
     flash('You created a word cloud')
     #Need to update this to the proper web address for the word cloud
-    beavis = requests.get('https://pastebin.com/raw/W2ez0StJ')
+    beavis = requests.get('http://valchin.com/sendjson2021')
+    #confirmed worked below - remove above if you want to use the code below
+    #beavis = requests.get('https://pastebin.com/raw/W2ez0StJ')
     print("out of beavis")
     #Discovered this after way too long - this forces the text out of beavis and into
     #a format that the cloud generator can run
@@ -1280,9 +1283,9 @@ def wordcloudGet66():
         f = open('static/wordCloud.png')
         f.close()
     except IOError:
-        print('File is not accessible')
-        flash('picture file not found')
-        return ('File is not accessible')
+        print('File is not accessible - please run wordcloud at /wordcloud')
+        flash('File is not accessible - please run wordcloud at /wordcloud')
+        return ('File is not accessible - please run wordcloud at /wordcloud')
     print('pre file content opening of word cloud')
     file_content = open("static/wordCloud.png", 'rb')
     with open('static/wordCloud.png', 'rb') as image_file:
