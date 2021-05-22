@@ -1279,13 +1279,88 @@ def wordcloud2():
 # this is the only word cloud get method that works
 @app.route('/wordcloud66', methods=['POST', 'GET'])
 def wordcloudGet66():
+    #need to update the code below to something along the lines of the web address access
+    #perhaps something of "did beavis work"
     try:
-        f = open('static/wordCloud.png')
-        f.close()
+        #f = open('game.json')
+        #f.close()
+        #webbrowser.open('https://1drv.ms/u/s!AlvZSaPdNhyBtYwpp3k3WhJxctY2qw?e=DETmKW')
+        #requests.get('https://pastebin.com/raw/W2ez0StJ')
+        requests.get('http://valchin.com/sendjson2021')
+    #when error happens then flashing this error will be helpful
     except IOError:
-        print('File is not accessible - please run wordcloud at /wordcloud')
-        flash('File is not accessible - please run wordcloud at /wordcloud')
-        return ('File is not accessible - please run wordcloud at /wordcloud')
+        print('File is not accessible')
+        flash('Files not found or readable. One or more required scraper files (game.json as example) not available - please fix')
+        return render_template('wordcloud.html')
+    print('File is accessible')
+    flash('You created a word cloud')
+    #Need to update this to the proper web address for the word cloud
+    #beavis = requests.get('http://127.0.0.4/wordcloud')
+
+    #beavis = requests.get('https://pastebin.com/raw/W2ez0StJ')
+
+    beavis = requests.get('http://valchin.com/sendjson2021')
+
+    print("out of beavis")
+    #Discovered this after way too long - this forces the text out of beavis and into
+    #a format that the cloud generator can run
+    file_content = beavis.text
+    # literally exists out of total paranoia - shows the text
+    print(file_content)
+    print('out of file_content')
+    print("FileContent")
+    #this section generates the word cloud
+    wordcloud = WordCloud(
+        stopwords=STOPWORDS,
+        background_color='white',
+        width=1200,
+        height=1000,
+        color_func=random_color_func
+    ).generate(file_content)
+    plt.imshow(wordcloud)
+    plt.axis('off')
+    # plt.show()
+    # saves picture file to picture format
+    plt.savefig('static/wordCloud.png')
+    print("wordCloud.png created")
+
+    file_content = open("static/wordCloud.png", 'rb')
+
+    with open('static/wordCloud.png', 'rb') as image_file:
+        print('file_content')
+        encoded_string = base64.b64encode(image_file.read())
+
+        print('file content created')
+
+        print('checking if file can be written')
+        #image decoding from recent encoding - this is to prove that
+        #encoded string will actually return back to the original picture
+        newImage = Image.open(BytesIO(base64.b64decode(encoded_string)))
+        print('decode workie?')
+
+        print("test")
+        #image is successfully printed to static folder proving that data can be decoded
+        newImage.save('static/noob.png', 'PNG')
+        print('possible print')
+
+        return (encoded_string)
+
+# Created a wordcloudGet67 as a copy of wordcloudGet66
+# Rational: team requested that /wordcloud66 execute the command from wordcloud2 first so they did not have to
+# hit the submit button
+@app.route('/wordcloud67', methods=['POST', 'GET'])
+def wordcloudGet67():
+    try:
+        #f = open('game.json')
+        #webbrowser.get('http://127.0.0.4/wordcloud')
+        #requests.get('http://127.0.0.4/wordcloud')
+        requests.get('http://valchin.com/sendjson2021')
+        #f.close()
+    #when error happens then flashing this error will be helpful
+    except IOError:
+        print('File is not accessible')
+        flash('picture file not found')
+        return ('File is not accessible')
     print('pre file content opening of word cloud')
     file_content = open("static/wordCloud.png", 'rb')
     with open('static/wordCloud.png', 'rb') as image_file:

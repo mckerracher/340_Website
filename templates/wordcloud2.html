@@ -4,59 +4,55 @@
   {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
   {% endif %}
-<!--------------
-  <form method=post>
-    <dl>
-      <dt>Username:
-      <dd><input type=text name=username value="{{
-          request.form.username }}">
-      <dt>Password:
-      <dd><input type=password name=password>
-    </dl>
-    <p><input type=submit value=Login>
-  </form>
------------>
-
 <body>
+    <br>
+
     <div style = "text-align: center">
         <h1>
             <strong>
-                WORD CLOUD 2 - Word Cloud Creator!
+
             </strong>
         </h1>
     </div>
-
-    <div style= "text-align: center; boarder: 4px solid">
+    <div style= "text-align: center; border: 4px solid; background-color: white">
     <title>Word Cloud Creator</title>
-    </div>
-    <div style= "border: 2px solid">
-    <h2>The Word Cloud Creator takes data from two microservice applications and combines it into a word cloud.</h2>
-    <h2>Click submit to generate a new word cloud based on the current data in these two microservices</h2>
+        <h1>
+            <strong>
+                Word Cloud Creator!
+            </strong>
+        </h1>
     </div>
     <br>
-
-
-
-
-
     <br>
-    <h3>Please use Ctrl+F5 to force reload of page - I am learning how to make flask do this for future iterations</h3>
-    <!------------
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
-    <script type="text/javascript"> $(function() { $("#mybutton").click(function (event) { $.getJSON('/SomeFunction', { },
-    function(data) { }); return false; }); }); </script>
-    <div style= "text-align: center">
-    <input type="button" id="mybutton" value="Submit">
+    <br>
+    <br>
+    <div style= "text-align: center; border: 2px solid; background-color: white">
+        <h2>The Word Cloud Creator takes data from a word scraper microservice application transforms it into a word cloud.</h2>
+        <h2>Click submit to generate a new word cloud based on the current data in this microservice</h2>
     </div>
-    ----------->
+    <br>
+    <br>
         <div style= "text-align: center">
-        <p><a href="{{ url_for('wordcloud2') }}"><input type="button" id="mybutton2" value="Submit" onclick="{{ url_for('wordcloud2') }}"></a></p>
+        <p><a href="{{ url_for('wordcloud2') }}"><input type="button" id="mybutton2" style= "font-size: 40px; height: 100px; width: 200px" value="Submit" onclick="{{ url_for('wordcloud2') }}"></a></p>
         <br>
         </div>
     <br>
     <br>
     <div style= "text-align: center">
-    <img src="\static\wordCloud.png">
+
+        <img src="\static\wordCloud.png?updated={DateTime.Now.Ticks}">
+        <br>
+
+        <!----------
+        <img loading="lazy" scr="\static\wordCloud.png?xxx=5123419" alt = "lazy" />
+        <iframe src="\static\wordCloud.png?xxx=5123419" loading="lazy"></iframe>
+
+        Following is old image format
+                <img src="\static\wordCloud.png?xxx=5123419">
+        -------->
+        <br>
+
+
     </div>
 
 </body>
