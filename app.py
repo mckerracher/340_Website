@@ -21,6 +21,7 @@ import urllib3
 import PIL.Image
 from whitenoise import WhiteNoise
 data = 'foo'
+count = 0
 
 from forms import AddGameForm, AddGenreForm, AddCreatorForm, AddPlatformForm, \
     AddEpisodeForm, AddToM2MPlatformGame, \
@@ -1273,7 +1274,11 @@ def wordcloud2():
     # saves picture file to picture format
     plt.savefig('static/wordCloud.png')
     print("wordCloud.png created")
-    flash('Success! Word Cloud has been processed and is loading')
+    global count
+    count += 1
+    print(count)
+    flash('Word cloud images created:')
+    flash(count)
     return render_template('wordcloud2.html')
 
 # this is the only word cloud get method that works
@@ -1293,7 +1298,7 @@ def wordcloudGet66():
         flash('Files not found or readable. One or more required scraper files (game.json as example) not available - please fix')
         return render_template('wordcloud.html')
     print('File is accessible')
-    flash('You created a word cloud')
+
     #Need to update this to the proper web address for the word cloud
     #beavis = requests.get('http://127.0.0.4/wordcloud')
 
@@ -1323,7 +1328,9 @@ def wordcloudGet66():
     # saves picture file to picture format
     plt.savefig('static/wordCloud.png')
     print("wordCloud.png created")
-
+    global count
+    count += 1
+    print(count)
     file_content = open("static/wordCloud.png", 'rb')
 
     with open('static/wordCloud.png', 'rb') as image_file:

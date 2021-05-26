@@ -1,13 +1,15 @@
 <!doctype html>
 <header class="intro-header" style="background-image: url('static/GameRoom.jpg')">
-<title>My Application</title>
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+<title>Word Cloud CS361</title>
+  <div style= "font-size: 15px; height: 80px; width: 230px; background-color: white; border: 2px solid;">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+    {% endwith %}
 {% block body %}{% endblock %}
