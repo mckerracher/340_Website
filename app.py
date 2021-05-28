@@ -1261,8 +1261,10 @@ def wordcloud2():
     print('out of file_content')
     print("FileContent")
     #this section generates the word cloud
+    stop_words2 = ["game", "GAME", "Game", "games", "player", "players", "user", "released"] + list(STOPWORDS)
+
     wordcloud = WordCloud(
-        stopwords=STOPWORDS,
+        stopwords=stop_words2,
         background_color='white',
         width=1200,
         height=1000,
@@ -1315,8 +1317,10 @@ def wordcloudGet66():
     print('out of file_content')
     print("FileContent")
     #this section generates the word cloud
+    stop_words2 = ["game", "GAME", "Game", "games", "player", "players", "user", "released"] + list(STOPWORDS)
+
     wordcloud = WordCloud(
-        stopwords=STOPWORDS,
+        stopwords=stop_words2,
         background_color='white',
         width=1200,
         height=1000,
